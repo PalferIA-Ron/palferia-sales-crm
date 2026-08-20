@@ -1,0 +1,163 @@
+{
+  "name": "OpenWA → Supabase CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "openwa-messages",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook OpenWA",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "openwa-messages"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "ok",
+        "options": {}
+      },
+      "id": "respond-ok",
+      "name": "Responder OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [480, 180]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "cond1",
+              "leftValue": "={{ $json.body.event }}",
+              "rightValue": "message",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "filter-messages",
+      "name": "Solo mensajes",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1",
+              "name": "session_id",
+              "value": "={{ $json.body.session }}",
+              "type": "string"
+            },
+            {
+              "id": "f2",
+              "name": "telefono",
+              "value": "={{ $json.body.data.from.replace('@c.us','').replace('@s.whatsapp.net','') }}",
+              "type": "string"
+            },
+            {
+              "id": "f3",
+              "name": "contenido",
+              "value": "={{ $json.body.data.body || $json.body.data.text || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "f4",
+              "name": "direccion",
+              "value": "={{ $json.body.data.fromMe ? 'outbound' : 'inbound' }}",
+              "type": "string"
+            },
+            {
+              "id": "f5",
+              "name": "timestamp_wa",
+              "value": "={{ $json.body.data.timestamp ? new Date($json.body.data.timestamp * 1000).toISOString() : new Date().toISOString() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "extraer-campos",
+      "name": "Extraer campos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://aqaiqmsypbwhgknbbmae.supabase.co/rest/v1/prospectos?telefono=ilike.*{{ encodeURIComponent($json.telefono) }}*&select=id,nombre",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": { "response": { "fullResponse": false } }
+        }
+      },
+      "id": "buscar-prospecto",
+      "name": "Buscar prospecto",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, 300],
+      "credentials": { "httpHeaderAuth": { "id": "supabase-headers", "name": "Supabase Headers" } }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://aqaiqmsypbwhgknbbmae.supabase.co/rest/v1/mensajes_whatsapp",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\n  \"session_id\": \"{{ $('Extraer campos').item.json.session_id }}\",\n  \"telefono\": \"{{ $('Extraer campos').item.json.telefono }}\",\n  \"contenido\": \"{{ $('Extraer campos').item.json.contenido }}\",\n  \"direccion\": \"{{ $('Extraer campos').item.json.direccion }}\",\n  \"timestamp_wa\": \"{{ $('Extraer campos').item.json.timestamp_wa }}\",\n  \"prospecto_id\": \"{{ $json[0] ? $json[0].id : null }}\"\n}",
+        "options": {}
+      },
+      "id": "guardar-supabase",
+      "name": "Guardar en Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 300],
+      "credentials": { "httpHeaderAuth": { "id": "supabase-headers", "name": "Supabase Headers" } }
+    }
+  ],
+  "connections": {
+    "Webhook OpenWA": {
+      "main": [
+        [
+          { "node": "Responder OK", "type": "main", "index": 0 },
+          { "node": "Solo mensajes", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Solo mensajes": {
+      "main": [
+        [{ "node": "Extraer campos", "type": "main", "index": 0 }]
+      ]
+    },
+    "Extraer campos": {
+      "main": [
+        [{ "node": "Buscar prospecto", "type": "main", "index": 0 }]
+      ]
+    },
+    "Buscar prospecto": {
+      "main": [
+        [{ "node": "Guardar en Supabase", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-08-20T00:00:00.000Z",
+  "versionId": "1"
+}

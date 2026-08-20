@@ -532,6 +532,26 @@
     .field select option { background: var(--bg-dark); }
     .field textarea { resize: vertical; min-height: 80px; }
 
+    /* ── WHATSAPP SESSIONS ── */
+    .wa-session-card {
+      background:var(--bg-mid);border:1px solid rgba(191,204,207,.1);border-radius:10px;
+      padding:14px 16px;min-width:180px;display:flex;flex-direction:column;gap:8px;
+    }
+    .wa-session-card .session-name { font-size:.9rem;font-weight:500;color:var(--white); }
+    .wa-session-card .session-phone { font-size:.78rem;color:var(--base); }
+    .session-status {
+      display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;
+      text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:20px;
+    }
+    .status-connected { background:rgba(177,247,39,.12);color:var(--cta); }
+    .status-qr_ready  { background:rgba(251,146,60,.12);color:#fb923c; }
+    .status-created   { background:rgba(129,140,248,.12);color:#818cf8; }
+    .status-disconnected { background:rgba(248,113,113,.12);color:#f87171; }
+    .wa-session-actions { display:flex;gap:8px;margin-top:4px; }
+    .wa-session-actions button { font-size:.75rem;padding:4px 10px;border-radius:5px;cursor:pointer;border:none; }
+    .btn-qr { background:var(--cta);color:var(--bg-dark);font-weight:600; }
+    .btn-del-session { background:rgba(248,113,113,.15);color:#f87171; }
+
     /* ── WHATSAPP ── */
     #wa-layout {
       display: flex;
@@ -1108,6 +1128,44 @@
     <section class="section" id="section-whatsapp">
       <div class="section-header">
         <h2>WhatsApp</h2>
+        <button class="btn-primary" onclick="openNewSessionModal()">+ Nueva sesión</button>
+      </div>
+
+      <!-- Sessions panel -->
+      <div id="wa-sessions-panel" style="margin-bottom:24px">
+        <div style="font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--base);margin-bottom:12px">Sesiones conectadas</div>
+        <div id="wa-sessions-list" style="display:flex;gap:12px;flex-wrap:wrap">
+          <div class="empty-state" style="padding:16px"><p>Cargando sesiones...</p></div>
+        </div>
+      </div>
+
+      <!-- QR Modal -->
+      <div id="modal-qr" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeQRModal()">
+        <div class="modal-box" style="max-width:400px;text-align:center">
+          <h3 style="margin-bottom:4px">Escanea el QR</h3>
+          <p style="font-size:.85rem;color:var(--base);margin-bottom:20px">Abre WhatsApp en tu móvil → Dispositivos vinculados → Vincular dispositivo</p>
+          <div id="qr-container" style="background:#fff;padding:16px;border-radius:12px;display:inline-block;margin-bottom:16px">
+            <div class="loading-spinner"></div>
+          </div>
+          <p id="qr-status" style="font-size:.8rem;color:var(--base)">Esperando QR...</p>
+          <button class="btn-secondary" onclick="closeQRModal()" style="margin-top:16px">Cerrar</button>
+        </div>
+      </div>
+
+      <!-- New session modal -->
+      <div id="modal-new-session" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeNewSessionModal()">
+        <div class="modal-box" style="max-width:360px">
+          <h3 style="margin-bottom:20px">Nueva sesión WhatsApp</h3>
+          <div class="field">
+            <label>Nombre de la sesión</label>
+            <input type="text" id="new-session-name" placeholder="ej: palferia-principal" />
+            <small style="color:var(--base)">Solo letras, números y guiones. Sin espacios.</small>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:20px">
+            <button class="btn-secondary" onclick="closeNewSessionModal()">Cancelar</button>
+            <button class="btn-primary" onclick="createWASession()">Crear y obtener QR</button>
+          </div>
+        </div>
       </div>
 
       <div id="wa-layout">
@@ -1388,7 +1446,7 @@ function showSection(name) {
 
   // Lazy-load section content
   if (name === 'prospectos')  loadProspectos();
-  if (name === 'whatsapp')    loadWhatsAppContacts();
+  if (name === 'whatsapp')    { loadWASessionsPanel(); loadWhatsAppContacts(); }
   if (name === 'propuestas')  renderPropuestas();
   if (name === 'log')         loadLog();
 
@@ -1939,30 +1997,130 @@ function renderMessages() {
   container.scrollTop = container.scrollHeight;
 }
 
-// Load WA Sessions
-async function loadWASessions() {
-  const select = document.getElementById('session-select');
+// ── SESSION PANEL ──
+let qrPollInterval = null;
+let currentQRSessionId = null;
 
+async function loadWASessionsPanel() {
+  const container = document.getElementById('wa-sessions-list');
+  const select    = document.getElementById('session-select');
   try {
-    const res = await fetch('/wa/api/sessions');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const res  = await fetch('/wa/api/sessions');
     const data = await res.json();
-
-    const sessions = Array.isArray(data) ? data : (data.sessions || []);
+    const sessions = Array.isArray(data) ? data : [];
 
     if (sessions.length === 0) {
-      select.innerHTML = '<option value="default">default</option>';
+      container.innerHTML = '<div class="empty-state" style="padding:16px"><p>Sin sesiones. Crea una nueva.</p></div>';
+      select.innerHTML = '<option value="">Sin sesiones</option>';
       return;
     }
 
-    select.innerHTML = sessions.map(s => {
-      const name = typeof s === 'string' ? s : (s.name || s.id || s.session || JSON.stringify(s));
-      return `<option value="${esc(name)}">${esc(name)}</option>`;
-    }).join('');
-  } catch (err) {
-    console.warn('Could not load WA sessions, using text input:', err);
-    select.innerHTML = '<option value="default">default</option>';
+    container.innerHTML = sessions.map(s => `
+      <div class="wa-session-card">
+        <div class="session-name">${esc(s.name || s.id)}</div>
+        <div class="session-phone">${s.phone ? '📱 ' + esc(s.phone) : 'Sin número conectado'}</div>
+        <span class="session-status status-${s.status || 'created'}">${statusLabel(s.status)}</span>
+        <div class="wa-session-actions">
+          ${s.status !== 'connected' ? `<button class="btn-qr" onclick="startAndShowQR('${s.id}','${esc(s.name)}')">Ver QR</button>` : ''}
+          <button class="btn-del-session" onclick="deleteWASession('${s.id}','${esc(s.name)}')">Eliminar</button>
+        </div>
+      </div>
+    `).join('');
+
+    select.innerHTML = sessions.filter(s => s.status === 'connected').map(s =>
+      `<option value="${s.id}">${esc(s.name)}</option>`
+    ).join('') || '<option value="">Sin sesión conectada</option>';
+
+  } catch(e) {
+    container.innerHTML = '<div class="empty-state" style="padding:16px"><p>No se pudo conectar con OpenWA.</p></div>';
   }
+}
+
+function statusLabel(s) {
+  return { connected:'Conectado', qr_ready:'QR listo', created:'Creada', disconnected:'Desconectado' }[s] || s || 'Desconocido';
+}
+
+function openNewSessionModal() {
+  document.getElementById('new-session-name').value = '';
+  document.getElementById('modal-new-session').style.display = 'flex';
+}
+function closeNewSessionModal() {
+  document.getElementById('modal-new-session').style.display = 'none';
+}
+
+async function createWASession() {
+  const name = document.getElementById('new-session-name').value.trim().replace(/\s+/g,'-').toLowerCase();
+  if (!name) { toast('Escribe un nombre para la sesión', 'error'); return; }
+  try {
+    const res  = await fetch('/wa/api/sessions', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name}) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Error creando sesión');
+    closeNewSessionModal();
+    toast('Sesión creada. Iniciando QR...', 'success');
+    await startAndShowQR(data.id, data.name);
+    loadWASessionsPanel();
+  } catch(e) {
+    toast('Error: ' + e.message, 'error');
+  }
+}
+
+async function startAndShowQR(sessionId, sessionName) {
+  document.getElementById('modal-qr').style.display = 'flex';
+  document.getElementById('qr-status').textContent  = 'Iniciando sesión...';
+  document.getElementById('qr-container').innerHTML = '<div class="loading-spinner"></div>';
+  currentQRSessionId = sessionId;
+
+  try {
+    await fetch(`/wa/api/sessions/${sessionId}/start`, { method:'POST', headers:{'Content-Type':'application/json'} });
+  } catch(e) {}
+
+  pollQR(sessionId);
+}
+
+function pollQR(sessionId) {
+  if (qrPollInterval) clearInterval(qrPollInterval);
+  qrPollInterval = setInterval(async () => {
+    if (currentQRSessionId !== sessionId) { clearInterval(qrPollInterval); return; }
+    try {
+      const res  = await fetch(`/wa/api/sessions/${sessionId}/qr`);
+      const data = await res.json();
+      if (data.qrCode) {
+        document.getElementById('qr-container').innerHTML = `<img src="${data.qrCode}" style="width:220px;height:220px;display:block">`;
+        document.getElementById('qr-status').textContent = 'Escanea con tu móvil — se actualizará al conectar';
+      }
+      // Check if connected
+      const sRes = await fetch('/wa/api/sessions');
+      const sessions = await sRes.json();
+      const s = (sessions || []).find(x => x.id === sessionId);
+      if (s && s.status === 'connected') {
+        clearInterval(qrPollInterval);
+        document.getElementById('qr-status').textContent = '✅ ¡Conectado! Cerrando...';
+        setTimeout(() => { closeQRModal(); loadWASessionsPanel(); toast('WhatsApp conectado', 'success'); }, 1500);
+      }
+    } catch(e) {}
+  }, 4000);
+}
+
+function closeQRModal() {
+  if (qrPollInterval) clearInterval(qrPollInterval);
+  currentQRSessionId = null;
+  document.getElementById('modal-qr').style.display = 'none';
+}
+
+async function deleteWASession(sessionId, name) {
+  if (!confirm(`¿Eliminar sesión "${name}"?`)) return;
+  try {
+    await fetch(`/wa/api/sessions/${sessionId}`, { method:'DELETE' });
+    toast('Sesión eliminada', 'success');
+    loadWASessionsPanel();
+  } catch(e) {
+    toast('Error eliminando sesión', 'error');
+  }
+}
+
+// Load WA Sessions (legacy select — now calls panel)
+async function loadWASessions() {
+  await loadWASessionsPanel();
 }
 
 // Send WA message
