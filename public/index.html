@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PalferIA CRM — Acceso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cta: #B1F727;
+      --base: #809AA0;
+      --bg: #013540;
+      --secondary: #416870;
+      --iron: #BFCCCF;
+      --white: #FFFFFF;
+      --bg-dark: #011F29;
+      --bg-mid: #022A36;
+      --font: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--bg-dark);
+      color: var(--iron);
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      background: radial-gradient(ellipse at 50% 0%, #022A36 0%, #011F29 70%);
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .logo-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-area img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .login-card {
+      width: 100%;
+      background: var(--bg-mid);
+      border: 1px solid var(--secondary);
+      border-radius: 16px;
+      padding: 40px 36px;
+    }
+
+    .login-card h1 {
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 32px;
+      letter-spacing: -0.02em;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--base);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .form-group input {
+      width: 100%;
+      background: var(--bg-dark);
+      border: 1px solid var(--secondary);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: var(--font);
+      font-size: 15px;
+      color: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input::placeholder {
+      color: var(--base);
+    }
+
+    .form-group input:focus {
+      border-color: var(--cta);
+    }
+
+    .btn-submit {
+      width: 100%;
+      margin-top: 28px;
+      padding: 14px;
+      background: var(--cta);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(1, 31, 41, 0.3);
+      border-top-color: var(--bg-dark);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner.visible { display: block; }
+
+    .error-msg {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: rgba(255, 80, 80, 0.12);
+      border: 1px solid rgba(255, 80, 80, 0.35);
+      border-radius: 8px;
+      color: #ff8080;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+
+    .footer-note {
+      font-size: 12px;
+      color: var(--secondary);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-wrapper">
+  <div class="logo-area">
+    <img src="https://palferia.com/wp-content/uploads/2026/03/Palferia_logo02-scaled.png" alt="PalferIA" />
+  </div>
+
+  <div class="login-card">
+    <h1>Acceso CRM</h1>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="tu@email.com"
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span id="btnText">Entrar</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+
+      <div class="error-msg" id="errorMsg"></div>
+    </form>
+  </div>
+
+  <p class="footer-note">PalferIA Sales CRM &mdash; Acceso restringido</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  const SUPABASE_URL = 'https://aqaiqmsypbwhgknbbmae.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_lxcUh7WtArLQbbP7CA-1Vw_yt7wOyje';
+
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // If already logged in, go straight to CRM
+  (async () => {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      window.location.replace('crm.html');
+    }
+  })();
+
+  const form      = document.getElementById('loginForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnText   = document.getElementById('btnText');
+  const spinner   = document.getElementById('spinner');
+  const errorMsg  = document.getElementById('errorMsg');
+
+  function setLoading(state) {
+    submitBtn.disabled = state;
+    btnText.textContent = state ? 'Verificando...' : 'Entrar';
+    spinner.classList.toggle('visible', state);
+  }
+
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    errorMsg.classList.add('visible');
+  }
+
+  function clearError() {
+    errorMsg.classList.remove('visible');
+    errorMsg.textContent = '';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!email || !password) {
+      showError('Por favor, introduce email y contraseña.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        throw error;
+      }
+
+      // Successful login
+      window.location.replace('crm.html');
+    } catch (err) {
+      console.error('Login error:', err);
+      const msg = err.message || 'Error al iniciar sesión.';
+      if (msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('credentials')) {
+        showError('Email o contraseña incorrectos.');
+      } else if (msg.toLowerCase().includes('network') || msg.toLowerCase().includes('fetch')) {
+        showError('Error de conexión. Comprueba tu red.');
+      } else {
+        showError(msg);
+      }
+      setLoading(false);
+    }
+  });
+</script>
+</body>
+</html>
