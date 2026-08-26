@@ -229,9 +229,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
 <script>
-  const SUPABASE_URL = 'https://aqaiqmsypbwhgknbbmae.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_lxcUh7WtArLQbbP7CA-1Vw_yt7wOyje';
+  const SUPABASE_URL      = window.PALFERIA_CONFIG.SUPABASE_URL;
+  const SUPABASE_ANON_KEY = window.PALFERIA_CONFIG.SUPABASE_ANON_KEY;
 
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

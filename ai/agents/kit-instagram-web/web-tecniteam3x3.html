@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tecni Team 3x3 | Baloncesto 3x3</title>
+<style>
+  :root {
+    --red: #D72638;
+    --red-dark: #b01e2c;
+    --red-light: #ff3347;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --gray: #1a1a1a;
+    --border: #222222;
+    --border-r: rgba(215,38,56,0.3);
+    --light-gray: #888888;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 2rem;
+    background: rgba(10,10,10,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-weight: 900; font-size: 1.1rem; letter-spacing: 0.05em; text-transform: uppercase; display: flex; align-items: center; gap: 0.5rem; }
+  .nav-logo .dot { width: 8px; height: 8px; background: var(--red); border-radius: 50%; display: inline-block; }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { color: var(--light-gray); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.05em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--red); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 8rem 2rem 4rem;
+    background: var(--black);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: var(--red);
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -30%; right: -15%;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(215,38,56,0.05) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+
+  .team-badge {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.4rem 1rem; border-radius: 4px;
+    background: var(--red); color: white;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-name {
+    font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 900;
+    line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 0.3rem;
+  }
+  .hero-name .x3 { color: var(--red); }
+  .hero-subtitle { font-size: 1rem; color: #aaa; margin-bottom: 2rem; font-weight: 300; letter-spacing: 0.03em; }
+  .hero-bio { font-size: 1rem; color: #888; max-width: 480px; line-height: 1.8; margin-bottom: 2.5rem; }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--red); color: white;
+    padding: 0.9rem 2rem; border-radius: 6px;
+    font-weight: 800; font-size: 0.9rem; text-decoration: none;
+    transition: background 0.2s; display: inline-block;
+    letter-spacing: 0.03em;
+  }
+  .btn-primary:hover { background: var(--red-light); }
+  .btn-secondary {
+    border: 1px solid var(--border-r); color: var(--red);
+    padding: 0.9rem 2rem; border-radius: 6px;
+    font-weight: 600; font-size: 0.9rem; text-decoration: none;
+    transition: all 0.2s; display: inline-block;
+  }
+  .btn-secondary:hover { background: rgba(215,38,56,0.07); }
+
+  /* TEAM CARD */
+  .team-card { background: var(--gray); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .team-card-header { background: var(--red); padding: 1.5rem; position: relative; }
+  .team-card-header h3 { font-size: 1.3rem; font-weight: 900; }
+  .team-card-header span { font-size: 0.8rem; color: rgba(255,255,255,0.75); }
+  .team-card-3x3 {
+    position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%);
+    font-size: 2.5rem; font-weight: 900; color: rgba(255,255,255,0.15);
+    letter-spacing: -0.05em;
+  }
+  .team-stats { display: grid; grid-template-columns: repeat(3,1fr); border-bottom: 1px solid var(--border); }
+  .team-stat { padding: 1.2rem; text-align: center; border-right: 1px solid var(--border); }
+  .team-stat:last-child { border-right: none; }
+  .team-stat-num { font-size: 1.6rem; font-weight: 900; color: var(--red); display: block; }
+  .team-stat-label { font-size: 0.65rem; color: var(--light-gray); text-transform: uppercase; letter-spacing: 0.1em; }
+  .team-card-body { padding: 1.5rem; }
+  .team-info-row { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0; border-bottom: 1px solid var(--border); }
+  .team-info-row:last-child { border-bottom: none; }
+  .team-info-label { color: var(--light-gray); font-size: 0.82rem; }
+  .team-info-value { font-weight: 600; font-size: 0.9rem; }
+  .team-info-value.red { color: var(--red); }
+  .ig-btn {
+    display: block; margin-top: 1.2rem;
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white; text-align: center; padding: 0.8rem;
+    border-radius: 8px; font-weight: 700; font-size: 0.85rem;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .ig-btn:hover { opacity: 0.85; }
+
+  /* SECTIONS */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); margin-bottom: 0.8rem; }
+  .section-title { font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 1rem; }
+  .section-sub { color: var(--light-gray); max-width: 560px; line-height: 1.7; margin-bottom: 3rem; }
+  .divider { width: 40px; height: 3px; background: var(--red); margin-bottom: 1.5rem; border-radius: 2px; }
+
+  /* SOBRE EL EQUIPO */
+  #equipo { background: var(--dark); border-top: 1px solid var(--border); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .about-text { color: #aaa; line-height: 1.8; margin-bottom: 1rem; }
+  .about-highlight {
+    background: var(--gray); border-left: 3px solid var(--red);
+    padding: 1.2rem 1.5rem; border-radius: 0 8px 8px 0;
+    color: #ccc; font-style: italic; margin: 1.5rem 0;
+  }
+  .about-facts { display: flex; flex-direction: column; gap: 0; }
+  .fact { display: flex; gap: 1.2rem; padding: 1.2rem 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .fact:last-child { border-bottom: none; }
+  .fact-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .fact-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .fact-text { color: var(--light-gray); font-size: 0.85rem; line-height: 1.5; }
+
+  /* PATROCINADORES */
+  #sponsors { background: var(--black); }
+  .sponsors-intro { max-width: 600px; margin-bottom: 4rem; }
+  .sponsors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+  .sponsor-card {
+    background: var(--gray); border: 1px solid var(--border); border-radius: 12px;
+    padding: 2rem; transition: border-color 0.2s; text-align: center;
+  }
+  .sponsor-card.main { border-color: var(--border-r); }
+  .sponsor-card:hover { border-color: var(--border-r); }
+  .sponsor-tier {
+    display: inline-block; padding: 0.25rem 0.7rem; border-radius: 100px;
+    font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .tier-main { background: var(--red); color: white; }
+  .tier-plus { background: rgba(215,38,56,0.2); color: var(--red); border: 1px solid var(--border-r); }
+  .tier-colab { background: var(--gray); color: var(--light-gray); border: 1px solid var(--border); }
+  .sponsor-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+  .sponsor-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .sponsor-handle { color: var(--light-gray); font-size: 0.82rem; margin-bottom: 0.5rem; }
+  .sponsor-desc { color: var(--light-gray); font-size: 0.82rem; line-height: 1.5; }
+
+  /* GM */
+  #gm { background: var(--dark); border-top: 1px solid var(--border); }
+  .gm-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .gm-card {
+    background: var(--gray); border: 1px solid var(--border); border-radius: 16px;
+    padding: 2.5rem;
+  }
+  .gm-photo {
+    border-radius: 16px; overflow: hidden; position: sticky; top: 6rem;
+  }
+  .gm-photo img { width: 100%; display: block; object-fit: cover; border-radius: 16px; }
+  .gm-badge { display: inline-block; background: var(--red); color: white; padding: 0.3rem 0.8rem; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.7rem; }
+  .gm-name { font-size: 1.5rem; font-weight: 900; margin-bottom: 0.3rem; }
+  .gm-handle { color: var(--light-gray); font-size: 0.85rem; margin-bottom: 1rem; }
+  .gm-desc { color: #aaa; font-size: 0.9rem; line-height: 1.7; margin-bottom: 1.2rem; }
+  .gm-link {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid var(--border-r); color: var(--red); padding: 0.6rem 1.2rem;
+    border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .gm-link:hover { background: rgba(215,38,56,0.08); }
+
+  /* CONTACTO */
+  #contacto { background: var(--black); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.2rem 1.5rem; border: 1px solid var(--border); border-radius: 10px;
+    text-decoration: none; color: var(--white); transition: all 0.2s;
+  }
+  .contact-link:hover { border-color: var(--border-r); background: var(--gray); }
+  .contact-link-icon { font-size: 1.4rem; }
+  .contact-link-label { font-size: 0.7rem; color: var(--light-gray); text-transform: uppercase; letter-spacing: 0.1em; }
+  .contact-link-value { font-weight: 600; font-size: 0.95rem; }
+
+  /* FOOTER */
+  footer { background: var(--black); border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--light-gray); font-size: 0.8rem; }
+
+  /* GALLERY */
+  #galeria { background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .gallery-item {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--gray);
+    position: relative;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease, opacity 0.35s;
+    opacity: 0.9;
+  }
+  .gallery-item:hover img { transform: scale(1.06); opacity: 1; }
+  .gallery-footer { margin-top: 2rem; text-align: center; }
+
+  /* FLOATING WHATSAPP */
+  .wa-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+    width: 60px; height: 60px;
+    background: #25D366; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 32px rgba(37,211,102,0.6); }
+  .wa-float svg { width: 30px; height: 30px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem; }
+    .nav-links { display: none; }
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .gm-layout { grid-template-columns: 1fr; }
+    .gm-photo { position: static; }
+    .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    section { padding: 4rem 1.2rem; }
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .wa-float { bottom: 1.2rem; right: 1.2rem; width: 52px; height: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span class="dot"></span> Tecni Team 3x3</div>
+  <div class="nav-links">
+    <a href="#equipo">El equipo</a>
+    <a href="#sponsors">Sponsors</a>
+    <a href="#gm">GM</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="team-badge">🏀 Equipo · Baloncesto 3x3</div>
+      <h1 class="hero-name">Tecni Team<br><span class="x3">3x3</span></h1>
+      <p class="hero-subtitle">Competición · Comunidad · Baloncesto de calle</p>
+      <p class="hero-bio">
+        Equipo de baloncesto 3x3 liderado por Luis Garcia Notario. Competimos, crecemos y representamos al proyecto Tecni en la cancha. Con el respaldo de cuatro sponsors que creen en nosotros.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://www.instagram.com/tecniteam3x3/" target="_blank" class="btn-primary">Seguirnos en Instagram</a>
+        <a href="#sponsors" class="btn-secondary">Nuestros sponsors</a>
+      </div>
+    </div>
+    <div>
+      <div class="team-card">
+        <div class="team-card-header" style="display:flex;align-items:center;gap:1rem;">
+          <img src="assets/tecniteam3x3/avatar.jpg" alt="Tecni Team 3x3"
+            style="width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,0,0,0.3);flex-shrink:0;">
+          <div>
+            <h3>TECNI TEAM 3x3</h3>
+            <span>@tecniteam3x3</span>
+          </div>
+          <div class="team-card-3x3">3x3</div>
+        </div>
+        <div class="team-stats">
+          <div class="team-stat">
+            <span class="team-stat-num">553</span>
+            <span class="team-stat-label">Seguidores</span>
+          </div>
+          <div class="team-stat">
+            <span class="team-stat-num">112</span>
+            <span class="team-stat-label">Posts</span>
+          </div>
+          <div class="team-stat">
+            <span class="team-stat-num">4</span>
+            <span class="team-stat-label">Sponsors</span>
+          </div>
+        </div>
+        <div class="team-card-body">
+          <div class="team-info-row">
+            <span class="team-info-label">General Manager</span>
+            <span class="team-info-value red">@tecni_luispa</span>
+          </div>
+          <div class="team-info-row">
+            <span class="team-info-label">Sponsor principal</span>
+            <span class="team-info-value">@hipebasketball</span>
+          </div>
+          <div class="team-info-row">
+            <span class="team-info-label">Sponsor Plus</span>
+            <span class="team-info-value">Reformas Ruiz</span>
+          </div>
+          <div class="team-info-row">
+            <span class="team-info-label">Colaboradores</span>
+            <span class="team-info-value">@wibosport · @jorgefitnessone</span>
+          </div>
+          <a href="https://www.instagram.com/tecniteam3x3/" target="_blank" class="ig-btn">Ver en Instagram →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE EL EQUIPO -->
+<section id="equipo">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <p class="section-label">Quiénes somos</p>
+        <h2 class="section-title">El equipo</h2>
+        <div class="divider"></div>
+        <p class="about-text">Tecni Team 3x3 es el equipo de baloncesto 3x3 del proyecto Tecni, liderado por Luis Garcia Notario como General Manager y Development Coach.</p>
+        <blockquote class="about-highlight">"El 3x3 no es solo baloncesto reducido — es un formato que exige toma de decisiones rápidas, capacidad física explosiva y cohesión de equipo. Eso es lo que construimos."</blockquote>
+        <p class="about-text">Competimos, representamos y crecemos bajo la misma filosofía que guía todo el proyecto Tecni: metodología, trabajo serio y resultados reales.</p>
+      </div>
+      <div class="about-facts">
+        <div class="fact">
+          <span class="fact-icon">🏀</span>
+          <div>
+            <div class="fact-title">Baloncesto 3x3</div>
+            <div class="fact-text">El formato más explosivo y rápido del baloncesto. 3 jugadores, una canasta, decisiones en fracciones de segundo.</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">🎯</span>
+          <div>
+            <div class="fact-title">Competición activa</div>
+            <div class="fact-text">Participamos en torneos y competiciones 3x3, representando al proyecto Tecni en la cancha.</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">🤝</span>
+          <div>
+            <div class="fact-title">4 sponsors</div>
+            <div class="fact-text">Contamos con el respaldo de @hipebasketball, Reformas Ruiz, @wibosport y @jorgefitnessone.</div>
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">📱</span>
+          <div>
+            <div class="fact-title">Comunidad activa</div>
+            <div class="fact-text">553 seguidores en Instagram y parte de la comunidad WhatsApp del proyecto Tecni.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<section id="sponsors">
+  <div class="container">
+    <p class="section-label">Quienes nos apoyan</p>
+    <h2 class="section-title">Nuestros Sponsors</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Cuatro marcas y proyectos que creen en el proyecto Tecni y hacen posible que el equipo compita al máximo nivel.</p>
+    <div class="sponsors-grid">
+      <div class="sponsor-card main">
+        <div class="sponsor-tier tier-main">Sponsor Principal</div>
+        <div class="sponsor-icon">🏆</div>
+        <div class="sponsor-name">Hipe Basketball</div>
+        <div class="sponsor-handle">@hipebasketball</div>
+        <div class="sponsor-desc">Sponsor principal del equipo. Referente en el mundo del baloncesto y primer apoyo del Tecni Team 3x3.</div>
+      </div>
+      <div class="sponsor-card">
+        <div class="sponsor-tier tier-plus">Sponsor Plus</div>
+        <div class="sponsor-icon">🏗️</div>
+        <div class="sponsor-name">Reformas Ruiz</div>
+        <div class="sponsor-handle">reformasruiz</div>
+        <div class="sponsor-desc">Sponsor Plus del equipo. Empresa de reformas comprometida con el deporte local.</div>
+      </div>
+      <div class="sponsor-card">
+        <div class="sponsor-tier tier-colab">Colaborador Oficial</div>
+        <div class="sponsor-icon">👟</div>
+        <div class="sponsor-name">Wibo Sport</div>
+        <div class="sponsor-handle">@wibosport</div>
+        <div class="sponsor-desc">Colaborador oficial. Material y equipamiento deportivo para el equipo.</div>
+      </div>
+      <div class="sponsor-card">
+        <div class="sponsor-tier tier-colab">Colaborador Oficial</div>
+        <div class="sponsor-icon">💪</div>
+        <div class="sponsor-name">Jorge Fitness One</div>
+        <div class="sponsor-handle">@jorgefitnessone</div>
+        <div class="sponsor-desc">Colaborador oficial. Preparación física y rendimiento deportivo para los jugadores del equipo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GM -->
+<section id="gm">
+  <div class="container">
+    <p class="section-label">Dirección</p>
+    <h2 class="section-title">General Manager</h2>
+    <div class="divider"></div>
+    <div class="gm-layout">
+      <div class="gm-card">
+        <div class="gm-badge">GM · Development Coach · CEO</div>
+        <div class="gm-name">Luis Garcia Notario</div>
+        <div class="gm-handle">@tecni_luispa · 1,747 seguidores</div>
+        <div class="gm-desc">
+          Luis es el General Manager del Tecni Team 3x3 y CEO de todo el proyecto Tecni. Como Development Coach, no solo gestiona el equipo sino que lo construye desde dentro: captación, estructura, metodología y resultados.
+        </div>
+        <a href="https://www.instagram.com/tecni_luispa/" target="_blank" class="gm-link">
+          Ver perfil completo →
+        </a>
+      </div>
+      <div class="gm-photo">
+        <img src="assets/tecni_luispa/ceo.jpg" alt="Luis Garcia Notario — General Manager Tecni Team 3x3">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section id="galeria">
+  <div class="container">
+    <p class="section-label">Instagram</p>
+    <h2 class="section-title">Últimas fotos</h2>
+    <div class="divider"></div>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_1.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_2.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_3.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_4.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_5.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_6.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_7.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_8.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecniteam3x3/post_9.jpg" alt="Post tecniteam3x3" loading="lazy"></div>
+    </div>
+    <div class="gallery-footer">
+      <a href="https://www.instagram.com/tecniteam3x3/" target="_blank" class="btn-secondary">Ver todo en Instagram →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <p class="section-label">Habla con el equipo</p>
+        <h2 class="section-title">Contacto</h2>
+        <div class="divider"></div>
+        <p class="section-sub">¿Quieres sponsorizar al equipo, jugar con nosotros o simplemente seguir el proyecto?</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:luispagn@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉️</span>
+          <div>
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-value">luispagn@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/tecniteam3x3/" target="_blank" class="contact-link">
+          <span class="contact-link-icon">📸</span>
+          <div>
+            <div class="contact-link-label">Instagram del equipo</div>
+            <div class="contact-link-value">@tecniteam3x3</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/tecni_luispa/" target="_blank" class="contact-link">
+          <span class="contact-link-icon">👤</span>
+          <div>
+            <div class="contact-link-label">General Manager</div>
+            <div class="contact-link-value">@tecni_luispa · Luis Garcia Notario</div>
+          </div>
+        </a>
+        <a href="https://chat.whatsapp.com/JDKxU1q3feSGRP3QusXPHO" target="_blank" class="contact-link">
+          <span class="contact-link-icon">💬</span>
+          <div>
+            <div class="contact-link-label">Comunidad WhatsApp</div>
+            <div class="contact-link-value">Unirse al grupo Tecni</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/34623176981" target="_blank" class="wa-float" title="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<footer>
+  <p>© 2026 Tecni Team 3x3 · @tecniteam3x3 · GM: <a href="https://www.instagram.com/tecni_luispa/" target="_blank" style="color: var(--red); text-decoration: none;">@tecni_luispa</a></p>
+</footer>
+
+</body>
+</html>

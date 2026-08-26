@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔒 Setter Tool — Tecniluispa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f1a;
+      --bg2: #111827;
+      --bg3: #1a2332;
+      --amber: #f59e0b;
+      --amber-dim: rgba(245,158,11,0.12);
+      --amber-glow: rgba(245,158,11,0.25);
+      --green: #10b981;
+      --red: #ef4444;
+      --orange: #f97316;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(255,255,255,0.07);
+      --sidebar-w: 240px;
+      --header-h: 52px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────── */
+    #top-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: rgba(245,158,11,0.08);
+      border-bottom: 1px solid rgba(245,158,11,0.3);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+    #top-header .badge {
+      background: var(--amber);
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+    #top-header .header-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #top-header .header-info span {
+      color: var(--amber);
+      font-weight: 600;
+    }
+    #hamburger {
+      display: none;
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--amber);
+      font-size: 22px;
+      padding: 4px;
+    }
+
+    /* ─── SIDEBAR ─────────────────────────────────────── */
+    #sidebar {
+      position: fixed;
+      top: var(--header-h);
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      z-index: 900;
+      padding: 12px 0;
+      transition: transform 0.3s ease;
+    }
+    #sidebar.hidden { transform: translateX(-100%); }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-item.active {
+      color: var(--amber);
+      border-left-color: var(--amber);
+      background: var(--amber-dim);
+    }
+    .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-divider { height: 1px; background: var(--border); margin: 8px 12px; }
+
+    /* ─── MAIN ─────────────────────────────────────── */
+    #main {
+      margin-left: var(--sidebar-w);
+      margin-top: var(--header-h);
+      padding: 32px 40px;
+      max-width: 960px;
+    }
+
+    /* ─── SECTIONS ─────────────────────────────────────── */
+    .section {
+      margin-bottom: 80px;
+      scroll-margin-top: calc(var(--header-h) + 20px);
+    }
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--amber-glow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ─── CARDS ─────────────────────────────────────── */
+    .cards-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .card-row { display: flex; flex-direction: column; gap: 6px; }
+    .card-row .item { font-size: 13px; color: var(--text); }
+    .card-row .item strong { color: var(--text-muted); font-weight: 500; }
+    .badge-status {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .badge-waiting { background: rgba(249,115,22,0.18); color: var(--orange); border: 1px solid rgba(249,115,22,0.4); }
+    .badge-ok { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.35); }
+    .badge-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-glow); }
+
+    /* ─── AUDIT LISTS ─────────────────────────────────────── */
+    .audit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .audit-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .audit-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.7px; }
+    .audit-card.green h3 { color: var(--green); }
+    .audit-card.red h3 { color: var(--red); }
+    .audit-card.orange h3 { color: var(--orange); }
+    .audit-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .audit-card ul li { font-size: 13px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; }
+    .audit-card ul li::before { flex-shrink: 0; margin-top: 2px; }
+    .audit-card.green ul li::before { content: "✓"; color: var(--green); }
+    .audit-card.red ul li::before { content: "✗"; color: var(--red); }
+    .audit-card.orange ul li::before { content: "⚠"; color: var(--orange); }
+    .score-badge {
+      display: inline-block;
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--amber);
+      line-height: 1;
+    }
+    .score-label { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ─── ROI ─────────────────────────────────────── */
+    .roi-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 32px; }
+    .roi-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .roi-card .roi-val { font-size: 24px; font-weight: 700; color: var(--amber); }
+    .roi-card .roi-desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .roi-total {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid var(--amber-glow);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .roi-total .big { font-size: 36px; font-weight: 800; color: var(--amber); }
+    .roi-total .detail { font-size: 13px; color: var(--text-muted); }
+
+    /* ─── CALCULADORA ─────────────────────────────────────── */
+    .calc-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .calc-box h3 { font-size: 14px; font-weight: 700; color: var(--text-muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .slider-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+    .slider-row label { font-size: 13px; color: var(--text); font-weight: 500; display: flex; justify-content: space-between; }
+    .slider-row label span { color: var(--amber); font-weight: 700; }
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--amber);
+      cursor: pointer;
+    }
+    .slider-sub { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .slider-sub span { font-size: 12px; color: var(--text-muted); }
+    .slider-sub input[type=number] { width: 80px; }
+    .calc-result {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid var(--amber-glow);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-top: 8px;
+    }
+
+    /* ─── INPUTS GENERIC ─────────────────────────────────────── */
+    input[type=text], input[type=number], select, textarea {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type=text]:focus, input[type=number]:focus, select:focus, textarea:focus {
+      border-color: var(--amber);
+    }
+    textarea { resize: vertical; min-height: 80px; width: 100%; }
+    select { cursor: pointer; }
+    label.field-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ─── PLAN TABLE ─────────────────────────────────────── */
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+      font-size: 13px;
+    }
+    .plan-table th {
+      background: var(--bg3);
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .plan-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .plan-table tr:last-child td { border-bottom: none; }
+    .plan-table tr.highlight td {
+      background: var(--amber-dim);
+      color: var(--amber);
+      font-weight: 700;
+      border-bottom: 1px solid var(--amber-glow);
+    }
+    .plan-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* ─── PLAN BUTTONS ─────────────────────────────────────── */
+    .plan-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .plan-btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .plan-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .plan-btn.active { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+
+    /* ─── DISCOUNT CALC ─────────────────────────────────────── */
+    .disc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .disc-result-box {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 12px;
+    }
+    .disc-result-box .res-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+    .disc-result-box .res-row .lbl { color: var(--text-muted); }
+    .disc-result-box .res-row .val { font-weight: 700; }
+    .semaforo {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .sem-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .sem-amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .sem-red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+    /* ─── ACORDEON OBJECIONES ─────────────────────────────────────── */
+    .obj-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .obj-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .obj-header:hover { background: rgba(239,68,68,0.05); }
+    .obj-header .q { font-size: 14px; font-weight: 600; color: #f87171; }
+    .obj-header .chevron { font-size: 16px; color: var(--text-muted); transition: transform 0.2s; }
+    .obj-item.open .chevron { transform: rotate(180deg); }
+    .obj-body {
+      display: none;
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+      background: rgba(255,255,255,0.02);
+    }
+    .obj-item.open .obj-body { display: block; }
+
+    /* ─── TIPS ─────────────────────────────────────── */
+    .tip-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+    }
+    .tip-item .tip-title { font-size: 14px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
+    .tip-item .tip-body { font-size: 13px; color: var(--text); line-height: 1.65; }
+
+    /* ─── ENTREGABLES ─────────────────────────────────────── */
+    .entregable-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+    }
+    .entregable-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+    .entregable-top .ent-num { font-size: 11px; font-weight: 700; color: var(--text-muted); min-width: 24px; }
+    .entregable-top .ent-name { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+    .status-sel {
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .entregable-bottom { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+    .entregable-bottom input[type=text] { width: 100%; }
+    .entregable-bottom input[type=date] { width: 150px; }
+    .btn-save {
+      background: var(--amber);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 16px;
+    }
+    .btn-save:hover { opacity: 0.85; }
+    .btn-secondary {
+      background: var(--bg3);
+      color: var(--amber);
+      border: 1px solid var(--amber-glow);
+      border-radius: 8px;
+      padding: 9px 20px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 12px;
+    }
+    .btn-secondary:hover { background: var(--amber-dim); }
+    .save-msg {
+      font-size: 12px;
+      color: var(--green);
+      margin-left: 12px;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .save-msg.show { opacity: 1; }
+
+    /* ─── MAPA PROCESO ─────────────────────────────────────── */
+    .form-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .form-block h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--amber-glow);
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .checkbox-group { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
+    .checkbox-group label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+    .checkbox-group input[type=checkbox] { accent-color: var(--amber); cursor: pointer; }
+
+    /* ─── GEMINI ─────────────────────────────────────── */
+    .gemini-header {
+      background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(16,185,129,0.05));
+      border: 1px solid var(--amber-glow);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .gemini-header h3 { font-size: 16px; font-weight: 700; color: var(--amber); margin-bottom: 8px; }
+    .gemini-header .meta { font-size: 13px; color: var(--text-muted); }
+    .gemini-summary {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .gemini-summary h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-muted); margin-bottom: 10px; }
+    .gemini-accordeon .g-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .g-item .g-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 18px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .g-item .g-header:hover { background: rgba(255,255,255,0.02); }
+    .g-item .g-header .g-title { font-size: 13px; font-weight: 600; color: var(--text); }
+    .g-item .g-header .g-ch { color: var(--text-muted); font-size: 14px; transition: transform 0.2s; }
+    .g-item.open .g-ch { transform: rotate(180deg); }
+    .g-item .g-body {
+      display: none;
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+      background: rgba(255,255,255,0.015);
+    }
+    .g-item.open .g-body { display: block; }
+    .drive-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; }
+    .btn-drive {
+      background: rgba(66,133,244,0.15);
+      color: #6ba3f5;
+      border: 1px solid rgba(66,133,244,0.3);
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-drive:hover { background: rgba(66,133,244,0.25); }
+    .sync-msg {
+      background: var(--amber-dim);
+      border: 1px solid var(--amber-glow);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--amber);
+      display: none;
+      margin-top: 10px;
+    }
+    .notas-area { width: 100%; min-height: 120px; margin-top: 8px; }
+    .next-steps {
+      background: rgba(16,185,129,0.08);
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .next-steps h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--green); margin-bottom: 10px; }
+    .next-steps ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .next-steps ul li { font-size: 13px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; }
+    .next-steps ul li::before { content: "→"; color: var(--green); flex-shrink: 0; }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #hamburger { display: block; }
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main { margin-left: 0; padding: 24px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .disc-grid { grid-template-columns: 1fr; }
+      .plan-table { font-size: 12px; }
+    }
+    @media (max-width: 500px) {
+      .cards-row { grid-template-columns: 1fr; }
+      .roi-cards { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ─── MISC ─────────────────────────────────────── */
+    .info-box {
+      background: rgba(245,158,11,0.06);
+      border: 1px solid var(--amber-glow);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--text);
+      margin: 16px 0;
+      line-height: 1.6;
+    }
+    .info-box strong { color: var(--amber); }
+    hr.section-hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    .small-note { font-size: 12px; color: var(--text-muted); margin-top: 6px; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<!-- ─── TOP HEADER ─────────────────────────────────────── -->
+<header id="top-header">
+  <span class="badge">🔒 SETTER TOOL</span>
+  <div class="header-info">
+    <span>Tecniluispa</span> — Luis Pascual García Notario &nbsp;|&nbsp;
+    <span>Plan Avanzado 900€/mes</span> &nbsp;|&nbsp; 21/08/2026
+  </div>
+  <button id="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+</header>
+
+<!-- ─── SIDEBAR ─────────────────────────────────────── -->
+<nav id="sidebar">
+  <div class="nav-item active" onclick="scrollTo('s1')" data-section="s1">
+    <span class="icon">📋</span> Resumen reunión
+  </div>
+  <div class="nav-item" onclick="scrollTo('s2')" data-section="s2">
+    <span class="icon">🔍</span> Auditoría
+  </div>
+  <div class="nav-item" onclick="scrollTo('s3')" data-section="s3">
+    <span class="icon">💰</span> ROI
+  </div>
+  <div class="nav-item" onclick="scrollTo('s4')" data-section="s4">
+    <span class="icon">🎛️</span> Plan &amp; Descuento
+  </div>
+  <div class="nav-divider"></div>
+  <div class="nav-item" onclick="scrollTo('s5')" data-section="s5">
+    <span class="icon">💬</span> Objeciones
+  </div>
+  <div class="nav-item" onclick="scrollTo('s6')" data-section="s6">
+    <span class="icon">🎯</span> Tips negociación
+  </div>
+  <div class="nav-divider"></div>
+  <div class="nav-item" onclick="scrollTo('s7')" data-section="s7">
+    <span class="icon">✅</span> Entregables
+  </div>
+  <div class="nav-item" onclick="scrollTo('s8')" data-section="s8">
+    <span class="icon">🗺️</span> Mapa proceso
+  </div>
+  <div class="nav-item" onclick="scrollTo('s9')" data-section="s9">
+    <span class="icon">📝</span> Notas Gemini
+  </div>
+</nav>
+
+<!-- ─── MAIN CONTENT ─────────────────────────────────────── -->
+<main id="main">
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 1 — RESUMEN REUNIÓN                      -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s1">
+    <h2 class="section-title">📋 Resumen reunión</h2>
+
+    <div class="cards-row">
+      <!-- Card datos cliente -->
+      <div class="card">
+        <div class="card-title">Datos del cliente</div>
+        <div class="card-row">
+          <div class="item"><strong>Nombre:</strong> Luis Pascual García Notario</div>
+          <div class="item"><strong>Email:</strong> luispagn@gmail.com</div>
+          <div class="item"><strong>WhatsApp:</strong> +34 623 176 981</div>
+          <div class="item"><strong>Proyecto:</strong> ME-sport</div>
+          <div class="item"><strong>Fecha reunión:</strong> 21/08/2026 12:00</div>
+        </div>
+      </div>
+
+      <!-- Card resultado -->
+      <div class="card">
+        <div class="card-title">Resultado de la reunión</div>
+        <span class="badge-status badge-waiting">⏳ waiting</span>
+        <div class="card-row">
+          <div class="item">Interesado pero no es el momento</div>
+          <div class="item"><strong>Motivo:</strong> Carga laboral (UE + Valencia Basket)</div>
+          <div class="item"><strong>Próxima acción:</strong> Seguimiento <span style="color:var(--amber);font-weight:700;">29/08/2026</span></div>
+        </div>
+      </div>
+
+      <!-- Card datos clave -->
+      <div class="card" style="grid-column: 1/-1;">
+        <div class="card-title">Datos clave descubiertos en reunión</div>
+        <div class="card-row">
+          <div class="item">• <strong>25 alumnos regulares activos</strong> (tendencia de crecimiento)</div>
+          <div class="item">• Equipo <strong style="color:var(--red)">3x3 CANCELADO en 2026</strong> (coste viajes + seguros, sin apoyo sponsors suficiente)</div>
+          <div class="item">• Colaboración con preparador físico</div>
+          <div class="item">• <strong>Sponsors activos:</strong> @hiperbasketball, Reformas Ruiz, @wibosport, @jorgefitnessone</div>
+          <div class="item">• <strong>Precio discutido en reunión:</strong> 750€ (integración canales) / 1.000€ (con landings)</div>
+          <div class="item">• <strong>Próximo paso acordado:</strong> Luis refiere contactos de otras academias</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 2 — AUDITORÍA                           -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s2">
+    <h2 class="section-title">🔍 Auditoría para dummies</h2>
+
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;flex-wrap:wrap;">
+      <div>
+        <div class="score-badge">72/100</div>
+        <div class="score-label">Oportunidad <strong style="color:var(--amber);">ALTA</strong></div>
+      </div>
+      <div class="info-box" style="flex:1;">
+        Presencia digital real con comunidad activa, sponsors y servicios consolidados. La gran oportunidad está en la automatización: cada semana pierde ~5 leads sin capturar y los sponsors no reciben seguimiento sistematizado.
+      </div>
+    </div>
+
+    <div class="audit-grid">
+      <div class="audit-card green">
+        <h3>✅ Lo que tiene</h3>
+        <ul>
+          <li>3 perfiles Instagram activos con comunidad</li>
+          <li>4 sponsors reales y activos</li>
+          <li>Servicios reales: academia, tecnificaciones, campus, eventos</li>
+          <li>25 alumnos regulares con tendencia creciente</li>
+        </ul>
+      </div>
+      <div class="audit-card red">
+        <h3>❌ Lo que le falta</h3>
+        <ul>
+          <li>0 sistemas de captura automatizada de leads</li>
+          <li>Responde DMs manualmente → ~5 leads perdidos/semana</li>
+          <li>Sin base de datos de leads histórica</li>
+          <li>Sin sistema de seguimiento a sponsors</li>
+          <li>Equipo 3x3 cancelado (oportunidad sin explotar)</li>
+        </ul>
+      </div>
+      <div class="audit-card orange">
+        <h3>⚠ Riesgo real</h3>
+        <ul>
+          <li>Si Valencia Basket y UE le quitan más tiempo, los sponsors actuales pueden irse sin seguimiento</li>
+          <li>Sin sistema = escalar es imposible (25 → 50 alumnos requiere automatización)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 3 — ROI                                  -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s3">
+    <h2 class="section-title">💰 ROI</h2>
+
+    <div class="roi-cards">
+      <div class="roi-card">
+        <div class="roi-val">750€/mes</div>
+        <div class="roi-desc">3 inscripciones extra/mes × 250€</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-val">83€/mes</div>
+        <div class="roi-desc">1 sponsor extra/año × 1.000€</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-val">250€/mes</div>
+        <div class="roi-desc">1 campus extra × 20 plazas × 150€</div>
+      </div>
+    </div>
+
+    <div class="roi-total">
+      <div>
+        <div class="big">~1.083€/mes</div>
+        <div class="detail">extra estimado</div>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--green);">✓ Sistema pagado en: Mes 1</div>
+        <div class="detail">El plan Avanzado 900€ se cubre desde la primera inscripción recuperada</div>
+      </div>
+    </div>
+
+    <!-- Calculadora interactiva -->
+    <div class="calc-box">
+      <h3>🧮 Calculadora ROI interactiva</h3>
+
+      <div class="slider-row">
+        <label>Inscripciones extra/mes <span id="ins-val">3</span></label>
+        <input type="range" id="ins-slider" min="1" max="10" value="3" oninput="syncSlider('ins');calcROI()">
+        <div class="slider-sub">
+          <span>Precio unitario:</span>
+          <input type="number" id="ins-price" value="250" min="50" max="2000" onchange="calcROI()" style="width:90px;"> €
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <label>Sponsors extra/año <span id="sp-val">1</span></label>
+        <input type="range" id="sp-slider" min="0" max="5" value="1" oninput="syncSlider('sp');calcROI()">
+        <div class="slider-sub">
+          <span>Valor unitario:</span>
+          <input type="number" id="sp-price" value="1000" min="100" max="10000" onchange="calcROI()" style="width:90px;"> €
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <label>Campus extra/año <span id="camp-val">1</span></label>
+        <input type="range" id="camp-slider" min="0" max="3" value="1" oninput="syncSlider('camp');calcROI()">
+        <div class="slider-sub">
+          <span>Plazas:</span>
+          <input type="number" id="camp-plazas" value="20" min="5" max="100" onchange="calcROI()" style="width:70px;">
+          <span>× Precio plaza:</span>
+          <input type="number" id="camp-price" value="150" min="30" max="500" onchange="calcROI()" style="width:80px;"> €
+        </div>
+      </div>
+
+      <div class="calc-result" id="roi-result">
+        Genera ~1.083€/mes extra — payback en 1 mes
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 4 — PLAN & DESCUENTO                    -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s4">
+    <h2 class="section-title">🎛️ Plan &amp; Descuento</h2>
+
+    <table class="plan-table">
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Precio</th>
+          <th>Horas/mes</th>
+          <th>Ideal para</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Básico</td>
+          <td>250€</td>
+          <td>1h</td>
+          <td>FAQ, 1 canal</td>
+        </tr>
+        <tr>
+          <td>Profesional</td>
+          <td>490€</td>
+          <td>3h</td>
+          <td>1 canal, leads simples</td>
+        </tr>
+        <tr class="highlight">
+          <td>⭐ Avanzado</td>
+          <td>900€</td>
+          <td>6h</td>
+          <td>Luis — 3 canales, agentes múltiples</td>
+        </tr>
+        <tr>
+          <td>Crítico</td>
+          <td>1.500€+</td>
+          <td>Ilimitado</td>
+          <td>Franquicias</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box" style="margin-bottom:28px;">
+      <strong>¿Por qué Plan Avanzado para Luis?</strong><br>
+      3 canales simultáneos (WhatsApp + Instagram + web) · 3 agentes distintos (Router + Sponsors + Academia) · Integración Google Sheets para memoria económica de sponsors · 6h/mes de soporte dedicado.
+    </div>
+
+    <!-- Calculadora de descuento -->
+    <div class="calc-box">
+      <h3>💸 Calculadora de descuento</h3>
+
+      <div class="plan-btns">
+        <button class="plan-btn" onclick="setPlan('basico')">Básico</button>
+        <button class="plan-btn" onclick="setPlan('profesional')">Profesional</button>
+        <button class="plan-btn active" onclick="setPlan('avanzado')">⭐ Avanzado</button>
+        <button class="plan-btn" onclick="setPlan('critico')">Crítico</button>
+      </div>
+
+      <div class="disc-grid">
+        <div class="form-field">
+          <label class="field-label">Precio del plan (€)</label>
+          <input type="number" id="disc-precio" value="900" min="0" onchange="calcDisc()">
+        </div>
+        <div class="form-field">
+          <label class="field-label">Coste real entrega (€)</label>
+          <input type="number" id="disc-coste" value="565" min="0" onchange="calcDisc()">
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <label>Descuento: <span id="disc-pct-val">0</span>%</label>
+        <input type="range" id="disc-slider" min="0" max="35" value="0" oninput="syncDiscSlider();calcDisc()">
+      </div>
+
+      <div class="disc-result-box" id="disc-result-box" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);">
+        <div class="res-row">
+          <span class="lbl">Precio con descuento:</span>
+          <span class="val" id="res-precio">900€</span>
+        </div>
+        <div class="res-row">
+          <span class="lbl">Margen bruto:</span>
+          <span class="val" id="res-margen">335€</span>
+        </div>
+        <div class="res-row">
+          <span class="lbl">Margen %:</span>
+          <span class="val" id="res-margen-pct">37.2%</span>
+        </div>
+        <div class="res-row" style="margin-top:10px;">
+          <span class="lbl">Estado:</span>
+          <span class="val" id="res-semaforo"><span class="semaforo sem-green"></span>OK — margen saludable</span>
+        </div>
+      </div>
+      <p class="small-note" id="disc-floor-note">Floor Avanzado: 700€ mínimo · Floor no aplica todavía</p>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 5 — OBJECIONES                          -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s5">
+    <h2 class="section-title">💬 Objeciones</h2>
+
+    <div id="obj-list">
+      <div class="obj-item" id="obj-0">
+        <div class="obj-header" onclick="toggleObj(0)">
+          <span class="q">"Ahora no es el momento"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          Entiendo, de hecho por eso no te propongo arrancar mañana. El setup tarda 3 semanas. Si lo activamos ahora, cuando Valencia Basket y la UE bajen el ritmo en septiembre, el sistema ya está funcionando. <strong style="color:var(--amber);">El peor momento para empezar es cuando más lo necesitas.</strong>
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-1">
+        <div class="obj-header" onclick="toggleObj(1)">
+          <span class="q">"900€/mes es mucho"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          Son 30€/día. Si el sistema recupera 3 inscripciones al mes a 250€ cada una, ya son 750€. El sistema se paga desde el mes 1. <strong style="color:var(--amber);">La pregunta real es: ¿cuánto te cuesta cada semana que no tienes el sistema?</strong>
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-2">
+        <div class="obj-header" onclick="toggleObj(2)">
+          <span class="q">"¿Y si la IA comete errores?"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          El agente tiene umbral de confianza. Si no está seguro, deriva al WhatsApp de Luis. Nunca inventa — solo trabaja con lo que tú defines. <strong style="color:var(--amber);">Los primeros 15 días revisamos todas las conversaciones juntos.</strong>
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-3">
+        <div class="obj-header" onclick="toggleObj(3)">
+          <span class="q">"No tengo tiempo de gestionarlo"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          Ese es exactamente el punto. <strong style="color:var(--amber);">No lo gestionas tú — lo gestiona el sistema.</strong> Recibes una notificación cuando hay un lead cualificado listo. 6h/mes de revisión conmigo, nada más.
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-4">
+        <div class="obj-header" onclick="toggleObj(4)">
+          <span class="q">"¿Cuánto tarda?"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          3 semanas desde el contrato: <strong style="color:var(--amber);">Semana 1</strong> configuración técnica · <strong style="color:var(--amber);">Semana 2</strong> entrenamiento con tus FAQs reales · <strong style="color:var(--amber);">Semana 3</strong> pruebas con leads reales antes de producción.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 6 — TIPS NEGOCIACIÓN                    -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s6">
+    <h2 class="section-title">🎯 Tips negociación</h2>
+
+    <div class="tip-item">
+      <div class="tip-title">🎯 Ancla el problema, no el precio</div>
+      <div class="tip-body">"¿Cuántos DMs sin responder tienes esta semana?" — antes de hablar de dinero. Que Luis ponga número al dolor primero. Si él mismo cuantifica la pérdida, el precio del sistema se vuelve pequeño.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">🏀 Usa los sponsors como palanca</div>
+      <div class="tip-body">Los sponsors quieren datos. Con el sistema, Luis puede presentar a @hiperbasketball un informe mensual de leads generados, eventos y engagement. Eso solo ya vale el precio del plan.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">⏱ Convierte su timing en argumento</div>
+      <div class="tip-body">Está ocupado AHORA. El setup de 3 semanas encaja perfectamente para arrancar en septiembre cuando el ritmo baje. Su objeción sobre tiempo es en realidad tu mejor aliada de timing.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">🔗 Pide referidos siempre antes de salir</div>
+      <div class="tip-body">Frase exacta: <em style="color:var(--amber);">"Luis, aunque tú no seas el momento, ¿conoces a alguien en el ecosistema de baloncesto o academias que sí lo necesite?"</em> — Ya lo acordasteis en la reunión.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">🚫 No bajes el precio antes de que lo pida</div>
+      <div class="tip-body">Ofrece primero: 1 workflow extra gratis, o seguimiento semanal el primer mes incluido. Solo si rechaza ambas opciones de valor, mueve el slider de descuento. Ceder precio sin razón destruye percepción de valor.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">💡 El 3x3 cancelado es una oportunidad nueva</div>
+      <div class="tip-body">Si antes tenía equipo 3x3, hay contactos, jugadores y sponsors sin hogar. Un campus 3x3 o clínica especializada podría ser un nuevo flujo de ingresos que el sistema puede gestionar automáticamente desde el primer día.</div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 7 — ENTREGABLES                         -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s7">
+    <h2 class="section-title">✅ Entregables del cliente</h2>
+
+    <div id="entregables-list">
+      <!-- Entregable 1 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">01</span>
+          <span class="ent-name">Propuesta HTML</span>
+          <select class="status-sel" id="ent-0-status" onchange="styleStatus(0);saveEntregables()">
+            <option value="entregado">✅ Entregado</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="pendiente">⏳ Pendiente</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-0-notes" placeholder="Notas..." value="d904b65e-tecniluispa.html" onchange="saveEntregables()">
+          <input type="date" id="ent-0-date" value="2026-08-21" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 2 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">02</span>
+          <span class="ent-name">Contrato de mantenimiento</span>
+          <select class="status-sel" id="ent-1-status" onchange="styleStatus(1);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-1-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-1-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 3 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">03</span>
+          <span class="ent-name">Workflow: Router de intenciones (n8n)</span>
+          <select class="status-sel" id="ent-2-status" onchange="styleStatus(2);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-2-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-2-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 4 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">04</span>
+          <span class="ent-name">Workflow: Agente sponsors</span>
+          <select class="status-sel" id="ent-3-status" onchange="styleStatus(3);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-3-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-3-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 5 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">05</span>
+          <span class="ent-name">Workflow: Agente academia</span>
+          <select class="status-sel" id="ent-4-status" onchange="styleStatus(4);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-4-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-4-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 6 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">06</span>
+          <span class="ent-name">Workflow: Notificación a Luis</span>
+          <select class="status-sel" id="ent-5-status" onchange="styleStatus(5);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-5-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-5-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 7 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">07</span>
+          <span class="ent-name">Workflow: Registro en Google Sheets</span>
+          <select class="status-sel" id="ent-6-status" onchange="styleStatus(6);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-6-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-6-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 8 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">08</span>
+          <span class="ent-name">Prompts de los 3 agentes</span>
+          <select class="status-sel" id="ent-7-status" onchange="styleStatus(7);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-7-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-7-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 9 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">09</span>
+          <span class="ent-name">Manual de uso para el cliente</span>
+          <select class="status-sel" id="ent-8-status" onchange="styleStatus(8);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-8-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-8-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <!-- Entregable 10 -->
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">10</span>
+          <span class="ent-name">Informe auditoría digital</span>
+          <select class="status-sel" id="ent-9-status" onchange="styleStatus(9);saveEntregables()">
+            <option value="entregado">✅ Entregado</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="pendiente">⏳ Pendiente</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-9-notes" placeholder="Notas..." value="web-tecni_luispa.html" onchange="saveEntregables()">
+          <input type="date" id="ent-9-date" value="2026-08-21" onchange="saveEntregables()">
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;margin-top:8px;">
+      <button class="btn-save" onclick="saveEntregables(true)">💾 Guardar cambios</button>
+      <span class="save-msg" id="ent-save-msg">Guardado en localStorage ✓</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 8 — MAPA DEL PROCESO                    -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s8">
+    <h2 class="section-title">🗺️ Mapa del proceso</h2>
+
+    <!-- Bloque A -->
+    <div class="form-block">
+      <h3>Bloque A — Situación actual (AS-IS)</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="field-label">Canal principal de captación</label>
+          <select id="map-canal" onchange="saveMap()">
+            <option value="">Seleccionar...</option>
+            <option value="whatsapp" selected>WhatsApp</option>
+            <option value="instagram">Instagram</option>
+            <option value="web">Web</option>
+            <option value="email">Email</option>
+            <option value="otros">Otros</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Tiempo gestión manual/semana (horas)</label>
+          <input type="number" id="map-tiempo" min="0" max="40" value="8" onchange="saveMap()">
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Tipo de lead que entra</label>
+          <textarea id="map-tipo-lead" onchange="saveMap()" placeholder="Ej: Padres de niños 8-16 años interesados en tecnificación de baloncesto, jugadores amateur buscando campus de verano...">Padres de niños 8-16 años interesados en tecnificación. Jugadores juveniles para campus. Posibles sponsors del sector deportivo.</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Proceso actual paso a paso</label>
+          <textarea id="map-proceso-as" onchange="saveMap()" style="min-height:110px;">1. Lead envía DM a Instagram o WhatsApp
+2. Luis responde manualmente cuando tiene tiempo
+3. Envía info básica del programa
+4. Si hay interés, coordina fecha de prueba por WhatsApp
+5. Sin seguimiento sistematizado si no contesta</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Pain principal</label>
+          <textarea id="map-pain" onchange="saveMap()">Luis no tiene tiempo de responder todos los DMs. Se pierden ~5 leads/semana. No hay registro histórico. Los sponsors tampoco reciben seguimiento estructurado.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloque B -->
+    <div class="form-block">
+      <h3>Bloque B — Proceso futuro automatizado (TO-BE)</h3>
+      <div class="form-grid">
+        <div class="form-field full">
+          <label class="field-label">Canales a automatizar</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="map-ch-wa" checked onchange="saveMap()"> WhatsApp</label>
+            <label><input type="checkbox" id="map-ch-ig" checked onchange="saveMap()"> Instagram DM</label>
+            <label><input type="checkbox" id="map-ch-web" checked onchange="saveMap()"> Formulario web</label>
+            <label><input type="checkbox" id="map-ch-email" onchange="saveMap()"> Email</label>
+          </div>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Proceso automatizado paso a paso</label>
+          <textarea id="map-proceso-to" onchange="saveMap()" style="min-height:130px;">1. Lead llega por WA / IG / web
+2. Router de intenciones clasifica: academia / sponsor / info general
+3. Agente correspondiente responde con info personalizada
+4. Recoge datos clave (nombre, edad del alumno, interés, presupuesto sponsor)
+5. Cualifica según criterios definidos
+6. Si cumple criterios → notificación a Luis con resumen
+7. Registro automático en Google Sheets
+8. Seguimiento automático si no responde (D+2, D+5)</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Cuándo deriva al humano (Luis)</label>
+          <textarea id="map-deriva" onchange="saveMap()">- Pregunta fuera del conocimiento del agente
+- Lead cualificado listo para cierre
+- Queja o situación delicada
+- Negociación de precio con sponsor</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Datos a capturar</label>
+          <textarea id="map-datos" onchange="saveMap()">- Nombre completo
+- Edad del alumno (si aplica)
+- Nivel de juego
+- Servicio de interés (tecnificación, campus, academia)
+- Presupuesto sponsor (si aplica)
+- Canal de contacto
+- Fecha de primer contacto</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Estados del lead</label>
+          <textarea id="map-estados" onchange="saveMap()">Nuevo → En seguimiento → Cualificado → Reunión agendada → Cerrado / Descartado</textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bloque C -->
+    <div class="form-block">
+      <h3>Bloque C — Integraciones técnicas</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="field-label">CRM / Base de datos</label>
+          <select id="map-crm" onchange="saveMap()">
+            <option value="sheets" selected>Google Sheets</option>
+            <option value="supabase">Supabase</option>
+            <option value="airtable">Airtable</option>
+            <option value="hubspot">HubSpot</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Calendario</label>
+          <select id="map-cal" onchange="saveMap()">
+            <option value="gcal" selected>Google Calendar</option>
+            <option value="calendly">Calendly</option>
+            <option value="otro">Otro</option>
+            <option value="no">No necesario</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">WhatsApp</label>
+          <select id="map-wa" onchange="saveMap()">
+            <option value="openwa">OpenWA</option>
+            <option value="meta" selected>Meta Business API</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Instagram</label>
+          <select id="map-ig" onchange="saveMap()">
+            <option value="meta" selected>Meta Graph API</option>
+            <option value="manychat">ManyChat</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Otras integraciones</label>
+          <textarea id="map-otras" onchange="saveMap()" placeholder="n8n como orquestador, Google Sheets para registros, notificaciones por WA al setter...">n8n como orquestador principal · Google Sheets para memoria de leads y sponsors · Notificación WA a Ronald cuando hay lead cualificado</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;margin-top:4px;">
+      <button class="btn-save" onclick="saveMap(true)">💾 Guardar mapa del proceso</button>
+      <span class="save-msg" id="map-save-msg">Guardado en localStorage ✓</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════ -->
+  <!-- SECCIÓN 9 — NOTAS GEMINI                        -->
+  <!-- ════════════════════════════════════════════════ -->
+  <section class="section" id="s9">
+    <h2 class="section-title">📝 Notas Gemini</h2>
+
+    <div class="gemini-header">
+      <h3>Notas de reunión — Gemini AI — 21/08/2026</h3>
+      <div class="meta">
+        Fecha: 21 agosto 2026 — 12:00 CEST<br>
+        Participantes: <strong>Ronald Palma Fernández</strong> (ri@palferia.com) — <strong>Luis Pascual García Notario</strong> (luispagn@gmail.com)
+      </div>
+    </div>
+
+    <div class="gemini-summary">
+      <h4>Resumen ejecutivo (Gemini)</h4>
+      Revisión estratégica sobre la optimización digital y la automatización mediante IA sin adoptar la propuesta. Luis declina la implementación inmediata citando carga laboral (Valencia Basket + Universidad Europea) y objetivos personales de equilibrio. <strong style="color:var(--amber);">Valora positivamente la propuesta.</strong>
+    </div>
+
+    <!-- Acordeón Gemini -->
+    <div class="gemini-accordeon" style="margin-bottom:28px;">
+
+      <div class="g-item" id="g-0">
+        <div class="g-header" onclick="toggleGem(0)">
+          <span class="g-title">1. Situación profesional de Luis</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          Tecnificación semanal + campus de verano en crecimiento. Coordina escuela + entrena juveniles/infantiles en Valencia Basket + actividades en Universidad Europea. Tiempo muy limitado actualmente.
+        </div>
+      </div>
+
+      <div class="g-item" id="g-1">
+        <div class="g-header" onclick="toggleGem(1)">
+          <span class="g-title">2. Análisis de marca y presencia digital</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          Ronald presentó análisis: falta de página centralizada. Propuso 3 landing pages para consolidar servicios. Luis confirmó que el ecosistema existe pero está disperso entre distintos perfiles y canales.
+        </div>
+      </div>
+
+      <div class="g-item" id="g-2">
+        <div class="g-header" onclick="toggleGem(2)">
+          <span class="g-title">3. Equipo 3x3 CANCELADO</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          Luis canceló el equipo 3x3 en 2026 por aumento de gastos (viajes, seguros, jugadores profesionales) y falta de apoyo económico suficiente. Contactos y jugadores quedan disponibles — <strong style="color:var(--orange);">oportunidad: campus 3x3 o clínicas especializadas.</strong>
+        </div>
+      </div>
+
+      <div class="g-item" id="g-3">
+        <div class="g-header" onclick="toggleGem(3)">
+          <span class="g-title">4. Estrategias de patrocinio</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          Ronald ofreció asesoramiento gratuito para estructurar propuestas de patrocinio. Luis opera como autónomo con 25 alumnos regulares y tendencia de crecimiento. Sponsors actuales: @hiperbasketball, Reformas Ruiz, @wibosport, @jorgefitnessone.
+        </div>
+      </div>
+
+      <div class="g-item" id="g-4">
+        <div class="g-header" onclick="toggleGem(4)">
+          <span class="g-title">5. Propuesta técnica presentada</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          4 canales (web, Instagram, email, WhatsApp) + 5 agentes IA. Sistema cualifica padres y sponsors, recopila datos, opera 24h. Luis solo interviene para decisiones humanas. Presentación positivamente valorada.
+        </div>
+      </div>
+
+      <div class="g-item" id="g-5">
+        <div class="g-header" onclick="toggleGem(5)">
+          <span class="g-title">6. Precio discutido en reunión</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          750€ integración canales + agentes. 1.000€ si incluye landing pages adicionales.
+          <div style="margin-top:10px;padding:10px 14px;background:rgba(245,158,11,0.08);border:1px solid var(--amber-glow);border-radius:6px;font-size:12px;color:var(--amber);">
+            ⚠ Nota interna: la propuesta generada es 900€/mes Plan Avanzado — ajustar framing en próxima conversación. El price anchor de 1.000€ puede usarse como anclaje favorable.
+          </div>
+        </div>
+      </div>
+
+      <div class="g-item" id="g-6">
+        <div class="g-header" onclick="toggleGem(6)">
+          <span class="g-title">7. Conclusión</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          Luis valora positivamente la propuesta pero declina por incertidumbre de carga de trabajo futura. Timing de seguimiento acordado: 29/08/2026.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Próximos pasos -->
+    <div class="next-steps">
+      <h4>Próximos pasos (Gemini)</h4>
+      <ul>
+        <li><strong>[Luis Pascual]</strong> Referir contactos: recomendar servicios de automatización de Ronald a otras academias o contactos conocidos del ecosistema de baloncesto.</li>
+        <li><strong>[Ronald]</strong> Seguimiento el 29/08/2026 — preguntar por carga de trabajo y avanzar propuesta.</li>
+      </ul>
+    </div>
+
+    <!-- Drive -->
+    <div class="drive-row">
+      <a class="btn-drive" href="https://docs.google.com/document/d/1UlbWX5Z4tv7ECjKQREbv5YVJAw7r56hj6qkLVkf7QMY" target="_blank" rel="noopener">
+        📄 Ver en Drive
+      </a>
+      <button class="btn-secondary" onclick="showSyncMsg()" style="margin-top:0;">🔄 Actualizar desde Drive</button>
+    </div>
+    <div class="sync-msg" id="sync-msg">
+      Para sincronizar las últimas notas de Gemini, pide a Claude Code:<br>
+      <em>"Actualiza las notas de Drive para Tecniluispa en el setter tool"</em>
+    </div>
+
+    <hr class="section-hr">
+
+    <!-- Notas adicionales -->
+    <div>
+      <label class="field-label" style="margin-bottom:10px;display:block;font-size:13px;">📝 Añadir apuntes propios</label>
+      <textarea class="notas-area" id="gemini-notas" placeholder="Escribe aquí tus apuntes sobre la reunión..." onchange="saveGeminiNotas()"></textarea>
+      <div style="display:flex;align-items:center;margin-top:8px;">
+        <button class="btn-save" onclick="saveGeminiNotas(true)">💾 Guardar apuntes</button>
+        <span class="save-msg" id="gem-save-msg">Guardado en localStorage ✓</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ─── JAVASCRIPT ─────────────────────────────────────── -->
+<script>
+  'use strict';
+
+  // ── PLAN DATA ──────────────────────────────────────────
+  const PLANS = {
+    basico:       { precio: 250,  coste: 180,  floor: 210  },
+    profesional:  { precio: 490,  coste: 350,  floor: 400  },
+    avanzado:     { precio: 900,  coste: 565,  floor: 700  },
+    critico:      { precio: 1500, coste: 1000, floor: 1200 }
+  };
+  let activePlan = 'avanzado';
+
+  // ── SIDEBAR ────────────────────────────────────────────
+  function toggleSidebar() {
+    const sb = document.getElementById('sidebar');
+    sb.classList.toggle('open');
+  }
+
+  function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    // Close on mobile
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  }
+
+  // ── SCROLLSPY ─────────────────────────────────────────
+  const sections = ['s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+  function updateNav() {
+    const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 52;
+    let current = sections[0];
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= headerH + 40) {
+        current = id;
+      }
+    });
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.toggle('active', n.dataset.section === current);
+    });
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+
+  // ── ROI CALCULATOR ────────────────────────────────────
+  function syncSlider(key) {
+    const s = document.getElementById(key + '-slider');
+    document.getElementById(key + '-val').textContent = s.value;
+  }
+
+  function calcROI() {
+    const ins    = parseInt(document.getElementById('ins-slider').value) || 0;
+    const insP   = parseFloat(document.getElementById('ins-price').value) || 0;
+    const sp     = parseInt(document.getElementById('sp-slider').value) || 0;
+    const spP    = parseFloat(document.getElementById('sp-price').value) || 0;
+    const camp   = parseInt(document.getElementById('camp-slider').value) || 0;
+    const campPl = parseFloat(document.getElementById('camp-plazas').value) || 0;
+    const campPr = parseFloat(document.getElementById('camp-price').value) || 0;
+
+    const insMonth  = ins * insP;
+    const spMonth   = (sp * spP) / 12;
+    const campMonth = (camp * campPl * campPr) / 12;
+    const total     = insMonth + spMonth + campMonth;
+
+    const planPrice = parseFloat(document.getElementById('disc-precio').value) || 900;
+    const payback   = total > 0 ? Math.ceil(planPrice / total) : '∞';
+
+    document.getElementById('roi-result').textContent =
+      'Genera ~' + Math.round(total).toLocaleString('es-ES') + '€/mes extra — payback en ' + payback + ' mes' + (payback === 1 ? '' : 'es');
+  }
+
+  // ── DISCOUNT CALCULATOR ───────────────────────────────
+  function setPlan(plan) {
+    activePlan = plan;
+    const data = PLANS[plan];
+    document.getElementById('disc-precio').value = data.precio;
+    document.getElementById('disc-coste').value  = data.coste;
+    document.getElementById('disc-slider').value = 0;
+    document.getElementById('disc-pct-val').textContent = '0';
+    document.querySelectorAll('.plan-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent.toLowerCase().includes(plan.replace('avanzado','avanzado').replace('critico','crítico')));
+    });
+    // Simpler: match by onclick attr
+    document.querySelectorAll('.plan-btn').forEach(b => {
+      const fn = b.getAttribute('onclick') || '';
+      b.classList.toggle('active', fn.includes("'" + plan + "'"));
+    });
+    calcDisc();
+  }
+
+  function syncDiscSlider() {
+    document.getElementById('disc-pct-val').textContent = document.getElementById('disc-slider').value;
+  }
+
+  function calcDisc() {
+    const precio = parseFloat(document.getElementById('disc-precio').value) || 0;
+    const coste  = parseFloat(document.getElementById('disc-coste').value) || 0;
+    const pct    = parseFloat(document.getElementById('disc-slider').value) || 0;
+    const floor  = PLANS[activePlan] ? PLANS[activePlan].floor : 0;
+
+    const descuento  = precio * (pct / 100);
+    const precioFinal = precio - descuento;
+    const margen     = precioFinal - coste;
+    const margenPct  = precioFinal > 0 ? (margen / precioFinal) * 100 : 0;
+
+    document.getElementById('res-precio').textContent     = Math.round(precioFinal).toLocaleString('es-ES') + '€';
+    document.getElementById('res-margen').textContent     = Math.round(margen).toLocaleString('es-ES') + '€';
+    document.getElementById('res-margen-pct').textContent = margenPct.toFixed(1) + '%';
+
+    const box = document.getElementById('disc-result-box');
+    const sem = document.getElementById('res-semaforo');
+    const note = document.getElementById('disc-floor-note');
+
+    if (precioFinal < floor) {
+      box.style.background = 'rgba(239,68,68,0.08)';
+      box.style.borderColor = 'rgba(239,68,68,0.35)';
+      sem.innerHTML = '<span class="semaforo sem-red"></span>Por debajo del floor mínimo (' + floor + '€)';
+      note.style.color = 'var(--red)';
+      note.textContent = 'Floor ' + activePlan.charAt(0).toUpperCase() + activePlan.slice(1) + ': ' + floor + '€ — PRECIO FINAL BAJO EL FLOOR';
+    } else if (margenPct < 15) {
+      box.style.background = 'rgba(245,158,11,0.08)';
+      box.style.borderColor = 'rgba(245,158,11,0.3)';
+      sem.innerHTML = '<span class="semaforo sem-amber"></span>Margen ajustado — revisar';
+      note.style.color = 'var(--amber)';
+      note.textContent = 'Floor ' + activePlan.charAt(0).toUpperCase() + activePlan.slice(1) + ': ' + floor + '€ · Margen por debajo del 15%';
+    } else {
+      box.style.background = 'rgba(16,185,129,0.08)';
+      box.style.borderColor = 'rgba(16,185,129,0.3)';
+      sem.innerHTML = '<span class="semaforo sem-green"></span>OK — margen saludable';
+      note.style.color = 'var(--text-muted)';
+      note.textContent = 'Floor ' + activePlan.charAt(0).toUpperCase() + activePlan.slice(1) + ': ' + floor + '€ · Floor no aplica todavía';
+    }
+  }
+
+  // ── ACORDEÓN OBJECIONES ───────────────────────────────
+  function toggleObj(i) {
+    const el = document.getElementById('obj-' + i);
+    el.classList.toggle('open');
+  }
+
+  // ── ACORDEÓN GEMINI ───────────────────────────────────
+  function toggleGem(i) {
+    const el = document.getElementById('g-' + i);
+    el.classList.toggle('open');
+  }
+
+  // ── SYNC MSG ──────────────────────────────────────────
+  function showSyncMsg() {
+    const el = document.getElementById('sync-msg');
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 8000);
+  }
+
+  // ── STATUS STYLE ─────────────────────────────────────
+  function styleStatus(i) {
+    // Could add visual feedback per status if needed
+  }
+
+  // ── SHOW SAVE MSG ─────────────────────────────────────
+  function showSaveMsg(id) {
+    const el = document.getElementById(id);
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // ── ENTREGABLES LOCALSTORAGE ──────────────────────────
+  const ENT_KEY = 'setter_tecniluispa_entregables';
+  const ENT_COUNT = 10;
+
+  function saveEntregables(showMsg) {
+    const data = {};
+    for (let i = 0; i < ENT_COUNT; i++) {
+      data['s-' + i] = document.getElementById('ent-' + i + '-status')?.value || '';
+      data['n-' + i] = document.getElementById('ent-' + i + '-notes')?.value || '';
+      data['d-' + i] = document.getElementById('ent-' + i + '-date')?.value || '';
+    }
+    localStorage.setItem(ENT_KEY, JSON.stringify(data));
+    if (showMsg) showSaveMsg('ent-save-msg');
+  }
+
+  function loadEntregables() {
+    const raw = localStorage.getItem(ENT_KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      for (let i = 0; i < ENT_COUNT; i++) {
+        const sel = document.getElementById('ent-' + i + '-status');
+        if (sel && data['s-' + i]) sel.value = data['s-' + i];
+        const notes = document.getElementById('ent-' + i + '-notes');
+        if (notes && data['n-' + i] !== undefined) notes.value = data['n-' + i];
+        const date = document.getElementById('ent-' + i + '-date');
+        if (date && data['d-' + i]) date.value = data['d-' + i];
+      }
+    } catch(e) {}
+  }
+
+  // ── MAPA LOCALSTORAGE ─────────────────────────────────
+  const MAP_KEY = 'setter_tecniluispa_mapa';
+  const MAP_FIELDS = [
+    'map-canal','map-tiempo','map-tipo-lead','map-proceso-as','map-pain',
+    'map-proceso-to','map-deriva','map-datos','map-estados',
+    'map-crm','map-cal','map-wa','map-ig','map-otras'
+  ];
+  const MAP_CHECKS = ['map-ch-wa','map-ch-ig','map-ch-web','map-ch-email'];
+
+  function saveMap(showMsg) {
+    const data = {};
+    MAP_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    MAP_CHECKS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.checked;
+    });
+    localStorage.setItem(MAP_KEY, JSON.stringify(data));
+    if (showMsg) showSaveMsg('map-save-msg');
+  }
+
+  function loadMap() {
+    const raw = localStorage.getItem(MAP_KEY);
+    if (!raw) return;
+    try {
+      const data = JSON.parse(raw);
+      MAP_FIELDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && data[id] !== undefined) el.value = data[id];
+      });
+      MAP_CHECKS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && data[id] !== undefined) el.checked = data[id];
+      });
+    } catch(e) {}
+  }
+
+  // ── GEMINI NOTAS ─────────────────────────────────────
+  const GEM_KEY = 'setter_tecniluispa_gemini_notas';
+
+  function saveGeminiNotas(showMsg) {
+    const val = document.getElementById('gemini-notas').value;
+    localStorage.setItem(GEM_KEY, val);
+    if (showMsg) showSaveMsg('gem-save-msg');
+  }
+
+  function loadGeminiNotas() {
+    const val = localStorage.getItem(GEM_KEY);
+    if (val !== null) document.getElementById('gemini-notas').value = val;
+  }
+
+  // ── INIT ──────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    loadEntregables();
+    loadMap();
+    loadGeminiNotas();
+    calcROI();
+    calcDisc();
+    updateNav();
+  });
+</script>
+</body>
+</html>

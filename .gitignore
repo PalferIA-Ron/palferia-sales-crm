@@ -1,0 +1,12 @@
+# Secrets — nunca a GitHub
+.env.local
+.env
+*.env
+public/config.js
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/

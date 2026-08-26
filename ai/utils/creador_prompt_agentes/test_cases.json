@@ -1,0 +1,72 @@
+{
+  "test_cases": [
+    {
+      "id": "test_1_email_classification",
+      "name": "Clasificar emails de soporte por urgencia",
+      "prompt": "Quiero un agente de n8n que clasifique emails de soporte según su nivel de urgencia. Los emails llegan desde una dirección de soporte general, y necesito que el agente determine si son críticos, altos, normales o bajos, y luego los envíe a la cola correspondiente.",
+      "expected_structure": [
+        "Rol del agente",
+        "Objetivo principal",
+        "Contexto",
+        "Entradas disponibles",
+        "Tarea",
+        "Flujo de razonamiento operativo",
+        "Reglas de comportamiento",
+        "Uso de herramientas",
+        "Manejo de errores",
+        "Formato de salida",
+        "Restricciones",
+        "Ejemplos"
+      ],
+      "expected_output_format": "JSON con fields: urgency, categoria, motivo_clasificacion"
+    },
+    {
+      "id": "test_2_crm_update",
+      "name": "Procesar solicitudes de cambio en CRM",
+      "prompt": "Tengo un workflow que recibe solicitudes para actualizar datos de contactos en mi CRM (Salesforce). El agente debe validar que los datos sean correctos, buscar el contacto, hacer la actualización y registrar el cambio en un log.",
+      "expected_structure": [
+        "Rol del agente",
+        "Objetivo principal",
+        "Entradas disponibles",
+        "Tarea",
+        "Reglas de comportamiento"
+      ],
+      "expected_output_format": "Confirmación de actualización o error detallado"
+    },
+    {
+      "id": "test_3_content_generation",
+      "name": "Redactar respuestas automáticas a clientes",
+      "prompt": "Necesito un agente que redacte emails de respuesta a consultas de clientes. Las consultas llegan a través de un formulario web con: nombre del cliente, email, tipo de consulta y descripción. El agente debe redactar una respuesta amable, breve y profesional que incluya la solución o próximos pasos.",
+      "expected_structure": [
+        "Rol del agente",
+        "Objetivo principal",
+        "Contexto",
+        "Entradas disponibles",
+        "Tarea",
+        "Reglas de comportamiento",
+        "Formato de salida"
+      ],
+      "expected_output_format": "Email redactado en texto plano, máximo 300 palabras"
+    },
+    {
+      "id": "test_4_decision_logic",
+      "name": "Flujo de decisión complejo con escalado",
+      "prompt": "Tengo un agente que debe evaluar solicitudes de reembolso. Si el monto es menor a 100€, aprueba automáticamente. Si es entre 100€ y 500€, requiere una revisión manual. Si es mayor a 500€, debe escalar a gerencia. Además, hay clientes VIP que siempre se aprueban.",
+      "expected_structure": [
+        "Rol del agente",
+        "Objetivo principal",
+        "Lógica de decisión",
+        "Manejo de errores",
+        "Restricciones"
+      ],
+      "expected_output_format": "Decisión: aprobado/revisión/escalado + motivo"
+    }
+  ],
+  "evaluation_criteria": {
+    "completeness": "¿El prompt cubre todos los aspectos necesarios?",
+    "clarity": "¿Es el prompt claro y sin ambigüedades?",
+    "actionability": "¿Podría alguien copiar-pegar el prompt en n8n y usarlo inmediatamente?",
+    "structure": "¿Sigue la estructura markdown definida?",
+    "examples": "¿Incluye ejemplos reales o aproximados?"
+  }
+}

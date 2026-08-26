@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Proyecto Tecni × PalferIA — Propuesta ME-sport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       PROGRESS BAR
+    ============================================================ */
+    #progress-bar-track {
+      position: fixed; top: 0; left: 0; width: 100%; height: 4px;
+      background: rgba(255,255,255,0.08); z-index: 100;
+    }
+    #progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #4f46e5, #B1F727);
+      transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 0 10px #4f46e5;
+      width: 10%;
+    }
+
+    /* ============================================================
+       PRESENTATION CONTAINER
+    ============================================================ */
+    #presentation-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       SLIDES
+    ============================================================ */
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: translateY(20px);
+      z-index: 0;
+      padding-bottom: 100px;
+      background: #0f172a;
+    }
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      z-index: 10;
+    }
+
+    /* ============================================================
+       SCROLLBAR
+    ============================================================ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(15,23,42,0.5); }
+    ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+
+    /* ============================================================
+       OVERLAY GRADIENTS
+    ============================================================ */
+    .bg-overlay {
+      background: linear-gradient(to bottom, rgba(15,23,42,0.97), rgba(15,23,42,0.92));
+    }
+    @media (min-width: 768px) {
+      .bg-overlay {
+        background: linear-gradient(90deg, rgba(15,23,42,1) 0%, rgba(15,23,42,0.95) 60%, rgba(15,23,42,0.05) 100%);
+      }
+      .bg-overlay-right {
+        background: linear-gradient(270deg, rgba(15,23,42,1) 0%, rgba(15,23,42,0.95) 60%, rgba(15,23,42,0.05) 100%);
+      }
+    }
+
+    /* ============================================================
+       TYPOGRAPHY HELPERS
+    ============================================================ */
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .tag-pill {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.8px;
+      text-transform: uppercase; padding: 5px 14px; border-radius: 20px;
+    }
+    .tag-indigo { background: rgba(79,70,229,0.15); color: #818cf8; border: 1px solid rgba(79,70,229,0.35); }
+    .tag-green  { background: rgba(177,247,39,0.12); color: #B1F727; border: 1px solid rgba(177,247,39,0.35); }
+    .tag-red    { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.35); }
+    .tag-orange { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.35); }
+
+    /* ============================================================
+       SPORT COURT BACKGROUND (CSS-only basketball court lines)
+    ============================================================ */
+    .sport-bg {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    .sport-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 700px 400px at 70% 50%, rgba(79,70,229,0.07) 0%, transparent 70%),
+        radial-gradient(circle 280px at 20% 80%, rgba(177,247,39,0.05) 0%, transparent 60%),
+        radial-gradient(circle 200px at 85% 20%, rgba(177,247,39,0.04) 0%, transparent 60%);
+    }
+    .sport-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        /* Court center circle */
+        radial-gradient(circle 120px at 50% 50%, transparent 115px, rgba(255,255,255,0.04) 116px, rgba(255,255,255,0.04) 120px, transparent 121px),
+        /* Half-court line */
+        linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(255,255,255,0.04) calc(50% - 0.5px), rgba(255,255,255,0.04) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+        /* Three-point arc left */
+        radial-gradient(circle 200px at 15% 50%, transparent 195px, rgba(255,255,255,0.03) 196px, rgba(255,255,255,0.03) 200px, transparent 201px),
+        /* Three-point arc right */
+        radial-gradient(circle 200px at 85% 50%, transparent 195px, rgba(255,255,255,0.03) 196px, rgba(255,255,255,0.03) 200px, transparent 201px);
+    }
+
+    /* ============================================================
+       CARD COMPONENTS
+    ============================================================ */
+    .card {
+      background: rgba(30,41,59,0.7);
+      border: 1px solid rgba(71,85,105,0.5);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+    }
+    .card-indigo {
+      background: rgba(79,70,229,0.08);
+      border: 1px solid rgba(79,70,229,0.3);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .card-green {
+      background: rgba(177,247,39,0.06);
+      border: 1px solid rgba(177,247,39,0.25);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .card-red {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .card-dark {
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(51,65,85,0.6);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    /* ============================================================
+       STEP CIRCLE
+    ============================================================ */
+    .step-circle {
+      width: 52px; height: 52px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 18px; flex-shrink: 0;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      box-shadow: 0 0 20px rgba(79,70,229,0.4);
+    }
+    .step-circle.green {
+      background: linear-gradient(135deg, #65a30d, #B1F727);
+      box-shadow: 0 0 20px rgba(177,247,39,0.3);
+      color: #0f172a;
+    }
+
+    /* ============================================================
+       AGENT CARDS
+    ============================================================ */
+    .agent-card {
+      background: rgba(30,41,59,0.8);
+      border-radius: 16px;
+      padding: 28px;
+      border-top: 3px solid #4f46e5;
+      position: relative;
+      overflow: hidden;
+    }
+    .agent-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(79,70,229,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .agent-card.router { border-top-color: #4f46e5; }
+    .agent-card.sponsor { border-top-color: #B1F727; }
+    .agent-card.academy { border-top-color: #f59e0b; }
+    .agent-card.sponsor::before { background: linear-gradient(135deg, rgba(177,247,39,0.06) 0%, transparent 60%); }
+    .agent-card.academy::before { background: linear-gradient(135deg, rgba(245,158,11,0.06) 0%, transparent 60%); }
+
+    /* ============================================================
+       FLOW STEP
+    ============================================================ */
+    .flow-step {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 16px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+    }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 900; flex-shrink: 0;
+      background: rgba(79,70,229,0.15);
+      border: 1px solid rgba(79,70,229,0.4);
+      color: #818cf8;
+    }
+
+    /* ============================================================
+       CHANNEL BADGE
+    ============================================================ */
+    .channel-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 50px;
+      font-size: 13px; font-weight: 600;
+    }
+    .ch-whatsapp { background: rgba(37,211,102,0.12); border: 1px solid rgba(37,211,102,0.3); color: #4ade80; }
+    .ch-instagram { background: rgba(217,70,239,0.12); border: 1px solid rgba(217,70,239,0.3); color: #e879f9; }
+    .ch-web { background: rgba(79,70,229,0.12); border: 1px solid rgba(79,70,229,0.3); color: #818cf8; }
+    .ch-email { background: rgba(234,179,8,0.12); border: 1px solid rgba(234,179,8,0.3); color: #fde047; }
+
+    /* ============================================================
+       WORKFLOW ROW
+    ============================================================ */
+    .wf-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 20px;
+      border-radius: 12px;
+      background: rgba(30,41,59,0.5);
+      border: 1px solid rgba(51,65,85,0.5);
+      margin-bottom: 12px;
+      transition: background 0.2s;
+    }
+    .wf-row:hover { background: rgba(79,70,229,0.07); }
+    .wf-num {
+      font-size: 11px; font-weight: 900; color: #4f46e5;
+      text-transform: uppercase; letter-spacing: 1px; width: 24px; flex-shrink: 0;
+    }
+    .wf-icon {
+      font-size: 22px; flex-shrink: 0; width: 36px; text-align: center;
+    }
+    .wf-title { font-size: 14px; font-weight: 700; color: #f1f5f9; flex: 1; }
+    .wf-desc { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+    .wf-badge {
+      font-size: 10px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+      background: rgba(79,70,229,0.15); color: #818cf8;
+      border: 1px solid rgba(79,70,229,0.3);
+    }
+
+    /* ============================================================
+       PLAN PRICE BLOCK
+    ============================================================ */
+    .plan-block {
+      background: rgba(30,41,59,0.9);
+      border: 2px solid rgba(79,70,229,0.5);
+      border-radius: 20px;
+      padding: 36px 40px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 40px rgba(79,70,229,0.15);
+    }
+    .plan-block::before {
+      content: '';
+      position: absolute; inset: 0; border-radius: 18px;
+      background: linear-gradient(135deg, rgba(79,70,229,0.08), rgba(177,247,39,0.04));
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       INCLUDE CHECKLIST
+    ============================================================ */
+    .include-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(51,65,85,0.4);
+      font-size: 14px;
+    }
+    .include-item:last-child { border-bottom: none; }
+    .include-check { color: #B1F727; font-weight: 900; flex-shrink: 0; margin-top: 1px; }
+
+    /* ============================================================
+       OBJECTION ACCORDION
+    ============================================================ */
+    .obj-item {
+      border-bottom: 1px solid rgba(51,65,85,0.5);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .obj-item:last-child { border-bottom: none; }
+    .obj-item:hover { background: rgba(79,70,229,0.04); }
+    .obj-header {
+      display: flex; align-items: center; gap: 16px;
+      padding: 20px 24px;
+    }
+    .obj-num { font-size: 11px; font-weight: 900; color: #f59e0b; letter-spacing: 1px; flex-shrink: 0; width: 24px; }
+    .obj-q { font-size: 15px; font-weight: 600; flex: 1; line-height: 1.4; color: #e2e8f0; }
+    .obj-arrow { font-size: 20px; color: #64748b; transition: transform 0.3s; flex-shrink: 0; }
+    .obj-item.open .obj-arrow { transform: rotate(90deg); color: #4f46e5; }
+    .obj-answer { display: none; padding: 0 24px 20px 64px; }
+    .obj-answer p { font-size: 14px; color: #94a3b8; line-height: 1.8; }
+    .obj-answer strong { color: #e2e8f0; }
+    .obj-item.open .obj-answer { display: block; }
+
+    /* ============================================================
+       CTA BUTTON
+    ============================================================ */
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #fff; font-size: 18px; font-weight: 700;
+      padding: 20px 48px; border-radius: 60px; text-decoration: none;
+      box-shadow: 0 0 40px rgba(79,70,229,0.45);
+      transition: all 0.25s; border: 1px solid rgba(129,140,248,0.4);
+    }
+    .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 0 60px rgba(79,70,229,0.7); }
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: rgba(37,211,102,0.12);
+      border: 1px solid rgba(37,211,102,0.4);
+      color: #4ade80; font-size: 16px; font-weight: 600;
+      padding: 16px 36px; border-radius: 60px; text-decoration: none;
+      transition: all 0.25s;
+    }
+    .btn-wa:hover { background: rgba(37,211,102,0.2); transform: translateY(-2px); }
+
+    /* ============================================================
+       NAV CONTROLS
+    ============================================================ */
+    #nav-controls {
+      position: fixed; bottom: 24px; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 24px;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .nav-btn {
+      pointer-events: auto;
+      background: rgba(30,41,59,0.9);
+      border: 1px solid rgba(71,85,105,0.6);
+      color: #fff; padding: 14px; border-radius: 50%;
+      cursor: pointer; transition: all 0.2s; backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-btn:hover { background: rgba(51,65,85,0.9); border-color: #4f46e5; }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .nav-btn.next {
+      background: #4f46e5;
+      border-color: rgba(129,140,248,0.5);
+      box-shadow: 0 0 20px rgba(79,70,229,0.5);
+    }
+    .nav-btn.next:hover { background: #6366f1; box-shadow: 0 0 30px rgba(79,70,229,0.7); }
+    #slide-counter {
+      pointer-events: auto;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(51,65,85,0.6);
+      border-radius: 30px; padding: 8px 20px;
+      font-size: 12px; font-weight: 600; color: #64748b;
+      backdrop-filter: blur(8px);
+    }
+    #slide-counter span { color: #f1f5f9; }
+
+    @media (min-width: 768px) {
+      #nav-controls { padding: 0 48px; }
+    }
+
+    /* ============================================================
+       GRID HELPERS
+    ============================================================ */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 14px; }
+    }
+
+    /* ============================================================
+       UTILITY
+    ============================================================ */
+    .full-center {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    .content-panel {
+      max-width: 900px; margin: 0 auto;
+      padding: 60px 24px 120px;
+    }
+    .content-panel-wide {
+      max-width: 1100px; margin: 0 auto;
+      padding: 60px 24px 120px;
+    }
+    .side-panel {
+      width: 100%; min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 48px 24px;
+    }
+    @media (min-width: 768px) {
+      .side-panel { width: 58%; padding: 64px 80px; }
+    }
+    h1.font-serif { font-family: 'Playfair Display', serif; }
+    h2.font-serif { font-family: 'Playfair Display', serif; }
+
+    /* Cost/stat big numbers */
+    .stat-big {
+      font-size: clamp(52px, 9vw, 96px);
+      font-weight: 900; line-height: 1;
+      letter-spacing: -3px;
+    }
+
+    /* Logo box */
+    .logo-box {
+      background: transparent;
+      padding: 12px 20px; border-radius: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    /* Sponsor badge */
+    .sponsor-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #fbbf24;
+    }
+
+    .checklist-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.3);
+      font-size: 14px; color: #94a3b8;
+      cursor: pointer;
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .check-box {
+      width: 20px; height: 20px; border-radius: 4px;
+      border: 2px solid rgba(79,70,229,0.5); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .checklist-item.done .check-box {
+      background: #4f46e5; border-color: #4f46e5;
+    }
+    .checklist-item.done .check-box::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 900; }
+    .checklist-item.done span { text-decoration: line-through; color: #4f46e5; }
+  </style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar-track">
+  <div id="progress-bar"></div>
+</div>
+
+<!-- PRESENTATION -->
+<div id="presentation-container">
+
+  <!-- ============================================================
+       SLIDE 1: PORTADA
+  ============================================================ -->
+  <div class="slide active" data-slide="1">
+    <div class="sport-bg"></div>
+    <div class="full-center text-center" style="padding: 40px 24px 120px; position: relative; z-index: 2;">
+
+      <div class="logo-box" style="margin-bottom: 8px; flex-direction: column; gap: 6px;">
+        <img src="https://palferia.me/wp-content/uploads/2026/08/Isologo-PIA03.png" alt="ME-sport PalferIA" style="height: 48px; width: auto; object-fit: contain;"/>
+        <span style="font-size: 13px; font-weight: 800; letter-spacing: 2px; color: #B1F727; text-transform: uppercase;">ME-sport</span>
+      </div>
+
+      <div style="margin-bottom: 24px;"></div>
+
+      <div class="tag-pill tag-green" style="margin-bottom: 24px;">Propuesta ME-sport · Vertical baloncesto</div>
+
+      <h1 style="font-size: clamp(32px,6vw,72px); font-weight: 900; line-height: 1.05; letter-spacing: -2px; margin-bottom: 20px; max-width: 780px;">
+        Proyecto Tecni <span style="color:#4f46e5;">×</span> PalferIA
+      </h1>
+      <h2 style="font-size: clamp(16px,2.5vw,26px); font-weight: 300; color: #94a3b8; margin-bottom: 40px; max-width: 620px; line-height: 1.5;">
+        Automatización omnicanal para el ecosistema de baloncesto más ambicioso de España
+      </h2>
+
+      <!-- Profile avatar cards -->
+      <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-bottom:40px;">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <img src="assets/tecni_luispa/avatar.jpg" alt="@tecni_luispa"
+               style="width:72px; height:72px; border-radius:50%; object-fit:cover; border:2px solid #818cf8; box-shadow:0 0 20px rgba(79,70,229,0.4);">
+          <span style="font-size:13px; font-weight:600; color:#818cf8;">@tecni_luispa</span>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <img src="assets/tecni_workout/avatar.jpg" alt="@tecni_workout"
+               style="width:72px; height:72px; border-radius:50%; object-fit:cover; border:2px solid #B1F727; box-shadow:0 0 20px rgba(177,247,39,0.3);">
+          <span style="font-size:13px; font-weight:600; color:#B1F727;">@tecni_workout</span>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <img src="assets/tecniteam3x3/avatar.jpg" alt="@tecniteam3x3"
+               style="width:72px; height:72px; border-radius:50%; object-fit:cover; border:2px solid #f59e0b; box-shadow:0 0 20px rgba(245,158,11,0.3);">
+          <span style="font-size:13px; font-weight:600; color:#f59e0b;">@tecniteam3x3</span>
+        </div>
+      </div>
+
+      <!-- Client data -->
+      <div style="background: rgba(30,41,59,0.6); border: 1px solid rgba(71,85,105,0.5); border-radius: 16px; padding: 20px 32px; backdrop-filter: blur(10px); margin-bottom: 40px; display: inline-block;">
+        <p style="font-size: 15px; color: #94a3b8; margin-bottom: 6px;">Preparada para</p>
+        <p style="font-size: 20px; font-weight: 700; color: #f1f5f9;">Luis Pascual García Notario</p>
+        <p style="font-size: 13px; color: #64748b; margin-top: 4px;">luispagn@gmail.com</p>
+      </div>
+
+      <!-- Sponsors -->
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 48px;">
+        <span class="sponsor-badge">★ @hiperbasketball</span>
+        <span class="sponsor-badge">★ Reformas Ruiz</span>
+        <span class="sponsor-badge">★ @wibosport</span>
+        <span class="sponsor-badge">★ @jorgefitnessone</span>
+      </div>
+
+      <p style="color: #475569; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; animation: pulse 2s infinite;">
+        Usa las flechas o desliza para navegar
+      </p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 2: EL PROBLEMA
+  ============================================================ -->
+  <div class="slide" data-slide="2">
+    <!-- Basketball court CSS background -->
+    <div class="sport-bg"></div>
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 600px 500px at 80% 50%, rgba(239,68,68,0.06) 0%, transparent 70%), linear-gradient(135deg, #0f172a 0%, #1a0a14 100%); z-index: 1;"></div>
+
+    <div style="position: relative; z-index: 2; display: flex; flex-direction: column; min-height: 100vh; align-items: flex-start;">
+      <!-- CEO photo panel — desktop only -->
+      <div style="display:none;" class="ceo-img-panel">
+        <img src="assets/tecni_luispa/ceo.jpg" alt="Luis Pascual">
+      </div>
+      <div class="side-panel">
+        <span class="tag-pill tag-red" style="margin-bottom: 24px; display: inline-block;">El problema sin resolver</span>
+
+        <h2 style="font-size: clamp(28px,4.5vw,54px); font-weight: 900; line-height: 1.1; margin-bottom: 28px; color: #f1f5f9;">
+          Tienes 3 perfiles,<br/>3 webs y <span style="color: #f87171;">0 sistemas</span><br/>para capturar leads.
+        </h2>
+
+        <p style="font-size: 18px; font-weight: 300; color: #94a3b8; line-height: 1.7; margin-bottom: 24px; max-width: 520px;">
+          Construiste un ecosistema de baloncesto real: academia, tecnificaciones, campus, 3x3, eventos. Cuatro sponsors. Tres comunidades online activas.
+        </p>
+
+        <div style="border-left: 3px solid #f87171; padding: 16px 20px; background: rgba(239,68,68,0.07); border-radius: 0 12px 12px 0; margin-bottom: 32px; max-width: 520px;">
+          <p style="font-size: 17px; color: #fca5a5; font-weight: 500; line-height: 1.6;">
+            Pero cada sponsor potencial, cada jugador interesado en la academia, cada padre que busca campus… escribe un DM que <strong style="color: #fff;">puede perderse hoy mismo.</strong>
+          </p>
+        </div>
+
+        <!-- Three projects visual -->
+        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+          <div style="background: rgba(30,41,59,0.7); border: 1px solid rgba(71,85,105,0.5); border-radius: 12px; padding: 14px 18px; min-width: 140px;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Perfil 1</div>
+            <div style="font-size: 14px; font-weight: 700; color: #818cf8;">@tecni_luispa</div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 2px;">Coach personal & academia</div>
+          </div>
+          <div style="background: rgba(30,41,59,0.7); border: 1px solid rgba(71,85,105,0.5); border-radius: 12px; padding: 14px 18px; min-width: 140px;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Perfil 2</div>
+            <div style="font-size: 14px; font-weight: 700; color: #B1F727;">@tecni_workout</div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 2px;">Prep física & entrenamiento</div>
+          </div>
+          <div style="background: rgba(30,41,59,0.7); border: 1px solid rgba(71,85,105,0.5); border-radius: 12px; padding: 14px 18px; min-width: 140px;">
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Perfil 3</div>
+            <div style="font-size: 14px; font-weight: 700; color: #f59e0b;">@tecniteam3x3</div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 2px;">Equipo 3×3 & eventos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 3: LO QUE ESTÁ PASANDO AHORA
+  ============================================================ -->
+  <div class="slide" data-slide="3">
+    <div class="sport-bg"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #0c1a30 100%); z-index: 1;"></div>
+
+    <div style="position: relative; z-index: 2; display: flex; flex-direction: column; min-height: 100vh; align-items: flex-end; justify-content: flex-start;">
+      <div class="side-panel" style="margin-left: auto;">
+        <span class="tag-pill tag-red" style="margin-bottom: 24px; display: inline-block;">Lo que pasa cada día</span>
+
+        <h2 style="font-size: clamp(26px,4vw,48px); font-weight: 900; line-height: 1.15; margin-bottom: 32px; color: #f1f5f9;">
+          El ciclo de las<br/>oportunidades <span style="color:#f87171;">perdidas</span>
+        </h2>
+
+        <!-- Pain points -->
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 520px;">
+          <div style="display: flex; align-items: flex-start; gap: 14px; background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 16px;">
+            <span style="font-size: 22px; flex-shrink: 0; margin-top: 1px;">📩</span>
+            <div>
+              <p style="font-weight: 700; color: #fca5a5; margin-bottom: 4px;">DM de sponsor potencial llega a las 10pm</p>
+              <p style="font-size: 13px; color: #64748b;">Luis está entrenando. Responde al día siguiente. El sponsor ya firmó con otro equipo.</p>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: flex-start; gap: 14px; background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 16px;">
+            <span style="font-size: 22px; flex-shrink: 0; margin-top: 1px;">🎓</span>
+            <div>
+              <p style="font-weight: 700; color: #fca5a5; margin-bottom: 4px;">Padre pregunta por inscripción en academia</p>
+              <p style="font-size: 13px; color: #64748b;">Formulario web sin respuesta automática. 48h sin noticias = el jugador se apunta a otro club.</p>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: flex-start; gap: 14px; background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 16px;">
+            <span style="font-size: 22px; flex-shrink: 0; margin-top: 1px;">🏀</span>
+            <div>
+              <p style="font-weight: 700; color: #fca5a5; margin-bottom: 4px;">Campus de verano — interés masivo pero caótico</p>
+              <p style="font-size: 13px; color: #64748b;">Misma pregunta llega 40 veces por canales distintos. Gestión manual = errores, duplicados, agotamiento.</p>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: flex-start; gap: 14px; background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); border-radius: 12px; padding: 16px;">
+            <span style="font-size: 22px; flex-shrink: 0; margin-top: 1px;">📊</span>
+            <div>
+              <p style="font-weight: 700; color: #fbbf24; margin-bottom: 4px;">Memoria económica para sponsors</p>
+              <p style="font-size: 13px; color: #64748b;">Sin datos estructurados de leads, Luis no puede demostrar el valor del patrocinio con números reales.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 4: EL COSTE REAL
+  ============================================================ -->
+  <div class="slide" data-slide="4">
+    <!-- Basketball texture background -->
+    <div style="position: absolute; inset: 0; z-index: 0; overflow: hidden;">
+      <img src="assets/tecni_luispa/post_1.jpg" alt="" style="width:100%; height:100%; object-fit:cover; opacity:0.07; pointer-events:none;">
+    </div>
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(127,29,29,0.4) 0%, #0f172a 70%); z-index: 1;"></div>
+    <div class="sport-bg"></div>
+
+    <div style="position: relative; z-index: 2;" class="full-center">
+      <div class="content-panel" style="text-align: center;">
+
+        <span class="tag-pill tag-red" style="margin-bottom: 28px; display: inline-block;">El coste de la inacción</span>
+
+        <div class="stat-big" style="color: #f87171; margin-bottom: 16px;">3–8</div>
+        <h2 style="font-size: clamp(22px,3.5vw,36px); font-weight: 800; color: #fff; margin-bottom: 12px;">
+          leads cualificados se pierden cada semana.
+        </h2>
+        <p style="font-size: 18px; color: #94a3b8; margin-bottom: 48px; font-weight: 300;">
+          A través de 3 perfiles × 4 canales × sin sistema = caos garantizado.
+        </p>
+
+        <div class="grid-3" style="margin-bottom: 40px;">
+          <div class="card-red" style="text-align: center;">
+            <div style="font-size: 40px; font-weight: 900; color: #f87171; margin-bottom: 8px;">~12</div>
+            <div style="font-size: 13px; color: #94a3b8; line-height: 1.5;">Oportunidades de<br/>inscripción perdidas/mes</div>
+          </div>
+          <div class="card-red" style="text-align: center;">
+            <div style="font-size: 40px; font-weight: 900; color: #fbbf24; margin-bottom: 8px;">2–3</div>
+            <div style="font-size: 13px; color: #94a3b8; line-height: 1.5;">Sponsors potenciales<br/>sin respuesta a tiempo</div>
+          </div>
+          <div class="card-red" style="text-align: center;">
+            <div style="font-size: 40px; font-weight: 900; color: #fb923c; margin-bottom: 8px;">0%</div>
+            <div style="font-size: 13px; color: #94a3b8; line-height: 1.5;">De leads registrados<br/>en base de datos hoy</div>
+          </div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(239,68,68,0.25); border-radius: 16px; padding: 28px; text-align: left; backdrop-filter: blur(8px);">
+          <p style="font-size: 16px; font-weight: 700; color: #fca5a5; margin-bottom: 16px; text-align: center;">El coste no es solo económico</p>
+          <ul style="display: flex; flex-direction: column; gap: 12px; list-style: none;">
+            <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: #cbd5e1;">
+              <span style="color: #f87171; font-weight: 900; flex-shrink: 0;">✗</span>
+              Sin base de datos de leads, la <strong style="color:#fff;">memoria económica para sponsors</strong> es indefendible con datos reales.
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: #cbd5e1;">
+              <span style="color: #f87171; font-weight: 900; flex-shrink: 0;">✗</span>
+              Cada hora de gestión manual es una hora que Luis <strong style="color:#fff;">no está en la pista entrenando</strong>.
+            </li>
+            <li style="display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: #cbd5e1;">
+              <span style="color: #f87171; font-weight: 900; flex-shrink: 0;">✗</span>
+              El ecosistema crece (3x3, campus, eventos) pero <strong style="color:#fff;">la infraestructura de captación no escala.</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 5: LA SOLUCIÓN — 3 AGENTES + 4 CANALES
+  ============================================================ -->
+  <div class="slide" data-slide="5">
+    <div class="sport-bg"></div>
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 700px 500px at 50% 40%, rgba(79,70,229,0.08) 0%, transparent 70%); z-index: 1;"></div>
+
+    <div style="position: relative; z-index: 2;" class="full-center">
+      <div class="content-panel-wide">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <span class="tag-pill tag-indigo" style="margin-bottom: 20px; display: inline-block;">La solución PalferIA ME-sport</span>
+          <h2 style="font-size: clamp(28px,4.5vw,52px); font-weight: 900; line-height: 1.1; margin-bottom: 16px;">
+            3 Agentes IA coordinados.<br/><span style="color:#4f46e5;">4 canales.</span> 1 sistema.
+          </h2>
+          <p style="font-size: 17px; color: #94a3b8; max-width: 560px; margin: 0 auto; line-height: 1.6; font-weight: 300;">
+            Cada lead que llega, sin importar de dónde, entra en el mismo sistema inteligente.
+          </p>
+        </div>
+
+        <!-- 4 channels -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 48px;">
+          <span class="channel-badge ch-whatsapp">WhatsApp Business</span>
+          <span class="channel-badge ch-instagram">Instagram DM</span>
+          <span class="channel-badge ch-web">Formulario Web ×3</span>
+          <span class="channel-badge ch-email">Email</span>
+        </div>
+
+        <!-- 3 agents -->
+        <div class="grid-3">
+          <div class="agent-card router">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #818cf8; margin-bottom: 12px;">Agente 01</div>
+            <div style="font-size: 24px; margin-bottom: 10px;">🔀</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 10px;">Router de Intenciones</h3>
+            <p style="font-size: 13px; color: #64748b; line-height: 1.7; margin-bottom: 16px;">
+              Analiza cada mensaje y clasifica la intención: academia, sponsor, campus, evento o consulta técnica. Dirige al agente correcto en milisegundos.
+            </p>
+            <div style="font-size: 12px; color: #818cf8; background: rgba(79,70,229,0.1); padding: 6px 12px; border-radius: 20px; display: inline-block;">Actúa en todos los canales</div>
+          </div>
+
+          <div class="agent-card sponsor">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #B1F727; margin-bottom: 12px;">Agente 02</div>
+            <div style="font-size: 24px; margin-bottom: 10px;">🤝</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 10px;">Agente Sponsors</h3>
+            <p style="font-size: 13px; color: #64748b; line-height: 1.7; margin-bottom: 16px;">
+              Responde en menos de 60 segundos, califica al sponsor, recoge datos clave, y notifica a Luis con toda la info lista para cerrar.
+            </p>
+            <div style="font-size: 12px; color: #B1F727; background: rgba(177,247,39,0.1); padding: 6px 12px; border-radius: 20px; display: inline-block;">Memoria económica automática</div>
+          </div>
+
+          <div class="agent-card academy">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #f59e0b; margin-bottom: 12px;">Agente 03</div>
+            <div style="font-size: 24px; margin-bottom: 10px;">🏀</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 10px;">Agente Academia</h3>
+            <p style="font-size: 13px; color: #64748b; line-height: 1.7; margin-bottom: 16px;">
+              Gestiona inscripciones para academia, tecnificaciones, prep física, campus y eventos. Responde FAQs, recoge datos y registra en Google Sheets.
+            </p>
+            <div style="font-size: 12px; color: #f59e0b; background: rgba(245,158,11,0.1); padding: 6px 12px; border-radius: 20px; display: inline-block;">Google Sheets en tiempo real</div>
+          </div>
+        </div>
+
+        <!-- Google Sheets note -->
+        <div style="text-align: center; margin-top: 32px; padding: 16px; background: rgba(79,70,229,0.06); border: 1px solid rgba(79,70,229,0.2); border-radius: 12px;">
+          <p style="font-size: 13px; color: #94a3b8;">
+            Todos los leads se registran automáticamente en <strong style="color: #818cf8;">Google Sheets</strong> y Luis recibe una <strong style="color: #B1F727;">notificación instantánea</strong> cuando llega un lead cualificado.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 6: CÓMO FUNCIONA — RECORRIDO DE UN LEAD (9 PASOS)
+  ============================================================ -->
+  <div class="slide" data-slide="6">
+    <div class="sport-bg"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #0a1628 100%); z-index: 1;"></div>
+
+    <div style="position: relative; z-index: 2;" class="full-center">
+      <div class="content-panel">
+        <div style="text-align: center; margin-bottom: 40px;">
+          <span class="tag-pill tag-indigo" style="margin-bottom: 16px; display: inline-block;">El recorrido de un lead</span>
+          <h2 style="font-size: clamp(26px,4vw,44px); font-weight: 900; line-height: 1.1; margin-bottom: 12px;">
+            De DM a lead cualificado<br/>en <span style="color:#B1F727;">menos de 90 segundos.</span>
+          </h2>
+        </div>
+
+        <div style="max-width: 680px; margin: 0 auto;">
+          <div class="flow-step">
+            <div class="flow-num">01</div>
+            <div>
+              <p style="font-weight: 700; font-size: 14px; color: #e2e8f0; margin-bottom: 3px;">Lead llega por cualquier canal</p>
+              <p style="font-size: 12px; color: #64748b;">WhatsApp, IG DM, formulario web de tecni_luispa / tecni_workout / tecniteam3x3, o email.</p>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0;">
+              <span class="channel-badge ch-whatsapp" style="font-size: 10px; padding: 3px 8px;">WA</span>
+              <span class="channel-badge ch-instagram" style="font-size: 10px; padding: 3px 8px;">IG</span>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">02</div>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 14px; color: #e2e8f0; margin-bottom: 3px;">n8n captura el mensaje</p>
+              <p style="font-size: 12px; color: #64748b;">El workflow activo recibe el evento vía webhook en tiempo real.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">03</div>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 14px; color: #e2e8f0; margin-bottom: 3px;">Router analiza intención</p>
+              <p style="font-size: 12px; color: #64748b;">IA clasifica: ¿Es sponsor? ¿Academia? ¿Campus? ¿Técnico? → asigna agente.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">04</div>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 14px; color: #e2e8f0; margin-bottom: 3px;">Agente responde en menos de 60 seg</p>
+              <p style="font-size: 12px; color: #64748b;">Respuesta personalizada en el idioma y tono de cada perfil de Luis.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">05</div>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 14px; color: #e2e8f0; margin-bottom: 3px;">Conversación de cualificación</p>
+              <p style="font-size: 12px; color: #64748b;">El agente hace las preguntas clave: edad, nivel, interés, presupuesto (si sponsor).</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">06</div>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 14px; color: #e2e8f0; margin-bottom: 3px;">Datos registrados en Google Sheets</p>
+              <p style="font-size: 12px; color: #64748b;">Nombre, canal, intención, datos clave, timestamp. Base de datos viva en tiempo real.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">07</div>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 14px; color: #e2e8f0; margin-bottom: 3px;">Notificación instantánea a Luis</p>
+              <p style="font-size: 12px; color: #64748b;">Si es lead cualificado → WhatsApp a Luis con resumen completo listo para actuar.</p>
+            </div>
+          </div>
+
+          <div class="flow-step">
+            <div class="flow-num">08</div>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 14px; color: #e2e8f0; margin-bottom: 3px;">Luis interviene solo cuando vale la pena</p>
+              <p style="font-size: 12px; color: #64748b;">El agente gestiona el 80% de las conversaciones. Luis cierra el 20% de alto valor.</p>
+            </div>
+          </div>
+
+          <div class="flow-step" style="border-bottom: none;">
+            <div class="flow-num" style="background: rgba(177,247,39,0.15); border-color: rgba(177,247,39,0.4); color: #B1F727;">09</div>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 14px; color: #B1F727; margin-bottom: 3px;">Lead convertido. Dato guardado. Ecosistema crece.</p>
+              <p style="font-size: 12px; color: #64748b;">Cada conversión alimenta la memoria económica para sponsors.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 7: LOS 5 WORKFLOWS
+  ============================================================ -->
+  <div class="slide" data-slide="7">
+    <div class="sport-bg"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #0d1f3c 100%); z-index: 1;"></div>
+
+    <div style="position: relative; z-index: 2;" class="full-center">
+      <div class="content-panel">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <span class="tag-pill tag-indigo" style="margin-bottom: 16px; display: inline-block;">Infraestructura preparada</span>
+          <h2 style="font-size: clamp(26px,4vw,44px); font-weight: 900; line-height: 1.1; margin-bottom: 12px;">
+            Los 5 workflows<br/><span style="color: #4f46e5;">listos para activar.</span>
+          </h2>
+          <p style="font-size: 16px; color: #64748b; max-width: 480px; margin: 0 auto; font-weight: 300;">
+            Construidos sobre n8n. Supervisados y mantenidos por PalferIA cada mes.
+          </p>
+        </div>
+
+        <div style="max-width: 720px; margin: 0 auto;">
+          <div class="wf-row">
+            <div class="wf-num">WF1</div>
+            <div class="wf-icon">🔀</div>
+            <div style="flex: 1;">
+              <div class="wf-title">Orquestador Omnicanal</div>
+              <div class="wf-desc">Escucha todos los canales simultáneamente. Deduplica, prioriza y distribuye a los agentes correctos.</div>
+            </div>
+            <div class="wf-badge">Core</div>
+          </div>
+
+          <div class="wf-row">
+            <div class="wf-num">WF2</div>
+            <div class="wf-icon">🤝</div>
+            <div style="flex: 1;">
+              <div class="wf-title">Pipeline de Sponsors</div>
+              <div class="wf-desc">Respuesta automatizada, cualificación de marca, propuesta de contraprestación, alerta a Luis.</div>
+            </div>
+            <div class="wf-badge">Sponsors</div>
+          </div>
+
+          <div class="wf-row">
+            <div class="wf-num">WF3</div>
+            <div class="wf-icon">🎓</div>
+            <div style="flex: 1;">
+              <div class="wf-title">Inscripciones Academia & Campus</div>
+              <div class="wf-desc">Gestión completa: consulta → info → datos → confirmación → registro en Sheets → recordatorio.</div>
+            </div>
+            <div class="wf-badge">Academia</div>
+          </div>
+
+          <div class="wf-row">
+            <div class="wf-num">WF4</div>
+            <div class="wf-icon">📊</div>
+            <div style="flex: 1;">
+              <div class="wf-title">CRM Automático Google Sheets</div>
+              <div class="wf-desc">Cada lead registrado con canal, intención, estado, timestamp. Dashboard de métricas actualizado en tiempo real.</div>
+            </div>
+            <div class="wf-badge">CRM</div>
+          </div>
+
+          <div class="wf-row" style="margin-bottom: 0;">
+            <div class="wf-num">WF5</div>
+            <div class="wf-icon">🔔</div>
+            <div style="flex: 1;">
+              <div class="wf-title">Alertas & Reporting Mensual</div>
+              <div class="wf-desc">Notificaciones en tiempo real a Luis. Informe mensual automático: leads, conversiones, canales top.</div>
+            </div>
+            <div class="wf-badge">Reporting</div>
+          </div>
+        </div>
+
+        <!-- n8n note -->
+        <div style="text-align: center; margin-top: 32px; padding: 14px; background: rgba(79,70,229,0.06); border: 1px solid rgba(79,70,229,0.2); border-radius: 12px;">
+          <p style="font-size: 13px; color: #94a3b8;">
+            Plataforma: <strong style="color: #818cf8;">n8n self-hosted</strong> · Modelos IA: <strong style="color: #818cf8;">Claude / GPT-4o</strong> · Integración: <strong style="color: #818cf8;">Meta API + WhatsApp Business API</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 8: PLAN AVANZADO — PRECIO E INCLUIDOS
+  ============================================================ -->
+  <div class="slide" data-slide="8">
+    <div class="sport-bg"></div>
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 700px 600px at 50% 50%, rgba(79,70,229,0.1) 0%, #0f172a 70%); z-index: 1;"></div>
+
+    <div style="position: relative; z-index: 2;" class="full-center">
+      <div class="content-panel-wide">
+        <div style="text-align: center; margin-bottom: 40px;">
+          <span class="tag-pill tag-indigo" style="margin-bottom: 16px; display: inline-block;">Inversión</span>
+          <h2 style="font-size: clamp(26px,4vw,44px); font-weight: 900; margin-bottom: 10px;">Plan Avanzado ME-sport</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; align-items: start;">
+          <!-- Left: what's included -->
+          <div>
+            <p style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin-bottom: 20px;">Qué incluye cada mes</p>
+
+            <div class="include-item">
+              <span class="include-check">✓</span>
+              <div><strong style="color: #e2e8f0;">5 workflows n8n</strong> supervisados y mantenidos</div>
+            </div>
+            <div class="include-item">
+              <span class="include-check">✓</span>
+              <div><strong style="color: #e2e8f0;">Correcciones y ajustes</strong> del sistema</div>
+            </div>
+            <div class="include-item">
+              <span class="include-check">✓</span>
+              <div><strong style="color: #e2e8f0;">6 horas/mes</strong> de ajustes y mejoras de prompts</div>
+            </div>
+            <div class="include-item">
+              <span class="include-check">✓</span>
+              <div><strong style="color: #e2e8f0;">Revisión bisemanal</strong> de conversaciones IA</div>
+            </div>
+            <div class="include-item">
+              <span class="include-check">✓</span>
+              <div><strong style="color: #e2e8f0;">Informe mensual</strong> de leads, canales y conversiones</div>
+            </div>
+            <div class="include-item">
+              <span class="include-check">✓</span>
+              <div><strong style="color: #e2e8f0;">Soporte 24h</strong> por incidencias críticas</div>
+            </div>
+            <div class="include-item">
+              <span class="include-check">✓</span>
+              <div><strong style="color: #e2e8f0;">Google Sheets CRM</strong> en tiempo real</div>
+            </div>
+            <div class="include-item">
+              <span class="include-check">✓</span>
+              <div><strong style="color: #e2e8f0;">3 agentes IA</strong> entrenados con el contenido de Luis</div>
+            </div>
+
+            <!-- Variable costs -->
+            <div style="margin-top: 24px; padding: 16px; background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2); border-radius: 12px;">
+              <p style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #f59e0b; margin-bottom: 10px;">Costes variables aparte</p>
+              <p style="font-size: 13px; color: #94a3b8; line-height: 1.7;">
+                API WhatsApp Business + API Instagram + coste de modelos IA:<br/>
+                <strong style="color: #fbbf24;">~30–80€/mes estimado</strong> según volumen de mensajes.
+              </p>
+              <p style="font-size: 11px; color: #64748b; margin-top: 8px;">Se factura a coste real. Transparencia total.</p>
+            </div>
+          </div>
+
+          <!-- Right: price block -->
+          <div>
+            <div class="plan-block">
+              <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #818cf8; margin-bottom: 16px;">Plan Avanzado</div>
+              <div style="font-size: 64px; font-weight: 900; color: #B1F727; letter-spacing: -3px; line-height: 1; margin-bottom: 8px;">900€</div>
+              <div style="font-size: 18px; color: #94a3b8; margin-bottom: 28px;">/mes · sin permanencia mínima</div>
+
+              <div style="background: rgba(79,70,229,0.12); border: 1px solid rgba(79,70,229,0.3); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+                <p style="font-size: 13px; color: #94a3b8; line-height: 1.7;">
+                  + <strong style="color: #818cf8;">Setup inicial</strong> incluido en primer mes<br/>
+                  Onboarding, configuración de los 3 agentes, integración de los 4 canales, formación a Luis: <strong style="color: #fff;">incluido</strong>
+                </p>
+              </div>
+
+              <!-- ROI mini calc -->
+              <div style="background: rgba(177,247,39,0.06); border: 1px solid rgba(177,247,39,0.2); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+                <p style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #B1F727; margin-bottom: 12px;">ROI estimado</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+                  <div>
+                    <div style="color: #64748b; margin-bottom: 3px;">Inscrip. academia/mes</div>
+                    <div style="font-weight: 700; color: #e2e8f0;">~3–5 extra</div>
+                  </div>
+                  <div>
+                    <div style="color: #64748b; margin-bottom: 3px;">Valor medio por plaza</div>
+                    <div style="font-weight: 700; color: #e2e8f0;">~200–400€</div>
+                  </div>
+                  <div>
+                    <div style="color: #64748b; margin-bottom: 3px;">Sponsor cerrado/mes</div>
+                    <div style="font-weight: 700; color: #e2e8f0;">+1 potencial</div>
+                  </div>
+                  <div>
+                    <div style="color: #64748b; margin-bottom: 3px;">Inversión recuperada</div>
+                    <div style="font-weight: 700; color: #B1F727;">Mes 1-2</div>
+                  </div>
+                </div>
+              </div>
+
+              <a href="https://wa.me/34623176981?text=Hola%20Luis%2C%20quiero%20arrancar%20con%20el%20sistema%20PalferIA%20ME-sport" class="btn-cta" style="width: 100%; justify-content: center; font-size: 16px; padding: 16px 24px;" target="_blank">
+                Quiero arrancar ahora →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 9: OBJECIONES
+  ============================================================ -->
+  <div class="slide" data-slide="9">
+    <div class="sport-bg"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, #0f172a 0%, #0c1a30 100%); z-index: 1;"></div>
+
+    <div style="position: relative; z-index: 2;" class="full-center">
+      <div class="content-panel">
+        <div style="text-align: center; margin-bottom: 40px;">
+          <span class="tag-pill tag-orange" style="margin-bottom: 16px; display: inline-block;">Lo que te estás preguntando</span>
+          <h2 style="font-size: clamp(26px,4vw,44px); font-weight: 900; line-height: 1.1; margin-bottom: 12px;">
+            Respuestas directas<br/>a las dudas reales.
+          </h2>
+        </div>
+
+        <div style="max-width: 720px; margin: 0 auto; background: rgba(30,41,59,0.5); border: 1px solid rgba(51,65,85,0.5); border-radius: 16px; overflow: hidden; backdrop-filter: blur(8px);">
+          <div class="obj-item" onclick="toggleObj(this)">
+            <div class="obj-header">
+              <span class="obj-num">01</span>
+              <span class="obj-q">"Instagram tarda meses en aprobar la API. ¿Cómo lo gestionamos?"</span>
+              <span class="obj-arrow">›</span>
+            </div>
+            <div class="obj-answer">
+              <p>Correcto: Meta tiene un proceso de aprobación para la Instagram Messaging API que puede tardar 4–8 semanas. <strong>Solución:</strong> arrancamos inmediatamente con WhatsApp Business (aprobación en 48–72h) y el formulario web de los 3 dominios. Mientras tanto, gestionamos el proceso de aprobación de Instagram en paralelo. El sistema lleva un 60% del tráfico desde el día 1 y escala al 100% cuando Instagram esté listo. <strong>No esperamos. Construimos.</strong></p>
+            </div>
+          </div>
+
+          <div class="obj-item" onclick="toggleObj(this)">
+            <div class="obj-header">
+              <span class="obj-num">02</span>
+              <span class="obj-q">"¿El agente puede responder bien preguntas sobre baloncesto? ¿Y si dice algo mal?"</span>
+              <span class="obj-arrow">›</span>
+            </div>
+            <div class="obj-answer">
+              <p>El agente solo responde con lo que tú le enseñas. No improvisa sobre tácticas ni sobre precios que no le has dado. Si llega una pregunta fuera de su conocimiento, <strong>responde que Luis le contestará personalmente</strong> y le manda una notificación a Luis de inmediato. Durante la revisión bisemanal, identificamos esas lagunas y entrenamos al agente. Cada semana que pasa, el agente es más preciso y más tuyo.</p>
+            </div>
+          </div>
+
+          <div class="obj-item" onclick="toggleObj(this)">
+            <div class="obj-header">
+              <span class="obj-num">03</span>
+              <span class="obj-q">"¿Qué pasa si el agente falla o el sistema se cae?"</span>
+              <span class="obj-arrow">›</span>
+            </div>
+            <div class="obj-answer">
+              <p>El Plan Avanzado incluye <strong>soporte 24h para incidencias críticas</strong>. Si el sistema detecta un fallo, se envía alerta automática a PalferIA. El tiempo de respuesta para incidencias críticas es inferior a 2 horas. Además, n8n tiene sistema de logs completo: podemos ver exactamente qué pasó, cuándo, y por qué. <strong>Ningún lead se pierde sin trazabilidad.</strong></p>
+            </div>
+          </div>
+
+          <div class="obj-item" onclick="toggleObj(this)">
+            <div class="obj-header">
+              <span class="obj-num">04</span>
+              <span class="obj-q">"900€/mes es mucho para un proyecto de baloncesto."</span>
+              <span class="obj-arrow">›</span>
+            </div>
+            <div class="obj-answer">
+              <p>Ejercicio rápido: si el sistema capta <strong>3 inscripciones extra en academia</strong> al mes (a 250€/inscripción = 750€) y <strong>ayuda a cerrar 1 sponsor</strong> que antes se perdía (valorado en 500–2.000€/año), el sistema se paga solo desde el mes 1 o 2. La pregunta real es: <strong>¿cuánto vale tener base de datos real, respuestas instantáneas y memoria económica con datos para negociar con sponsors?</strong> Eso no tiene precio de catálogo.</p>
+            </div>
+          </div>
+
+          <div class="obj-item" onclick="toggleObj(this)" style="border-bottom: none;">
+            <div class="obj-header">
+              <span class="obj-num">05</span>
+              <span class="obj-q">"¿Necesito saber de tecnología para que esto funcione?"</span>
+              <span class="obj-arrow">›</span>
+            </div>
+            <div class="obj-answer">
+              <p>No. Tu trabajo es entrenar, gestionar el ecosistema y cerrar con sponsors. El nuestro es que el sistema funcione sin que tengas que tocarlo. Te formamos en 1 sesión sobre cómo leer el Google Sheets de leads y cómo usar las notificaciones. Todo lo demás es invisible para ti. <strong>Si algo cambia en Meta API, en n8n o en los modelos de IA, nosotros lo actualizamos.</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SLIDE 10: CTA — PRÓXIMOS PASOS
+  ============================================================ -->
+  <div class="slide" data-slide="10">
+    <div class="sport-bg"></div>
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 800px 600px at 50% 60%, rgba(79,70,229,0.12) 0%, #0f172a 70%); z-index: 1;"></div>
+
+    <div style="position: relative; z-index: 2;" class="full-center text-center">
+      <div class="content-panel" style="text-align: center;">
+
+        <div class="logo-box" style="margin-bottom: 32px; margin-left: auto; margin-right: auto; flex-direction: column; gap: 5px;">
+          <img src="https://palferia.me/wp-content/uploads/2026/08/Isologo-PIA03.png" alt="ME-sport PalferIA" style="height: 38px; width: auto; object-fit: contain;"/>
+          <span style="font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #B1F727; text-transform: uppercase;">ME-sport</span>
+        </div>
+
+        <span class="tag-pill tag-green" style="margin-bottom: 24px; display: inline-block;">Los próximos pasos</span>
+
+        <h2 style="font-size: clamp(28px,5vw,56px); font-weight: 900; line-height: 1.1; margin-bottom: 20px; max-width: 680px; margin-left: auto; margin-right: auto;">
+          Los próximos pasos son simples.<br/><span style="color: #4f46e5;">Solo necesitamos 5 datos.</span>
+        </h2>
+
+        <p style="font-size: 18px; color: #94a3b8; margin-bottom: 48px; font-weight: 300; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+          Confirmación → Onboarding 48h → Sistema activo en 2 semanas → Primeros leads registrados.
+        </p>
+
+        <!-- 5 datos -->
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-width: 780px; margin: 0 auto 48px; text-align: center;">
+          <div style="background: rgba(30,41,59,0.7); border: 1px solid rgba(71,85,105,0.5); border-radius: 12px; padding: 16px 10px;">
+            <div style="font-size: 24px; font-weight: 900; color: #4f46e5; margin-bottom: 6px;">1</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Acceso WA Business</div>
+          </div>
+          <div style="background: rgba(30,41,59,0.7); border: 1px solid rgba(71,85,105,0.5); border-radius: 12px; padding: 16px 10px;">
+            <div style="font-size: 24px; font-weight: 900; color: #4f46e5; margin-bottom: 6px;">2</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Acceso páginas IG</div>
+          </div>
+          <div style="background: rgba(30,41,59,0.7); border: 1px solid rgba(71,85,105,0.5); border-radius: 12px; padding: 16px 10px;">
+            <div style="font-size: 24px; font-weight: 900; color: #4f46e5; margin-bottom: 6px;">3</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Servicios y precios actuales</div>
+          </div>
+          <div style="background: rgba(30,41,59,0.7); border: 1px solid rgba(71,85,105,0.5); border-radius: 12px; padding: 16px 10px;">
+            <div style="font-size: 24px; font-weight: 900; color: #4f46e5; margin-bottom: 6px;">4</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Tono de respuesta ideal</div>
+          </div>
+          <div style="background: rgba(30,41,59,0.7); border: 1px solid rgba(71,85,105,0.5); border-radius: 12px; padding: 16px 10px;">
+            <div style="font-size: 24px; font-weight: 900; color: #4f46e5; margin-bottom: 6px;">5</div>
+            <div style="font-size: 11px; color: #64748b; line-height: 1.4;">Google account para Sheets</div>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 40px;">
+          <a href="https://wa.me/34623176981?text=Luis%2C%20quiero%20arrancar%20con%20PalferIA%20para%20Proyecto%20Tecni.%20%C2%BFCu%C3%A1ndo%20nos%20reunimos%3F" class="btn-cta" target="_blank">
+            Confirmar por WhatsApp →
+          </a>
+          <a href="mailto:luispagn@gmail.com?subject=Propuesta%20PalferIA%20ME-sport%20-%20Siguiente%20paso&body=Hola%20Luis%2C%20estoy%20listo%20para%20arrancar%20con%20el%20sistema%20omnicanal%20PalferIA.%20Confirmamos%20la%20reunión%20de%20kick-off." class="btn-wa" target="_blank">
+              Enviar confirmación →
+          </a>
+        </div>
+
+        <!-- Contact info -->
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; font-size: 14px; color: #64748b;">
+          <span>ripvlad@gmail.com · PalferIA</span>
+          <span style="color: #374151;">·</span>
+          <span>palferia.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- slide-interno removed — use /setter/[slug].html instead -->
+
+</div><!-- end #presentation-container -->
+
+<!-- ============================================================
+     NAV CONTROLS
+============================================================ -->
+<div id="nav-controls">
+  <button class="nav-btn" id="btn-prev" disabled>
+    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+    </svg>
+  </button>
+
+  <div id="slide-counter">
+    <span id="counter-current">1</span> / <span id="counter-total">10</span>
+  </div>
+
+  <button class="nav-btn next" id="btn-next">
+    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+    </svg>
+  </button>
+</div>
+
+<style>
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr !important; }
+    .side-panel { width: 100% !important; min-height: auto !important; }
+    .plan-block { padding: 24px 20px; }
+    #nav-controls { padding: 0 16px; }
+  }
+
+  /* ============================================================
+     CEO IMAGE PANEL — slide 2
+  ============================================================ */
+  @media (min-width: 768px) {
+    .ceo-img-panel {
+      display:block !important; position:absolute; right:0; top:0;
+      width:42%; height:100%;
+      mask-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
+      -webkit-mask-image: linear-gradient(to right, transparent, rgba(0,0,0,0.6));
+    }
+    .ceo-img-panel img {
+      width:100%; height:100%; object-fit:cover; opacity:0.35;
+    }
+  }
+
+  /* ============================================================
+     RESPONSIVE MEJORADO
+  ============================================================ */
+
+  /* Slides altura correcta en iOS Safari */
+  .slide {
+    height: 100dvh;
+  }
+  #presentation-container {
+    height: 100dvh;
+  }
+
+  /* Mobile: tipografía y padding */
+  @media (max-width: 480px) {
+    .content-panel, .content-panel-wide {
+      padding: 48px 16px 100px;
+    }
+    .side-panel {
+      padding: 48px 16px 80px;
+    }
+    .card, .card-indigo, .card-green, .card-red, .card-dark {
+      padding: 16px;
+    }
+    .agent-card {
+      padding: 20px 16px;
+    }
+    .plan-block {
+      padding: 24px 16px;
+    }
+    .wf-row {
+      padding: 14px 12px;
+      gap: 10px;
+    }
+    .wf-desc {
+      display: none;
+    }
+    .flow-step {
+      gap: 12px;
+      padding: 12px 0;
+    }
+    .include-item {
+      font-size: 13px;
+      gap: 8px;
+    }
+  }
+
+  /* Tablet */
+  @media (min-width: 481px) and (max-width: 900px) {
+    .content-panel { padding: 48px 24px 100px; }
+    .content-panel-wide { padding: 48px 24px 100px; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .agent-card { padding: 20px; }
+  }
+
+  /* Nav controls en móvil */
+  @media (max-width: 600px) {
+    #slide-counter { display: none; }
+    .nav-btn { padding: 10px; }
+    .nav-btn svg { width: 20px; height: 20px; }
+  }
+</style>
+
+<script>
+  // ============================================================
+  //  SLIDE ENGINE
+  // ============================================================
+  (function() {
+    const allSlides = document.querySelectorAll('.slide');
+    const btnPrev   = document.getElementById('btn-prev');
+    const btnNext   = document.getElementById('btn-next');
+    const bar       = document.getElementById('progress-bar');
+    const counterCurrent = document.getElementById('counter-current');
+    const counterTotal   = document.getElementById('counter-total');
+
+    // Build active slides array
+    const slides = Array.from(allSlides);
+    const total = slides.length;
+    counterTotal.textContent = 10;
+    let current = 0;
+
+    function goTo(idx) {
+      slides.forEach((s, i) => {
+        if (i === idx) {
+          s.classList.add('active');
+          s.scrollTop = 0;
+        } else {
+          s.classList.remove('active');
+        }
+      });
+      current = idx;
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = current === total - 1;
+      bar.style.width = ((current + 1) / total * 100) + '%';
+      counterCurrent.textContent = current + 1;
+      // bounce animation on next if not last
+      if (current < total - 1) {
+        btnNext.style.animation = 'bounce 1s infinite';
+      } else {
+        btnNext.style.animation = 'none';
+      }
+    }
+
+    btnNext.addEventListener('click', () => { if (current < total - 1) goTo(current + 1); });
+    btnPrev.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        if (current < total - 1) goTo(current + 1);
+      } else if (e.key === 'ArrowLeft') {
+        if (current > 0) goTo(current - 1);
+      }
+    });
+
+    // Touch / swipe
+    let touchX0 = 0, touchY0 = 0;
+    document.addEventListener('touchstart', e => {
+      touchX0 = e.changedTouches[0].screenX;
+      touchY0 = e.changedTouches[0].screenY;
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].screenX - touchX0;
+      const dy = e.changedTouches[0].screenY - touchY0;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        if (dx < 0 && current < total - 1) goTo(current + 1);
+        if (dx > 0 && current > 0) goTo(current - 1);
+      }
+    }, { passive: true });
+
+    goTo(0);
+
+    // keyframe for bounce via JS
+    const style = document.createElement('style');
+    style.textContent = `@keyframes bounce {
+      0%, 100% { transform: translateY(-15%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
+      50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); }
+    }`;
+    document.head.appendChild(style);
+  })();
+
+  // ============================================================
+  //  OBJECTION ACCORDION
+  // ============================================================
+  function toggleObj(el) {
+    const wasOpen = el.classList.contains('open');
+    document.querySelectorAll('.obj-item').forEach(o => o.classList.remove('open'));
+    if (!wasOpen) el.classList.add('open');
+  }
+
+  // ============================================================
+  //  INTERNO CHECKLIST
+  // ============================================================
+  function toggleCheck(el) {
+    el.classList.toggle('done');
+  }
+</script>
+</body>
+</html>

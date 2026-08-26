@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔒 Setter Tool — Cortinajes Valls &amp; París</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0f1a;
+      --bg2: #111827;
+      --bg3: #1a2332;
+      --amber: #f59e0b;
+      --amber-dim: rgba(245,158,11,0.12);
+      --amber-glow: rgba(245,158,11,0.25);
+      --green: #10b981;
+      --red: #ef4444;
+      --orange: #f97316;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(255,255,255,0.07);
+      --sidebar-w: 240px;
+      --header-h: 52px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+    /* ─── HEADER ─────────────────────────────────────── */
+    #top-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: rgba(245,158,11,0.08);
+      border-bottom: 1px solid rgba(245,158,11,0.3);
+      display: flex; align-items: center;
+      padding: 0 20px; gap: 12px;
+      z-index: 1000; backdrop-filter: blur(10px);
+    }
+    #top-header .badge { background: var(--amber); color: #000; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; white-space: nowrap; letter-spacing: 0.5px; }
+    #top-header .header-info { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #top-header .header-info span { color: var(--amber); font-weight: 600; }
+    #hamburger { display: none; margin-left: auto; background: none; border: none; cursor: pointer; color: var(--amber); font-size: 22px; padding: 4px; }
+
+    /* ─── SIDEBAR ─────────────────────────────────────── */
+    #sidebar {
+      position: fixed; top: var(--header-h); left: 0; bottom: 0;
+      width: var(--sidebar-w); background: var(--bg2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto; z-index: 900; padding: 12px 0;
+      transition: transform 0.3s ease;
+    }
+    #sidebar.hidden { transform: translateX(-100%); }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text-muted); border-left: 3px solid transparent; transition: all 0.2s; user-select: none; }
+    .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-item.active { color: var(--amber); border-left-color: var(--amber); background: var(--amber-dim); }
+    .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+    .nav-divider { height: 1px; background: var(--border); margin: 8px 12px; }
+
+    /* ─── MAIN ─────────────────────────────────────── */
+    #main { margin-left: var(--sidebar-w); margin-top: var(--header-h); padding: 32px 40px; max-width: 960px; }
+
+    /* ─── SECTIONS ─────────────────────────────────────── */
+    .section { margin-bottom: 80px; scroll-margin-top: calc(var(--header-h) + 20px); }
+    .section-title { font-size: 22px; font-weight: 700; color: var(--amber); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--amber-glow); display: flex; align-items: center; gap: 10px; }
+
+    /* ─── CARDS ─────────────────────────────────────── */
+    .cards-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 14px; }
+    .card-row { display: flex; flex-direction: column; gap: 6px; }
+    .card-row .item { font-size: 13px; color: var(--text); }
+    .card-row .item strong { color: var(--text-muted); font-weight: 500; }
+    .badge-status { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .badge-waiting { background: rgba(249,115,22,0.18); color: var(--orange); border: 1px solid rgba(249,115,22,0.4); }
+    .badge-ok { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.35); }
+    .badge-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-glow); }
+
+    /* ─── AUDIT ─────────────────────────────────────── */
+    .audit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .audit-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .audit-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.7px; }
+    .audit-card.green h3 { color: var(--green); }
+    .audit-card.red h3 { color: var(--red); }
+    .audit-card.orange h3 { color: var(--orange); }
+    .audit-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .audit-card ul li { font-size: 13px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; }
+    .audit-card ul li::before { flex-shrink: 0; margin-top: 2px; }
+    .audit-card.green ul li::before { content: "✓"; color: var(--green); }
+    .audit-card.red ul li::before { content: "✗"; color: var(--red); }
+    .audit-card.orange ul li::before { content: "⚠"; color: var(--orange); }
+    .score-badge { display: inline-block; font-size: 48px; font-weight: 800; color: var(--red); line-height: 1; }
+    .score-label { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ─── ROI ─────────────────────────────────────── */
+    .roi-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 32px; }
+    .roi-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+    .roi-card .roi-val { font-size: 24px; font-weight: 700; color: var(--amber); }
+    .roi-card .roi-desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .roi-total { background: rgba(245,158,11,0.08); border: 1px solid var(--amber-glow); border-radius: 10px; padding: 20px; margin-bottom: 32px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .roi-total .big { font-size: 36px; font-weight: 800; color: var(--amber); }
+    .roi-total .detail { font-size: 13px; color: var(--text-muted); }
+
+    /* ─── CALCULADORA ─────────────────────────────────────── */
+    .calc-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; }
+    .calc-box h3 { font-size: 14px; font-weight: 700; color: var(--text-muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .slider-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 20px; }
+    .slider-row label { font-size: 13px; color: var(--text); font-weight: 500; display: flex; justify-content: space-between; }
+    .slider-row label span { color: var(--amber); font-weight: 700; }
+    input[type=range] { width: 100%; accent-color: var(--amber); cursor: pointer; }
+    .slider-sub { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .slider-sub span { font-size: 12px; color: var(--text-muted); }
+    .slider-sub input[type=number] { width: 80px; }
+    .calc-result { background: rgba(245,158,11,0.08); border: 1px solid var(--amber-glow); border-radius: 8px; padding: 14px 18px; font-size: 18px; font-weight: 700; color: var(--amber); margin-top: 8px; }
+
+    /* ─── INPUTS ─────────────────────────────────────── */
+    input[type=text], input[type=number], select, textarea { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 8px 12px; font-family: inherit; font-size: 13px; outline: none; transition: border-color 0.2s; }
+    input[type=text]:focus, input[type=number]:focus, select:focus, textarea:focus { border-color: var(--amber); }
+    textarea { resize: vertical; min-height: 80px; width: 100%; }
+    select { cursor: pointer; }
+    label.field-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* ─── PLAN TABLE ─────────────────────────────────────── */
+    .plan-table { width: 100%; border-collapse: collapse; margin-bottom: 28px; font-size: 13px; }
+    .plan-table th { background: var(--bg3); color: var(--text-muted); font-weight: 600; padding: 10px 14px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .plan-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+    .plan-table tr:last-child td { border-bottom: none; }
+    .plan-table tr.highlight td { background: var(--amber-dim); color: var(--amber); font-weight: 700; border-bottom: 1px solid var(--amber-glow); }
+    .plan-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* ─── PLAN BUTTONS ─────────────────────────────────────── */
+    .plan-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .plan-btn { padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg2); color: var(--text-muted); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .plan-btn:hover { border-color: var(--amber); color: var(--amber); }
+    .plan-btn.active { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+
+    /* ─── DISCOUNT CALC ─────────────────────────────────────── */
+    .disc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .disc-result-box { border-radius: 8px; padding: 16px 20px; margin-top: 12px; }
+    .disc-result-box .res-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+    .disc-result-box .res-row .lbl { color: var(--text-muted); }
+    .disc-result-box .res-row .val { font-weight: 700; }
+    .semaforo { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    .sem-green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .sem-amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .sem-red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+    /* ─── ACORDEON ─────────────────────────────────────── */
+    .obj-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
+    .obj-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; cursor: pointer; user-select: none; transition: background 0.2s; }
+    .obj-header:hover { background: rgba(239,68,68,0.05); }
+    .obj-header .q { font-size: 14px; font-weight: 600; color: #f87171; }
+    .obj-header .chevron { font-size: 16px; color: var(--text-muted); transition: transform 0.2s; }
+    .obj-item.open .chevron { transform: rotate(180deg); }
+    .obj-body { display: none; padding: 14px 18px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.7; background: rgba(255,255,255,0.02); }
+    .obj-item.open .obj-body { display: block; }
+
+    /* ─── TIPS ─────────────────────────────────────── */
+    .tip-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
+    .tip-item .tip-title { font-size: 14px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
+    .tip-item .tip-body { font-size: 13px; color: var(--text); line-height: 1.65; }
+
+    /* ─── ENTREGABLES ─────────────────────────────────────── */
+    .entregable-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+    .entregable-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+    .entregable-top .ent-num { font-size: 11px; font-weight: 700; color: var(--text-muted); min-width: 24px; }
+    .entregable-top .ent-name { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+    .status-sel { padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); font-size: 12px; font-weight: 600; cursor: pointer; }
+    .entregable-bottom { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+    .entregable-bottom input[type=text] { width: 100%; }
+    .entregable-bottom input[type=date] { width: 150px; }
+    .btn-save { background: var(--amber); color: #000; border: none; border-radius: 8px; padding: 10px 24px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-top: 16px; }
+    .btn-save:hover { opacity: 0.85; }
+    .btn-secondary { background: var(--bg3); color: var(--amber); border: 1px solid var(--amber-glow); border-radius: 8px; padding: 9px 20px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 12px; }
+    .btn-secondary:hover { background: var(--amber-dim); }
+    .save-msg { font-size: 12px; color: var(--green); margin-left: 12px; opacity: 0; transition: opacity 0.4s; }
+    .save-msg.show { opacity: 1; }
+
+    /* ─── MAPA PROCESO ─────────────────────────────────────── */
+    .form-block { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 20px; }
+    .form-block h3 { font-size: 13px; font-weight: 700; color: var(--amber); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--amber-glow); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .checkbox-group { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
+    .checkbox-group label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+    .checkbox-group input[type=checkbox] { accent-color: var(--amber); cursor: pointer; }
+
+    /* ─── GEMINI ─────────────────────────────────────── */
+    .gemini-header { background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(16,185,129,0.05)); border: 1px solid var(--amber-glow); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+    .gemini-header h3 { font-size: 16px; font-weight: 700; color: var(--amber); margin-bottom: 8px; }
+    .gemini-header .meta { font-size: 13px; color: var(--text-muted); }
+    .gemini-summary { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; font-size: 13px; line-height: 1.7; color: var(--text); }
+    .gemini-summary h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-muted); margin-bottom: 10px; }
+    .gemini-accordeon .g-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+    .g-item .g-header { display: flex; justify-content: space-between; align-items: center; padding: 13px 18px; cursor: pointer; user-select: none; }
+    .g-item .g-header:hover { background: rgba(255,255,255,0.02); }
+    .g-item .g-header .g-title { font-size: 13px; font-weight: 600; color: var(--text); }
+    .g-item .g-header .g-ch { color: var(--text-muted); font-size: 14px; transition: transform 0.2s; }
+    .g-item.open .g-ch { transform: rotate(180deg); }
+    .g-item .g-body { display: none; padding: 14px 18px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text); line-height: 1.7; background: rgba(255,255,255,0.015); }
+    .g-item.open .g-body { display: block; }
+    .drive-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; }
+    .btn-drive { background: rgba(66,133,244,0.15); color: #6ba3f5; border: 1px solid rgba(66,133,244,0.3); border-radius: 8px; padding: 9px 18px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s; }
+    .btn-drive:hover { background: rgba(66,133,244,0.25); }
+    .notas-area { width: 100%; min-height: 120px; margin-top: 8px; }
+    .next-steps { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; }
+    .next-steps h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--green); margin-bottom: 10px; }
+    .next-steps ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .next-steps ul li { font-size: 13px; color: var(--text); display: flex; gap: 8px; align-items: flex-start; }
+    .next-steps ul li::before { content: "→"; color: var(--green); flex-shrink: 0; }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #hamburger { display: block; }
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main { margin-left: 0; padding: 24px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .disc-grid { grid-template-columns: 1fr; }
+      .plan-table { font-size: 12px; }
+    }
+    @media (max-width: 500px) { .cards-row { grid-template-columns: 1fr; } .roi-cards { grid-template-columns: 1fr 1fr; } }
+
+    /* ─── MISC ─────────────────────────────────────── */
+    .info-box { background: rgba(245,158,11,0.06); border: 1px solid var(--amber-glow); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--text); margin: 16px 0; line-height: 1.6; }
+    .info-box strong { color: var(--amber); }
+    hr.section-hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    .small-note { font-size: 12px; color: var(--text-muted); margin-top: 6px; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<header id="top-header">
+  <span class="badge">🔒 SETTER TOOL</span>
+  <div class="header-info">
+    <span>Cortinajes Valls &amp; París</span> — Godella, l'Horta Nord &nbsp;|&nbsp;
+    <span>Autopilot 30 recomendado</span> &nbsp;|&nbsp; 21/08/2026
+  </div>
+  <button id="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+</header>
+
+<nav id="sidebar">
+  <div class="nav-item active" onclick="scrollTo('s1')" data-section="s1"><span class="icon">📋</span> Resumen prospecto</div>
+  <div class="nav-item" onclick="scrollTo('s2')" data-section="s2"><span class="icon">🔍</span> Auditoría</div>
+  <div class="nav-item" onclick="scrollTo('s-meta')" data-section="s-meta"><span class="icon">📊</span> Meta Ads</div>
+  <div class="nav-item" onclick="scrollTo('s3')" data-section="s3"><span class="icon">💰</span> ROI</div>
+  <div class="nav-item" onclick="scrollTo('s4')" data-section="s4"><span class="icon">🎛️</span> Plan &amp; Descuento</div>
+  <div class="nav-divider"></div>
+  <div class="nav-item" onclick="scrollTo('s5')" data-section="s5"><span class="icon">💬</span> Objeciones</div>
+  <div class="nav-item" onclick="scrollTo('s6')" data-section="s6"><span class="icon">🎯</span> Tips negociación</div>
+  <div class="nav-divider"></div>
+  <div class="nav-item" onclick="scrollTo('s7')" data-section="s7"><span class="icon">✅</span> Entregables</div>
+  <div class="nav-item" onclick="scrollTo('s8')" data-section="s8"><span class="icon">🗺️</span> Mapa proceso</div>
+  <div class="nav-item" onclick="scrollTo('s9')" data-section="s9"><span class="icon">📝</span> Notas Gemini</div>
+</nav>
+
+<main id="main">
+
+  <!-- ════ S1 — RESUMEN PROSPECTO ════ -->
+  <section class="section" id="s1">
+    <h2 class="section-title">📋 Resumen del prospecto</h2>
+
+    <div class="cards-row">
+      <div class="card">
+        <div class="card-title">Datos del negocio</div>
+        <div class="card-row">
+          <div class="item"><strong>Nombre:</strong> Cortinajes Valls &amp; París</div>
+          <div class="item"><strong>Sector:</strong> Decoración del hogar</div>
+          <div class="item"><strong>Web:</strong> cortinajesvallsparis.es</div>
+          <div class="item"><strong>Ubicación:</strong> Godella, l'Horta Nord</div>
+          <div class="item"><strong>Trayectoria:</strong> ~35 años en el sector</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Estado actual</div>
+        <span class="badge-status badge-waiting">⏳ De vacaciones</span>
+        <div class="card-row">
+          <div class="item">Email frío enviado 16/08 · Seguimiento 20/08</div>
+          <div class="item"><strong>Sin respuesta aún</strong> — de vacaciones</div>
+          <div class="item"><strong>Próxima acción:</strong> Sensibilizar semana <span style="color:var(--amber);font-weight:700;">25/08/2026</span></div>
+          <div class="item"><strong>Propuesta:</strong> <a href="/propuestas/b7f3c1a9-cortinajes-valls.html" target="_blank" style="color:var(--amber);">Ver propuesta →</a></div>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column: 1/-1;">
+        <div class="card-title">Contexto clave del negocio</div>
+        <div class="card-row">
+          <div class="item">• <strong>35+ años de experiencia</strong> — reputación sólida en l'Horta Nord</div>
+          <div class="item">• Productos: cortinas, estores, toldos, persianas, colchones, tapicería</div>
+          <div class="item">• <strong style="color:var(--red);">Score digital 33/100</strong> — sin contacto visible, sin SEO, sin tracking</div>
+          <div class="item">• Estimación pérdida: <strong style="color:var(--red);">~5 presupuestos/semana</strong> que se van a la competencia</div>
+          <div class="item">• Posible objeción: "vivimos del boca a boca" — lleva 35 años así</div>
+          <div class="item">• Ticket medio estimado: ~800€ por trabajo (cortinas + instalación habitación)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ S2 — AUDITORÍA ════ -->
+  <section class="section" id="s2">
+    <h2 class="section-title">🔍 Auditoría para dummies</h2>
+
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;flex-wrap:wrap;">
+      <div>
+        <div class="score-badge">33/100</div>
+        <div class="score-label">Oportunidad <strong style="color:var(--amber);">MUY ALTA</strong></div>
+      </div>
+      <div class="info-box" style="flex:1;">
+        Negocio con reputación local de 35 años pero presencia digital casi inexistente. Cada semana pierden presupuestos porque la gente no puede contactarles fácil desde el móvil y Google no los muestra cuando buscan "cortinas Godella". El gap entre reputación y presencia digital es la oportunidad de venta.
+      </div>
+    </div>
+
+    <div class="audit-grid">
+      <div class="audit-card green">
+        <h3>✅ Lo que tienen</h3>
+        <ul>
+          <li>35+ años de experiencia y reputación</li>
+          <li>Ubicación en Godella (zona con potencial)</li>
+          <li>Amplio catálogo (cortinas, estores, toldos, colchones)</li>
+          <li>Web existente (aunque deficiente)</li>
+        </ul>
+      </div>
+      <div class="audit-card red">
+        <h3>❌ Lo que les falta</h3>
+        <ul>
+          <li>Sin WhatsApp ni teléfono clicable en móvil</li>
+          <li>Sin SEO — Google no los muestra en búsquedas locales</li>
+          <li>Sin Meta Píxel ni Google Analytics 4</li>
+          <li>Google My Business sin optimizar (sin fotos, sin reseñas activas)</li>
+          <li>Sin seguimiento automático de presupuestos solicitados</li>
+          <li>WordPress desactualizado, sin protección básica</li>
+        </ul>
+      </div>
+      <div class="audit-card orange">
+        <h3>⚠ Riesgo real</h3>
+        <ul>
+          <li>Nuevos competidores con mejor presencia digital captan sus clientes</li>
+          <li>La generación joven no pregunta por boca a boca — googlea</li>
+          <li>Sin reseñas activas = no aparece en Google Maps</li>
+          <li>Temporada alta toldos (primavera) se acerca — sin sistema = leads perdidos</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ S-META — META ADS ════ -->
+  <section class="section" id="s-meta">
+    <h2 class="section-title">📊 Meta Ads — Diagnóstico</h2>
+
+    <!-- Métricas clave -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:28px;">
+      <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);border-radius:10px;padding:18px;text-align:center;">
+        <div style="font-size:36px;font-weight:800;color:#ef4444;line-height:1;">0</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:6px;text-transform:uppercase;letter-spacing:0.6px;">Anuncios activos</div>
+      </div>
+      <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);border-radius:10px;padding:18px;text-align:center;">
+        <div style="font-size:36px;font-weight:800;color:#ef4444;line-height:1;">28<span style="font-size:18px;">/100</span></div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:6px;text-transform:uppercase;letter-spacing:0.6px;">Score landing</div>
+      </div>
+      <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);border-radius:10px;padding:18px;text-align:center;">
+        <div style="font-size:36px;font-weight:800;color:#ef4444;line-height:1;">0%</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:6px;text-transform:uppercase;letter-spacing:0.6px;">Tracking (sin Pixel)</div>
+      </div>
+      <div style="background:rgba(15,118,110,0.1);border:1px solid rgba(20,184,166,0.35);border-radius:10px;padding:18px;text-align:center;">
+        <div style="font-size:36px;font-weight:800;color:#14b8a6;line-height:1;">262</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:6px;text-transform:uppercase;letter-spacing:0.6px;">Seguidores FB</div>
+      </div>
+    </div>
+
+    <!-- Pitch argument -->
+    <div style="background:rgba(245,158,11,0.08);border-left:3px solid #f59e0b;border-radius:0 10px 10px 0;padding:18px 20px;margin-bottom:28px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#f59e0b;margin-bottom:10px;">💬 Argumento de venta</div>
+      <p style="font-size:14px;color:#e2e8f0;line-height:1.7;font-style:italic;">"No solo no tienes anuncios — si los tuvieras ahora mismo, tu landing no convertiría. Doble problema. Lo que hacemos es resolver los dos a la vez: primero preparamos el suelo para que cada euro invertido en publicidad tenga dónde caer."</p>
+    </div>
+
+    <!-- Hallazgos -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;">
+      <div style="background:var(--bg2);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:16px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#ef4444;letter-spacing:0.6px;margin-bottom:12px;">🔴 Gaps detectados</div>
+        <ul style="font-size:13px;color:#e2e8f0;line-height:2;padding-left:16px;">
+          <li>Sin Meta Pixel instalado</li>
+          <li>Sin Google Analytics 4</li>
+          <li>Sin anuncios históricos en Meta</li>
+          <li>Landing sin WhatsApp clicable</li>
+          <li>Sin galería de trabajos reales</li>
+        </ul>
+      </div>
+      <div style="background:var(--bg2);border:1px solid rgba(20,184,166,0.3);border-radius:10px;padding:16px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#14b8a6;letter-spacing:0.6px;margin-bottom:12px;">🟢 Oportunidad</div>
+        <ul style="font-size:13px;color:#e2e8f0;line-height:2;padding-left:16px;">
+          <li>Competencia local sin ventaja ads</li>
+          <li>Sector decoración = alto ticket visual</li>
+          <li>Catálogo de cortinas → retargeting</li>
+          <li>Base de 262 seguidores → lookalike</li>
+          <li>Primero en medir = primero en escalar</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Top 5 mejoras -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:24px;">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#94a3b8;margin-bottom:14px;">Top 5 mejoras prioritarias</div>
+      <ol style="font-size:13px;color:#e2e8f0;line-height:2.2;padding-left:18px;">
+        <li>WhatsApp clicable en landing (conversión inmediata)</li>
+        <li>Meta Pixel + evento de conversión configurado</li>
+        <li>Galería de trabajos reales con antes/después</li>
+        <li>Landing específica por producto (cortinas roller, estores…)</li>
+        <li>Activar Google Reviews → social proof</li>
+      </ol>
+    </div>
+
+    <!-- Link auditoría completa -->
+    <a href="/Users/macbook/Desktop/workspace/clientes/COM-studio/cortinajes-valls-paris/auditoria/auditoria-meta-ads-cortinajes.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;color:#f59e0b;text-decoration:none;">
+      📄 Ver auditoría completa →
+    </a>
+  </section>
+
+  <!-- ════ S3 — ROI ════ -->
+  <section class="section" id="s3">
+    <h2 class="section-title">💰 ROI</h2>
+
+    <div class="roi-cards">
+      <div class="roi-card">
+        <div class="roi-val">~1.600€/mes</div>
+        <div class="roi-desc">2 presupuestos extra/mes recuperados × 800€ ticket medio</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-val">~320€/mes</div>
+        <div class="roi-desc">Seguimiento automático: recupera 40% de los presupuestos sin respuesta</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-val">~200€/mes</div>
+        <div class="roi-desc">Reseñas Google → mejor posición → más tráfico orgánico</div>
+      </div>
+    </div>
+
+    <div class="roi-total">
+      <div>
+        <div class="big">~2.120€/mes</div>
+        <div class="detail">extra estimado con Autopilot 30</div>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--green);">✓ Sistema pagado en: Mes 1</div>
+        <div class="detail">499€/mes se cubre con 1 solo trabajo extra al mes</div>
+      </div>
+    </div>
+
+    <div class="calc-box">
+      <h3>🧮 Calculadora ROI interactiva</h3>
+
+      <div class="slider-row">
+        <label>Presupuestos recibidos/mes <span id="leads-val">20</span></label>
+        <input type="range" id="leads-slider" min="5" max="60" value="20" oninput="syncSl('leads');calcROI()">
+        <div class="slider-sub">
+          <span>Ticket medio (€):</span>
+          <input type="number" id="ticket-price" value="800" min="100" max="5000" onchange="calcROI()" style="width:90px;">
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <label>Cierre actual (%) <span id="close-val">30</span>%</label>
+        <input type="range" id="close-slider" min="10" max="70" value="30" oninput="syncSl('close');calcROI()">
+      </div>
+
+      <div class="slider-row">
+        <label>Mejora con Autopilot 30 <span id="boost-val">+25</span>%</label>
+        <input type="range" id="boost-slider" min="10" max="50" value="25" oninput="syncSl('boost');calcROI()">
+      </div>
+
+      <div class="calc-result" id="roi-result">
+        Genera ~1.600€/mes extra — payback setup en 2 meses
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ S4 — PLAN & DESCUENTO ════ -->
+  <section class="section" id="s4">
+    <h2 class="section-title">🎛️ Plan &amp; Descuento</h2>
+
+    <table class="plan-table">
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Setup</th>
+          <th>Mensual</th>
+          <th>Coste entrega est.</th>
+          <th>Margen bruto</th>
+          <th>Ideal para</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Vecino Digital</td>
+          <td>1.200€</td>
+          <td>—</td>
+          <td>550€</td>
+          <td>650€ (54%)</td>
+          <td>Entrada mínima, 0 riesgo</td>
+        </tr>
+        <tr class="highlight">
+          <td>⭐ Autopilot 30</td>
+          <td>3.100€</td>
+          <td>499€</td>
+          <td>1.400€ setup / 180€/mes</td>
+          <td>1.700€ setup / 319€/mes</td>
+          <td>Recomendado — máximo ROI</td>
+        </tr>
+        <tr>
+          <td>Socio Digital</td>
+          <td>4.900€</td>
+          <td>799€</td>
+          <td>2.200€ setup / 320€/mes</td>
+          <td>2.700€ setup / 479€/mes</td>
+          <td>Expansión total l'Horta Nord</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box" style="margin-bottom:28px;">
+      <strong>¿Por qué Autopilot 30 para Cortinajes?</strong><br>
+      Sin reunión aún — pero el perfil encaja perfectamente: negocio local con reputación, sin tiempo para gestionar consultas digitales, con temporada alta de toldos en primavera. El agente IA de WhatsApp + seguimiento automático de presupuestos + reseñas Google resuelve sus 3 problemas principales.
+    </div>
+
+    <!-- Calculadora de descuento -->
+    <div class="calc-box">
+      <h3>💸 Calculadora de descuento</h3>
+
+      <div class="plan-btns">
+        <button class="plan-btn" onclick="setPlan('vecino')">Vecino Digital</button>
+        <button class="plan-btn active" onclick="setPlan('autopilot')">⭐ Autopilot 30</button>
+        <button class="plan-btn" onclick="setPlan('socio')">Socio Digital</button>
+      </div>
+
+      <div style="margin-bottom:12px;font-size:12px;color:var(--text-muted);">
+        Modo: <strong id="disc-modo" style="color:var(--amber);">Setup</strong>
+        &nbsp;|&nbsp;
+        <button onclick="toggleDiscMode()" style="background:none;border:1px solid var(--border);color:var(--text-muted);border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer;">Cambiar a mensual</button>
+      </div>
+
+      <div class="disc-grid">
+        <div class="form-field">
+          <label class="field-label">Precio (€)</label>
+          <input type="number" id="disc-precio" value="3100" min="0" onchange="calcDisc()">
+        </div>
+        <div class="form-field">
+          <label class="field-label">Coste real entrega (€)</label>
+          <input type="number" id="disc-coste" value="1400" min="0" onchange="calcDisc()">
+        </div>
+      </div>
+
+      <div class="slider-row">
+        <label>Descuento: <span id="disc-pct-val">0</span>%</label>
+        <input type="range" id="disc-slider" min="0" max="35" value="0" oninput="syncDiscSlider();calcDisc()">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label class="field-label" style="display:inline;">Descuento manual (%):</label>
+        <input type="number" id="disc-pct-input" value="0" min="0" max="35" style="width:70px;margin-left:8px;" onchange="syncDiscInput();calcDisc()">
+      </div>
+
+      <div class="disc-result-box" id="disc-result-box" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.3);">
+        <div class="res-row"><span class="lbl">Precio con descuento:</span><span class="val" id="res-precio">3.100€</span></div>
+        <div class="res-row"><span class="lbl">Margen bruto:</span><span class="val" id="res-margen">1.700€</span></div>
+        <div class="res-row"><span class="lbl">Margen %:</span><span class="val" id="res-margen-pct">54.8%</span></div>
+        <div class="res-row" style="margin-top:10px;">
+          <span class="lbl">Estado:</span>
+          <span class="val" id="res-semaforo"><span class="semaforo sem-green"></span>OK — margen saludable</span>
+        </div>
+      </div>
+      <p class="small-note" id="disc-floor-note">Floor Autopilot 30 setup: 2.400€ mínimo · Mensual: 380€ mínimo</p>
+    </div>
+  </section>
+
+  <!-- ════ S5 — OBJECIONES ════ -->
+  <section class="section" id="s5">
+    <h2 class="section-title">💬 Objeciones</h2>
+
+    <div id="obj-list">
+      <div class="obj-item" id="obj-0">
+        <div class="obj-header" onclick="toggleObj(0)">
+          <span class="q">"Vivimos del boca a boca, siempre ha funcionado"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          Perfecto — 35 años de reputación no mienten. El problema es que la generación que hoy busca cortinas en Godella no le pregunta a su vecino: le pregunta a Google. <strong style="color:var(--amber);">Tu boca a boca existe. El problema es que no llega a quien no conoce aún tu negocio.</strong> El sistema amplifica ese boca a boca digitalmente.
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-1">
+        <div class="obj-header" onclick="toggleObj(1)">
+          <span class="q">"1.200€ / 3.100€ es mucho dinero"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          Un toldo motorizado vale 800€. Con que el sistema te recupere 2 presupuestos al mes que ahora se pierden, ya cubriste la cuota de los 499€ con 1 trabajo extra. <strong style="color:var(--amber);">La pregunta real es: ¿cuánto te cuesta seguir perdiendo 5 presupuestos/semana?</strong> Eso son ~16.000€/año.
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-2">
+        <div class="obj-header" onclick="toggleObj(2)">
+          <span class="q">"No tengo tiempo para gestionar esto"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          <strong style="color:var(--amber);">No lo gestionas tú — lo gestiona el sistema.</strong> El agente IA responde en tu nombre, filtra las consultas y solo te avisa cuando hay un presupuesto cualificado listo para cerrar. 1 hora de tu tiempo al mes para revisar métricas. Nada más.
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-3">
+        <div class="obj-header" onclick="toggleObj(3)">
+          <span class="q">"Mis clientes no usan WhatsApp para pedir presupuestos"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          España tiene un 87% de penetración de WhatsApp. Los clientes de decoración del hogar buscan en Google, ven la web, y si el botón de WhatsApp no está visible… llaman a quien sí lo tiene. <strong style="color:var(--amber);">El problema no es si tus clientes usan WhatsApp: es que no pueden encontrar el tuyo fácilmente.</strong>
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-4">
+        <div class="obj-header" onclick="toggleObj(4)">
+          <span class="q">"¿Y si la IA da información incorrecta?"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          El agente trabaja únicamente con lo que tú defines: precios orientativos, productos, zonas de instalación. Si una pregunta está fuera de su conocimiento, deriva automáticamente a ti. <strong style="color:var(--amber);">Los primeros 15 días revisamos todas las conversaciones juntos antes de pasar a producción.</strong>
+        </div>
+      </div>
+
+      <div class="obj-item" id="obj-5">
+        <div class="obj-header" onclick="toggleObj(5)">
+          <span class="q">"¿Cuánto tarda en estar listo?"</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="obj-body">
+          10 días hábiles desde la firma: <strong style="color:var(--amber);">Semana 1</strong> — SEO, contacto visible, GMB · <strong style="color:var(--amber);">Semana 2</strong> — Agente IA configurado con tus productos y zona · <strong style="color:var(--amber);">Día 10</strong> — pruebas y puesta en marcha. Para la temporada de toldos en primavera ya está activo.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ S6 — TIPS NEGOCIACIÓN ════ -->
+  <section class="section" id="s6">
+    <h2 class="section-title">🎯 Tips negociación</h2>
+
+    <div class="tip-item">
+      <div class="tip-title">🎯 Ancla el dolor antes de hablar de precio</div>
+      <div class="tip-body">"¿Cuántas veces al mes te ocurre que alguien ve vuestra web pero no llama?" — Que ellos pongan número al problema. Si el propietario dice "4 o 5 veces a la semana", el precio del Plan 1 ya se justifica solo en 2 semanas.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">📅 Usa la temporalidad como urgencia real</div>
+      <div class="tip-body">La campaña de toldos empieza en marzo. Si arrancamos en septiembre, el sistema ya está rodado y con reseñas acumuladas cuando llegue la temporada más lucrativa del año. <strong style="color:var(--amber);">Esperar a primavera para empezar es perder la temporada de toldos.</strong></div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">🗺️ La expansión zonal como argumento de cierre</div>
+      <div class="tip-body">Llevan 35 años en Godella. Con el Plan Socio Digital llegan a Rocafort, Burjassot, Paterna y Moncada — 5 municipios más. Eso duplica su mercado potencial. Si hay competencia en la zona, esto es lo que los diferencia.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">⭐ Las reseñas son el argumento más fácil de entender</div>
+      <div class="tip-body">"Busca ahora mismo 'cortinas Godella' en Google. ¿Quién aparece primero? ¿Cuántas reseñas tienen?" — Que lo vea en directo. Si la competencia tiene más reseñas y mejor posición, el pain se vuelve tangible e inmediato.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">🚫 No bajes el precio antes de que lo pida</div>
+      <div class="tip-body">Primera oferta de valor antes de mover precio: "Si arrancamos este mes, incluimos el kit de 30 posts de Instagram gratis (valor 300€)." Solo si lo rechaza, mueve el descuento. Ceder precio sin resistencia destruye percepción de valor.</div>
+    </div>
+
+    <div class="tip-item">
+      <div class="tip-title">💡 Puerta de entrada con Vecino Digital</div>
+      <div class="tip-body">Si el cierre del Autopilot 30 (3.100€) genera fricción, propón Vecino Digital (1.200€) como primer paso. En 30 días demuestras resultados reales (más tráfico, llamadas) y haces el upsell natural. No pierdas el prospecto por no ofrecer una entrada menor.</div>
+    </div>
+  </section>
+
+  <!-- ════ S7 — ENTREGABLES ════ -->
+  <section class="section" id="s7">
+    <h2 class="section-title">✅ Entregables del cliente</h2>
+
+    <div id="entregables-list">
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">01</span>
+          <span class="ent-name">Propuesta HTML</span>
+          <select class="status-sel" id="ent-0-status" onchange="styleStatus(0);saveEntregables()">
+            <option value="entregado">✅ Entregado</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="pendiente">⏳ Pendiente</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-0-notes" value="b7f3c1a9-cortinajes-valls.html" onchange="saveEntregables()">
+          <input type="date" id="ent-0-date" value="2026-08-21" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">02</span>
+          <span class="ent-name">Auditoría web 33/100</span>
+          <select class="status-sel" id="ent-1-status" onchange="styleStatus(1);saveEntregables()">
+            <option value="entregado">✅ Entregado</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="pendiente">⏳ Pendiente</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-1-notes" value="auditoria-cortinajesvallsparis.html" onchange="saveEntregables()">
+          <input type="date" id="ent-1-date" value="2026-08-21" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">03</span>
+          <span class="ent-name">Contrato de servicios (Autopilot 30)</span>
+          <select class="status-sel" id="ent-2-status" onchange="styleStatus(2);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-2-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-2-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">04</span>
+          <span class="ent-name">SEO Técnico + GMB optimizado</span>
+          <select class="status-sel" id="ent-3-status" onchange="styleStatus(3);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-3-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-3-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">05</span>
+          <span class="ent-name">WhatsApp Business clicable + botón llamada</span>
+          <select class="status-sel" id="ent-4-status" onchange="styleStatus(4);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-4-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-4-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">06</span>
+          <span class="ent-name">Meta Píxel + Google Analytics 4</span>
+          <select class="status-sel" id="ent-5-status" onchange="styleStatus(5);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-5-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-5-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">07</span>
+          <span class="ent-name">Agente IA WhatsApp (n8n)</span>
+          <select class="status-sel" id="ent-6-status" onchange="styleStatus(6);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-6-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-6-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">08</span>
+          <span class="ent-name">Workflow seguimiento presupuestos (n8n)</span>
+          <select class="status-sel" id="ent-7-status" onchange="styleStatus(7);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-7-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-7-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">09</span>
+          <span class="ent-name">Workflow petición reseñas Google</span>
+          <select class="status-sel" id="ent-8-status" onchange="styleStatus(8);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-8-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-8-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">10</span>
+          <span class="ent-name">Kit 30 posts Instagram/Facebook</span>
+          <select class="status-sel" id="ent-9-status" onchange="styleStatus(9);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-9-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-9-date" onchange="saveEntregables()">
+        </div>
+      </div>
+
+      <div class="entregable-item">
+        <div class="entregable-top">
+          <span class="ent-num">11</span>
+          <span class="ent-name">Manual de uso del sistema</span>
+          <select class="status-sel" id="ent-10-status" onchange="styleStatus(10);saveEntregables()">
+            <option value="pendiente">⏳ Pendiente</option>
+            <option value="proceso">🔄 En proceso</option>
+            <option value="entregado">✅ Entregado</option>
+          </select>
+        </div>
+        <div class="entregable-bottom">
+          <input type="text" id="ent-10-notes" placeholder="Notas..." onchange="saveEntregables()">
+          <input type="date" id="ent-10-date" onchange="saveEntregables()">
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;margin-top:8px;">
+      <button class="btn-save" onclick="saveEntregables(true)">💾 Guardar cambios</button>
+      <span class="save-msg" id="ent-save-msg">Guardado ✓</span>
+    </div>
+  </section>
+
+  <!-- ════ S8 — MAPA PROCESO ════ -->
+  <section class="section" id="s8">
+    <h2 class="section-title">🗺️ Mapa del proceso</h2>
+
+    <div class="form-block">
+      <h3>Bloque A — Situación actual (AS-IS)</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="field-label">Canal principal de captación</label>
+          <select id="map-canal" onchange="saveMap()">
+            <option value="">Seleccionar...</option>
+            <option value="boca-a-boca" selected>Boca a boca</option>
+            <option value="whatsapp">WhatsApp</option>
+            <option value="web">Web</option>
+            <option value="gmb">Google My Business</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Tiempo gestión manual/semana (horas)</label>
+          <input type="number" id="map-tiempo" min="0" max="40" value="6" onchange="saveMap()">
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Tipo de lead que entra</label>
+          <textarea id="map-tipo-lead" onchange="saveMap()">Particulares de l'Horta Nord que buscan cortinas, estores, toldos, persianas o colchones. Rango de edad 35-65 años. Buscan presupuesto para nueva instalación o reparación.</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Proceso actual paso a paso</label>
+          <textarea id="map-proceso-as" onchange="saveMap()" style="min-height:110px;">1. Cliente llega por boca a boca o buscando en Google (aunque con dificultad)
+2. Llama por teléfono (no visible en móvil) o aparece en la tienda
+3. Se da precio orientativo de viva voz
+4. Si hay interés, se concierta visita a domicilio
+5. Sin seguimiento si el cliente no vuelve a llamar</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Pain principal</label>
+          <textarea id="map-pain" onchange="saveMap()">Sin contacto visible en móvil → clientes que visitan la web no encuentran cómo contactar. Sin seguimiento de presupuestos → el cliente se enfría y compra a la competencia. Sin reseñas activas → Google no los muestra primero.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-block">
+      <h3>Bloque B — Proceso futuro automatizado (TO-BE)</h3>
+      <div class="form-grid">
+        <div class="form-field full">
+          <label class="field-label">Canales a automatizar</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="map-ch-wa" checked onchange="saveMap()"> WhatsApp</label>
+            <label><input type="checkbox" id="map-ch-web" checked onchange="saveMap()"> Formulario web</label>
+            <label><input type="checkbox" id="map-ch-gmb" checked onchange="saveMap()"> Google My Business</label>
+            <label><input type="checkbox" id="map-ch-ig" onchange="saveMap()"> Instagram</label>
+          </div>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Proceso automatizado paso a paso</label>
+          <textarea id="map-proceso-to" onchange="saveMap()" style="min-height:130px;">1. Cliente escribe por WhatsApp o formula web
+2. Agente IA responde inmediatamente: saluda, pregunta tipo de producto, zona, necesidad
+3. Recoge datos básicos (nombre, producto, zona, teléfono)
+4. Envía información de productos y precios orientativos
+5. Propone visita a domicilio y sugiere fecha
+6. Notificación al propietario con resumen del lead
+7. Si no hay respuesta del cliente en 48h → recordatorio automático
+8. Tras instalación → solicitud automática de reseña Google</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Cuándo deriva al humano (propietario)</label>
+          <textarea id="map-deriva" onchange="saveMap()">- Solicitud de precio específico (sin datos del proyecto)
+- Negociación o reclamación
+- Confirmación de visita a domicilio con fecha concreta
+- Pregunta técnica fuera del conocimiento del agente</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Datos a capturar</label>
+          <textarea id="map-datos" onchange="saveMap()">- Nombre y teléfono
+- Tipo de producto (cortinas, estores, toldos, persianas, colchones)
+- Municipio / zona exacta
+- Tipo de instalación (nueva, sustitución, reparación)
+- Número aproximado de ventanas/estancias
+- Urgencia (plazo deseado)
+- Canal de contacto</textarea>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Estados del lead</label>
+          <textarea id="map-estados" onchange="saveMap()">Nuevo → Datos capturados → Visita propuesta → Presupuesto enviado → Seguimiento (48h) → Cerrado / Perdido</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-block">
+      <h3>Bloque C — Integraciones técnicas</h3>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="field-label">CRM / Base de datos</label>
+          <select id="map-crm" onchange="saveMap()">
+            <option value="sheets" selected>Google Sheets</option>
+            <option value="supabase">Supabase</option>
+            <option value="airtable">Airtable</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Calendario visitas</label>
+          <select id="map-cal" onchange="saveMap()">
+            <option value="gcal" selected>Google Calendar</option>
+            <option value="calendly">Calendly</option>
+            <option value="no">Gestión manual</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">WhatsApp Business</label>
+          <select id="map-wa" onchange="saveMap()">
+            <option value="openwa">OpenWA</option>
+            <option value="meta" selected>Meta Business API</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Orquestador</label>
+          <select id="map-orch" onchange="saveMap()">
+            <option value="n8n" selected>n8n</option>
+            <option value="make">Make</option>
+            <option value="zapier">Zapier</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label class="field-label">Otras integraciones</label>
+          <textarea id="map-otras" onchange="saveMap()">n8n como orquestador principal · Google Sheets para registro de leads · Notificación WhatsApp al propietario cuando hay lead cualificado · Workflow automático de petición de reseña Google tras instalación confirmada</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;margin-top:4px;">
+      <button class="btn-save" onclick="saveMap(true)">💾 Guardar mapa del proceso</button>
+      <span class="save-msg" id="map-save-msg">Guardado ✓</span>
+    </div>
+  </section>
+
+  <!-- ════ S9 — NOTAS GEMINI ════ -->
+  <section class="section" id="s9">
+    <h2 class="section-title">📝 Notas Gemini</h2>
+
+    <div class="next-steps">
+      <h4>Próxima acción — semana 25/08/2026</h4>
+      <ul>
+        <li>Sensibilizar al propietario de vuelta de vacaciones — mensaje cálido, no venta directa</li>
+        <li>Objetivo: agendar llamada de 15 minutos para mostrar la calculadora ROI en directo</li>
+        <li>Ángulo: "mientras estabas de vacaciones, tus competidores seguían apareciendo en Google"</li>
+        <li>Si hay respuesta → cargar las notas de Gemini de esa reunión aquí</li>
+      </ul>
+    </div>
+
+    <div class="gemini-header">
+      <h3>Notas de reunión — Pendiente primera reunión</h3>
+      <div class="meta">
+        Prospecto en estado ⏳ — sin reunión aún.<br>
+        Cuando tengas la primera reunión, pega aquí las notas de Gemini y completa las secciones de abajo.
+      </div>
+    </div>
+
+    <div class="drive-row">
+      <a href="https://drive.google.com/drive/search?q=Cortinajes+Valls" target="_blank" class="btn-drive">
+        📂 Buscar en Drive
+      </a>
+      <span style="font-size:12px;color:var(--text-muted);">Busca las notas de reunión con Gemini en Drive cuando tengas la primera llamada</span>
+    </div>
+
+    <div class="gemini-summary" id="gemini-summary-box">
+      <h4>Resumen ejecutivo (pendiente)</h4>
+      <textarea class="notas-area" id="gemini-resumen" placeholder="Pega aquí el resumen ejecutivo de las notas de Gemini tras la primera reunión..." onchange="saveGemini()"></textarea>
+    </div>
+
+    <div class="gemini-accordeon" style="margin-bottom:28px;" id="gemini-sections">
+      <div class="g-item" id="g-0">
+        <div class="g-header" onclick="toggleGem(0)">
+          <span class="g-title">1. Situación del negocio (rellenar tras reunión)</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          <textarea class="notas-area" id="gem-0-body" placeholder="¿Cómo está gestionando ahora los presupuestos? ¿Cuántas personas trabajan? ¿Tienen empleados o es familiar?" onchange="saveGemini()"></textarea>
+        </div>
+      </div>
+      <div class="g-item" id="g-1">
+        <div class="g-header" onclick="toggleGem(1)">
+          <span class="g-title">2. Dolor detectado en la reunión</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          <textarea class="notas-area" id="gem-1-body" placeholder="¿Qué problemas mencionaron? ¿Temporada alta? ¿Pérdida de presupuestos? ¿Competencia?" onchange="saveGemini()"></textarea>
+        </div>
+      </div>
+      <div class="g-item" id="g-2">
+        <div class="g-header" onclick="toggleGem(2)">
+          <span class="g-title">3. Plan que más le interesó</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          <textarea class="notas-area" id="gem-2-body" placeholder="¿Qué plan le llamó más la atención? ¿Pusieron objeciones de precio? ¿Pidieron descuento?" onchange="saveGemini()"></textarea>
+        </div>
+      </div>
+      <div class="g-item" id="g-3">
+        <div class="g-header" onclick="toggleGem(3)">
+          <span class="g-title">4. Próximos pasos acordados</span>
+          <span class="g-ch">▼</span>
+        </div>
+        <div class="g-body">
+          <textarea class="notas-area" id="gem-3-body" placeholder="¿Cuándo volvemos a hablar? ¿Hay que enviar algo? ¿Quieren consultar con alguien más?" onchange="saveGemini()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Notas adicionales libres:</div>
+    <textarea class="notas-area" id="notas-libres" placeholder="Notas sueltas, frases clave del prospecto, contexto personal relevante..." onchange="saveGemini()" style="min-height:160px;"></textarea>
+
+    <div style="display:flex;align-items:center;margin-top:12px;">
+      <button class="btn-save" onclick="saveGemini(true)">💾 Guardar notas</button>
+      <span class="save-msg" id="gem-save-msg">Guardado ✓</span>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  var SLUG = 'b7f3c1a9-cortinajes-valls';
+
+  // ─── SIDEBAR ─────────────────────────────────
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+  function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    document.querySelector('[data-section="' + id + '"]').classList.add('active');
+    if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+  }
+
+  // ─── ROI CALC ────────────────────────────────
+  function syncSl(key) {
+    var v = document.getElementById(key + '-slider').value;
+    document.getElementById(key + '-val').textContent = v;
+  }
+  function calcROI() {
+    var leads  = parseInt(document.getElementById('leads-slider').value) || 20;
+    var ticket = parseInt(document.getElementById('ticket-price').value) || 800;
+    var close  = parseInt(document.getElementById('close-slider').value) || 30;
+    var boost  = parseInt(document.getElementById('boost-slider').value) || 25;
+    document.getElementById('leads-val').textContent = leads;
+    document.getElementById('close-val').textContent = close;
+    document.getElementById('boost-val').textContent = '+' + boost;
+    var base   = leads * (close / 100) * ticket;
+    var newRev = leads * (Math.min(close + boost, 100) / 100) * ticket;
+    var extra  = Math.round(newRev - base);
+    var payback = extra <= 0 ? '—' : (Math.ceil(499 / extra) <= 1 ? 'Mes 1 ✔' : Math.ceil(3100 / extra) + ' meses setup');
+    document.getElementById('roi-result').textContent = 'Extra estimado: ' + extra.toLocaleString('es-ES') + '€/mes (' + (extra * 12).toLocaleString('es-ES') + '€/año) · Payback setup: ' + payback;
+  }
+  calcROI();
+
+  // ─── PLAN & DESCUENTO ────────────────────────
+  var PLANS = {
+    vecino:    { setup: 1200, mes: 0,   costeSetup: 550,  costesMes: 0,   floorSetup: 900,  floorMes: 0   },
+    autopilot: { setup: 3100, mes: 499, costeSetup: 1400, costesMes: 180, floorSetup: 2400, floorMes: 380 },
+    socio:     { setup: 4900, mes: 799, costeSetup: 2200, costesMes: 320, floorSetup: 3800, floorMes: 620 }
+  };
+  var currentPlan = 'autopilot';
+  var discMode    = 'setup'; // 'setup' | 'mes'
+
+  function setPlan(p) {
+    currentPlan = p;
+    document.querySelectorAll('.plan-btn').forEach(function(b) { b.classList.remove('active'); });
+    event.target.classList.add('active');
+    loadPlanValues();
+    calcDisc();
+  }
+  function toggleDiscMode() {
+    discMode = discMode === 'setup' ? 'mes' : 'setup';
+    document.getElementById('disc-modo').textContent = discMode === 'setup' ? 'Setup' : 'Mensual';
+    event.target.textContent = discMode === 'setup' ? 'Cambiar a mensual' : 'Cambiar a setup';
+    loadPlanValues();
+    calcDisc();
+  }
+  function loadPlanValues() {
+    var p = PLANS[currentPlan];
+    document.getElementById('disc-precio').value = discMode === 'setup' ? p.setup : p.mes;
+    document.getElementById('disc-coste').value  = discMode === 'setup' ? p.costeSetup : p.costesMes;
+    document.getElementById('disc-slider').value  = 0;
+    document.getElementById('disc-pct-val').textContent = '0';
+    document.getElementById('disc-pct-input').value = 0;
+    var floor = discMode === 'setup' ? p.floorSetup : p.floorMes;
+    document.getElementById('disc-floor-note').textContent = 'Floor ' + currentPlan + ' ' + (discMode === 'setup' ? 'setup' : 'mensual') + ': ' + floor + '€ mínimo';
+  }
+  function syncDiscSlider() {
+    var v = document.getElementById('disc-slider').value;
+    document.getElementById('disc-pct-val').textContent = v;
+    document.getElementById('disc-pct-input').value = v;
+  }
+  function syncDiscInput() {
+    var v = Math.min(35, Math.max(0, parseInt(document.getElementById('disc-pct-input').value) || 0));
+    document.getElementById('disc-pct-input').value = v;
+    document.getElementById('disc-slider').value = v;
+    document.getElementById('disc-pct-val').textContent = v;
+  }
+  function calcDisc() {
+    var precio = parseFloat(document.getElementById('disc-precio').value) || 0;
+    var coste  = parseFloat(document.getElementById('disc-coste').value)  || 0;
+    var pct    = parseFloat(document.getElementById('disc-slider').value)  || 0;
+    var p      = PLANS[currentPlan];
+    var floor  = discMode === 'setup' ? p.floorSetup : p.floorMes;
+    var precioDisc = Math.round(precio * (1 - pct / 100));
+    var margen     = precioDisc - coste;
+    var margenPct  = precio > 0 ? ((margen / precioDisc) * 100).toFixed(1) : '0.0';
+    document.getElementById('res-precio').textContent    = precioDisc.toLocaleString('es-ES') + '€';
+    document.getElementById('res-margen').textContent    = margen.toLocaleString('es-ES') + '€';
+    document.getElementById('res-margen-pct').textContent = margenPct + '%';
+    var box = document.getElementById('disc-result-box');
+    var sem, txt, bg, border;
+    if (precioDisc < floor) {
+      sem = 'sem-red'; txt = '⚠ Por debajo del floor — revisar'; bg = 'rgba(239,68,68,0.08)'; border = 'rgba(239,68,68,0.3)';
+    } else if (parseFloat(margenPct) < 30) {
+      sem = 'sem-amber'; txt = 'Margen ajustado — proceder con cuidado'; bg = 'rgba(245,158,11,0.08)'; border = 'rgba(245,158,11,0.3)';
+    } else {
+      sem = 'sem-green'; txt = 'OK — margen saludable'; bg = 'rgba(16,185,129,0.08)'; border = 'rgba(16,185,129,0.3)';
+    }
+    box.style.background = bg; box.style.border = '1px solid ' + border;
+    document.getElementById('res-semaforo').innerHTML = '<span class="semaforo ' + sem + '"></span>' + txt;
+  }
+  loadPlanValues(); calcDisc();
+
+  // ─── OBJECIONES ──────────────────────────────
+  function toggleObj(i) {
+    var el = document.getElementById('obj-' + i);
+    el.classList.toggle('open');
+  }
+
+  // ─── GEMINI ──────────────────────────────────
+  function toggleGem(i) {
+    document.getElementById('g-' + i).classList.toggle('open');
+  }
+
+  // ─── ENTREGABLES ─────────────────────────────
+  var ENT_COUNT = 11;
+  function styleStatus(i) {
+    var sel = document.getElementById('ent-' + i + '-status');
+    var item = sel.closest('.entregable-item');
+    item.style.borderColor = sel.value === 'entregado' ? 'rgba(16,185,129,0.4)' : sel.value === 'proceso' ? 'rgba(245,158,11,0.4)' : '';
+  }
+  function saveEntregables(show) {
+    var data = {};
+    for (var i = 0; i < ENT_COUNT; i++) {
+      data['ent-' + i] = {
+        status: document.getElementById('ent-' + i + '-status')?.value,
+        notes:  document.getElementById('ent-' + i + '-notes')?.value,
+        date:   document.getElementById('ent-' + i + '-date')?.value
+      };
+    }
+    localStorage.setItem(SLUG + '-entregables', JSON.stringify(data));
+    if (show) { var m = document.getElementById('ent-save-msg'); m.classList.add('show'); setTimeout(function(){ m.classList.remove('show'); }, 2000); }
+  }
+  function loadEntregables() {
+    var raw = localStorage.getItem(SLUG + '-entregables');
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    for (var i = 0; i < ENT_COUNT; i++) {
+      var d = data['ent-' + i]; if (!d) continue;
+      var st = document.getElementById('ent-' + i + '-status');
+      var no = document.getElementById('ent-' + i + '-notes');
+      var da = document.getElementById('ent-' + i + '-date');
+      if (st && d.status) { st.value = d.status; styleStatus(i); }
+      if (no && d.notes)  no.value = d.notes;
+      if (da && d.date)   da.value = d.date;
+    }
+  }
+
+  // ─── MAPA ────────────────────────────────────
+  var MAP_FIELDS = ['canal','tiempo','tipo-lead','proceso-as','pain','proceso-to','deriva','datos','estados','crm','cal','wa','orch','otras'];
+  var MAP_CB = ['ch-wa','ch-web','ch-gmb','ch-ig'];
+  function saveMap(show) {
+    var data = {};
+    MAP_FIELDS.forEach(function(f) { var el = document.getElementById('map-' + f); if (el) data[f] = el.value; });
+    MAP_CB.forEach(function(f) { var el = document.getElementById('map-' + f); if (el) data[f] = el.checked; });
+    localStorage.setItem(SLUG + '-map', JSON.stringify(data));
+    if (show) { var m = document.getElementById('map-save-msg'); m.classList.add('show'); setTimeout(function(){ m.classList.remove('show'); }, 2000); }
+  }
+  function loadMap() {
+    var raw = localStorage.getItem(SLUG + '-map');
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    MAP_FIELDS.forEach(function(f) { var el = document.getElementById('map-' + f); if (el && data[f] !== undefined) el.value = data[f]; });
+    MAP_CB.forEach(function(f) { var el = document.getElementById('map-' + f); if (el && data[f] !== undefined) el.checked = data[f]; });
+  }
+
+  // ─── GEMINI NOTES ────────────────────────────
+  var GEM_FIELDS = ['gemini-resumen','gem-0-body','gem-1-body','gem-2-body','gem-3-body','notas-libres'];
+  function saveGemini(show) {
+    var data = {};
+    GEM_FIELDS.forEach(function(f) { var el = document.getElementById(f); if (el) data[f] = el.value; });
+    localStorage.setItem(SLUG + '-gemini', JSON.stringify(data));
+    if (show) { var m = document.getElementById('gem-save-msg'); m.classList.add('show'); setTimeout(function(){ m.classList.remove('show'); }, 2000); }
+  }
+  function loadGemini() {
+    var raw = localStorage.getItem(SLUG + '-gemini');
+    if (!raw) return;
+    var data = JSON.parse(raw);
+    GEM_FIELDS.forEach(function(f) { var el = document.getElementById(f); if (el && data[f]) el.value = data[f]; });
+  }
+
+  // ─── SCROLL SPY ──────────────────────────────
+  window.addEventListener('scroll', function() {
+    var sections = ['s1','s2','s-meta','s3','s4','s5','s6','s7','s8','s9'];
+    var active = sections[0];
+    sections.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top <= 80) active = id;
+    });
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    var navEl = document.querySelector('[data-section="' + active + '"]');
+    if (navEl) navEl.classList.add('active');
+  });
+
+  // ─── INIT ────────────────────────────────────
+  loadEntregables();
+  loadMap();
+  loadGemini();
+</script>
+</body>
+</html>

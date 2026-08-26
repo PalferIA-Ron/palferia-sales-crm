@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Propuesta PalferIA · Cortinajes Valls & París</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:   #4f46e5;
+      --accent2:  #6366f1;
+      --teal:     #0d9488;
+      --teal2:    #14b8a6;
+      --green:    #22c55e;
+      --amber:    #f59e0b;
+      --red:      #ef4444;
+      --bg:       #0a0f1a;
+      --surface:  #111827;
+      --card:     #1e2535;
+      --border:   rgba(51,65,85,0.6);
+      --text:     #f1f5f9;
+      --muted:    #64748b;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── CONTAINER ─────────────────────────────── */
+    #presentation-container {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    /* ── SLIDES ─────────────────────────────────── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100dvh;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      transform: translateX(40px);
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    /* ── PROGRESS BAR ───────────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal2), var(--accent));
+      transition: width 0.4s ease;
+      z-index: 100;
+    }
+
+    /* ── NAV CONTROLS ───────────────────────────── */
+    #nav-controls {
+      position: fixed; bottom: 24px; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 24px;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .nav-btn {
+      pointer-events: auto;
+      background: rgba(30,41,59,0.9);
+      border: 1px solid rgba(71,85,105,0.6);
+      color: #fff; padding: 14px; border-radius: 50%;
+      cursor: pointer; transition: all 0.2s; backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-btn:hover { background: rgba(51,65,85,0.9); border-color: var(--accent); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .nav-btn.next {
+      background: var(--teal);
+      border-color: rgba(20,184,166,0.5);
+      box-shadow: 0 0 20px rgba(13,148,136,0.5);
+    }
+    .nav-btn.next:hover { background: var(--teal2); box-shadow: 0 0 30px rgba(20,184,166,0.7); }
+    #slide-counter {
+      pointer-events: auto;
+      background: rgba(15,23,42,0.85);
+      border: 1px solid rgba(51,65,85,0.6);
+      border-radius: 30px; padding: 8px 20px;
+      font-size: 12px; font-weight: 600; color: var(--muted);
+      backdrop-filter: blur(8px);
+    }
+    #slide-counter span { color: var(--text); }
+
+    @media (min-width: 768px) {
+      #nav-controls { padding: 0 48px; }
+    }
+
+    /* ── LAYOUT HELPERS ─────────────────────────── */
+    .content-panel {
+      max-width: 900px; margin: 0 auto;
+      padding: 60px 24px 120px;
+    }
+    .content-panel-wide {
+      max-width: 1100px; margin: 0 auto;
+      padding: 60px 24px 120px;
+    }
+    .full-center {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100dvh;
+    }
+
+    /* ── TYPOGRAPHY ─────────────────────────────── */
+    h1.font-serif, h2.font-serif { font-family: 'Playfair Display', serif; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+      padding: 5px 14px; border-radius: 20px;
+    }
+    .tag-teal { background: rgba(13,148,136,0.12); border: 1px solid rgba(20,184,166,0.3); color: var(--teal2); }
+    .tag-red  { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+    .tag-indigo { background: rgba(79,70,229,0.12); border: 1px solid rgba(99,102,241,0.3); color: #a5b4fc; }
+    .tag-amber { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: var(--amber); }
+
+    /* ── CARDS ──────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+    }
+    .card-teal {
+      background: rgba(13,148,136,0.06);
+      border: 1px solid rgba(20,184,166,0.3);
+      border-radius: 16px; padding: 24px;
+    }
+    .card-red {
+      background: rgba(239,68,68,0.06);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 16px; padding: 24px;
+    }
+    .card-indigo {
+      background: rgba(79,70,229,0.08);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 16px; padding: 24px;
+    }
+    .card-amber {
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 16px; padding: 24px;
+    }
+
+    /* ── GRID ───────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+    /* ── INCLUDE LIST ───────────────────────────── */
+    .include-list { list-style: none; }
+    .include-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: #94a3b8; padding: 7px 0;
+      border-bottom: 1px solid rgba(51,65,85,0.3);
+      line-height: 1.5;
+    }
+    .include-item:last-child { border-bottom: none; }
+    .include-item .icon { flex-shrink: 0; margin-top: 1px; }
+    .include-item strong { color: #e2e8f0; }
+
+    /* ── PLAN PRICING BLOCK ─────────────────────── */
+    .price-block {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 20px; padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+    .price-block.featured {
+      border-color: var(--teal2);
+      background: rgba(13,148,136,0.06);
+      box-shadow: 0 0 40px rgba(13,148,136,0.12);
+    }
+    .price-block.aspirational {
+      border-color: rgba(99,102,241,0.5);
+      background: rgba(79,70,229,0.05);
+    }
+    .price-tag {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 900; color: #fff; line-height: 1;
+      letter-spacing: -1px;
+    }
+    .price-tag .eur { font-size: 0.55em; font-weight: 700; vertical-align: top; margin-top: 4px; display: inline-block; }
+    .price-tag .period { font-size: 0.32em; font-weight: 500; color: var(--muted); font-family: 'Inter', sans-serif; letter-spacing: 0; }
+    .price-sep {
+      font-size: 13px; color: var(--muted); margin: 4px 0 12px;
+    }
+
+    /* ── COMPARISON TABLE ───────────────────────── */
+    .compare-table { width: 100%; border-collapse: collapse; }
+    .compare-table th, .compare-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(51,65,85,0.4);
+      font-size: 13px; text-align: center;
+    }
+    .compare-table th {
+      font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--muted); background: var(--surface);
+    }
+    .compare-table th:first-child, .compare-table td:first-child {
+      text-align: left; color: #cbd5e1; font-weight: 500;
+    }
+    .compare-table .col-rec { background: rgba(13,148,136,0.05); }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .chk { color: var(--teal2); font-size: 18px; font-weight: 700; }
+    .xmark { color: rgba(51,65,85,0.8); font-size: 16px; }
+    .col-price { font-weight: 900; color: #fff; }
+
+    /* ── ROI CALCULATOR ─────────────────────────── */
+    .roi-input-group { margin-bottom: 16px; }
+    .roi-label {
+      font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between;
+    }
+    .roi-label span { color: var(--teal2); font-size: 14px; font-weight: 700; text-transform: none; letter-spacing: 0; }
+    input[type=range].roi-range {
+      width: 100%; accent-color: var(--teal2); height: 6px;
+    }
+    .roi-result-box {
+      background: rgba(13,148,136,0.1);
+      border: 1px solid rgba(20,184,166,0.3);
+      border-radius: 14px; padding: 20px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .roi-result-label { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    .roi-result-value { font-size: 32px; font-weight: 900; color: var(--teal2); }
+
+    /* ── FLOW STEPS ─────────────────────────────── */
+    .flow-step {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 16px 0; border-bottom: 1px solid rgba(51,65,85,0.3);
+    }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-num {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+      background: var(--teal); color: #fff;
+      font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .flow-content h4 { font-size: 14px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
+    .flow-content p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ── PROBLEM SCORE ──────────────────────────── */
+    .score-circle-big {
+      width: 140px; height: 140px; border-radius: 50%;
+      border: 8px solid var(--red);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .score-circle-big .num { font-size: 40px; font-weight: 900; color: var(--red); line-height: 1; }
+    .score-circle-big .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── STAT CARDS ─────────────────────────────── */
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      text-align: center;
+    }
+    .stat-card .stat-num { font-size: 36px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+    .stat-card .stat-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+    /* ── BUTTON ─────────────────────────────────── */
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--teal); color: #fff;
+      font-size: 15px; font-weight: 700; letter-spacing: 0.3px;
+      padding: 16px 36px; border-radius: 60px; text-decoration: none;
+      transition: all 0.25s; border: none; cursor: pointer;
+    }
+    .btn-cta:hover { background: var(--teal2); transform: translateY(-2px); }
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid rgba(34,197,94,0.4);
+      color: var(--green);
+      font-size: 15px; font-weight: 600;
+      padding: 16px 36px; border-radius: 60px; text-decoration: none;
+      background: transparent; transition: all 0.25s;
+    }
+    .btn-wa:hover { background: rgba(34,197,94,0.1); transform: translateY(-2px); }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .hide-mobile { display: none !important; }
+    }
+    @media (max-width: 480px) {
+      .content-panel, .content-panel-wide { padding: 48px 16px 100px; }
+      .price-block { padding: 20px; }
+      #slide-counter { display: none; }
+      .nav-btn { padding: 10px; }
+      .nav-btn svg { width: 20px; height: 20px; }
+    }
+    @media (min-width: 481px) and (max-width: 900px) {
+      .content-panel { padding: 48px 24px 100px; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar" style="width:10%"></div>
+
+<div id="presentation-container">
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 1 — PORTADA
+  ══════════════════════════════════════════════ -->
+  <div class="slide active" data-slide="1" style="background: radial-gradient(ellipse at 70% 50%, rgba(13,148,136,0.18) 0%, var(--bg) 60%);">
+    <div class="full-center" style="padding: 48px 24px;">
+      <div style="max-width: 720px; width: 100%; text-align: center;">
+
+        <!-- Logos -->
+        <div style="display:flex; align-items:center; justify-content:center; gap:24px; margin-bottom:48px; flex-wrap:wrap;">
+          <img src="https://palferia.com/wp-content/uploads/2026/03/Palferia_logo02-scaled.png"
+               alt="PalferIA" style="height:36px; object-fit:contain;" />
+        </div>
+
+        <div class="tag tag-teal" style="margin-bottom: 24px;">Propuesta Comercial · COM-studio</div>
+
+        <h1 class="font-serif" style="font-size: clamp(2.2rem, 6vw, 4rem); font-weight:800; line-height:1.15; margin-bottom:24px;">
+          El sistema que convierte tu web en el primer instalador que llama
+        </h1>
+
+        <p style="font-size: clamp(16px, 2.5vw, 20px); color: #94a3b8; max-width: 560px; margin: 0 auto 48px; line-height: 1.7;">
+          Cortinajes Valls & París · Godella, l'Horta Nord
+          <br/>Propuesta personalizada · Agosto 2026
+        </p>
+
+        <!-- Divider stat -->
+        <div style="display:flex; gap:32px; justify-content:center; flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div style="font-size:36px; font-weight:900; color:var(--red);">33/100</div>
+            <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px;">Score digital actual</div>
+          </div>
+          <div style="width:1px; background:var(--border);"></div>
+          <div style="text-align:center;">
+            <div style="font-size:36px; font-weight:900; color:var(--teal2);">35+</div>
+            <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px;">Años en el sector</div>
+          </div>
+          <div style="width:1px; background:var(--border);"></div>
+          <div style="text-align:center;">
+            <div style="font-size:36px; font-weight:900; color:var(--amber);">3 planes</div>
+            <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px;">Adaptados a tu ritmo</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 2 — DIAGNÓSTICO
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="2" style="background: var(--bg);">
+    <div class="content-panel">
+
+      <div class="tag tag-red" style="margin-bottom:20px;">Diagnóstico · Auditoría web</div>
+      <h2 class="font-serif" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom:8px;">
+        Lo que encontramos en tu negocio
+      </h2>
+      <p style="color:var(--muted); font-size:15px; margin-bottom:36px;">
+        Auditamos cortinajesvallsparis.es. Aquí está la verdad.
+      </p>
+
+      <!-- Score + problems -->
+      <div style="display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap; margin-bottom:36px;">
+        <div class="score-circle-big">
+          <span class="num">33</span>
+          <span class="label">/ 100</span>
+        </div>
+        <div style="flex:1; min-width:240px;">
+          <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:12px; padding:16px 20px; margin-bottom:12px;">
+            <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#fca5a5; margin-bottom:4px;">🔴 Crítico</div>
+            <div style="font-size:14px; color:#e2e8f0; font-weight:600;">Eres incontactable en móvil</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:4px;">No hay botón de WhatsApp ni teléfono clicable. El cliente tiene que copiar y pegar el número.</div>
+          </div>
+          <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:12px; padding:16px 20px; margin-bottom:12px;">
+            <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#fca5a5; margin-bottom:4px;">🔴 Crítico</div>
+            <div style="font-size:14px; color:#e2e8f0; font-weight:600;">Google no sabe qué vendes</div>
+            <div style="font-size:13px; color:var(--muted); margin-top:4px;">Sin H1, sin meta descriptions, sin schema. Quien busca "cortinas Godella" no te encuentra.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap:16px; margin-bottom:32px;">
+        <div class="card-red" style="padding:18px 20px;">
+          <div style="font-size:12px; font-weight:700; color:#fca5a5; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">🟠 Advertencia</div>
+          <div style="font-size:14px; color:#e2e8f0; font-weight:600; margin-bottom:4px;">Vuelas a ciegas</div>
+          <div style="font-size:13px; color:var(--muted);">Sin Meta Píxel ni Google Analytics 4. No sabes cuánta gente visita tu web ni de dónde viene.</div>
+        </div>
+        <div class="card-red" style="padding:18px 20px;">
+          <div style="font-size:12px; font-weight:700; color:#fca5a5; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">🟠 Advertencia</div>
+          <div style="font-size:14px; color:#e2e8f0; font-weight:600; margin-bottom:4px;">Google My Business sin aprovechar</div>
+          <div style="font-size:13px; color:var(--muted);">Perfil incompleto. Sin fotos de trabajos, sin reseñas activas, sin categorías específicas.</div>
+        </div>
+        <div class="card" style="padding:18px 20px;">
+          <div style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">⚠️ Mejora</div>
+          <div style="font-size:14px; color:#e2e8f0; font-weight:600; margin-bottom:4px;">WordPress sin proteger</div>
+          <div style="font-size:13px; color:var(--muted);">Plugins desactualizados, sin SSL renovado, vulnerable a ataques básicos.</div>
+        </div>
+        <div class="card" style="padding:18px 20px;">
+          <div style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">⚠️ Mejora</div>
+          <div style="font-size:14px; color:#e2e8f0; font-weight:600; margin-bottom:4px;">Sin seguimiento de presupuestos</div>
+          <div style="font-size:13px; color:var(--muted);">Los clientes que piden precio no reciben seguimiento. Muchos se enfrían y van a la competencia.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 3 — LO QUE TE ESTÁ COSTANDO
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="3" style="background: var(--bg);">
+    <div class="content-panel">
+
+      <div class="tag tag-red" style="margin-bottom:20px;">Impacto económico</div>
+      <h2 class="font-serif" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom:8px;">
+        Dinero que se escapa cada semana
+      </h2>
+      <p style="color:var(--muted); font-size:15px; margin-bottom:40px;">
+        Con 35 años en el sector, tienes reputación. El problema es que esa reputación no llega a quien te busca en Google hoy.
+      </p>
+
+      <!-- Big stats -->
+      <div class="grid-3" style="margin-bottom:36px;">
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--red);">~5</div>
+          <div class="stat-desc">Presupuestos estimados que se pierden cada semana por no contestar a tiempo</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--amber);">800€</div>
+          <div class="stat-desc">Ticket medio de un trabajo (cortinas + instalación de una habitación)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--red);">~16.000€</div>
+          <div class="stat-desc">Ingreso anual estimado perdido solo por no tener contacto visible y seguimiento</div>
+        </div>
+      </div>
+
+      <div class="card-red" style="padding:24px;">
+        <h4 style="font-size:15px; font-weight:700; color:#fca5a5; margin-bottom:12px;">¿Por qué pasa esto?</h4>
+        <div class="flow-step" style="padding:12px 0;">
+          <div class="flow-num" style="background:var(--red);">1</div>
+          <div class="flow-content">
+            <h4>Visitan tu web → no encuentran cómo contactar fácil</h4>
+            <p>Se van. Llaman al siguiente en Google. Ese competidor cierra la venta.</p>
+          </div>
+        </div>
+        <div class="flow-step" style="padding:12px 0;">
+          <div class="flow-num" style="background:var(--red);">2</div>
+          <div class="flow-content">
+            <h4>Piden un presupuesto → no reciben seguimiento</h4>
+            <p>El cliente se enfría en 24–48h. Sin recordatorio automático, la venta muere.</p>
+          </div>
+        </div>
+        <div class="flow-step" style="padding:12px 0;">
+          <div class="flow-num" style="background:var(--red);">3</div>
+          <div class="flow-content">
+            <h4>Terminas un trabajo → no pides reseña</h4>
+            <p>El cliente feliz no reseña por sí solo. Sin reseñas, Google no te muestra primero.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 4 — LA SOLUCIÓN
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="4" style="background: radial-gradient(ellipse at 30% 60%, rgba(13,148,136,0.12) 0%, var(--bg) 60%);">
+    <div class="content-panel">
+
+      <div class="tag tag-teal" style="margin-bottom:20px;">La solución PalferIA</div>
+      <h2 class="font-serif" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom:8px;">
+        Un sistema que trabaja por ti las 24h
+      </h2>
+      <p style="color:var(--muted); font-size:15px; margin-bottom:36px;">
+        Combinamos tecnología de IA con automatización para que nunca pierdas un presupuesto y seas el primero en responder.
+      </p>
+
+      <!-- Components -->
+      <div class="grid-2" style="margin-bottom:32px;">
+        <div class="card-teal" style="padding:20px 22px;">
+          <div style="font-size:24px; margin-bottom:10px;">🌐</div>
+          <h4 style="font-size:14px; font-weight:700; color:var(--teal2); margin-bottom:6px;">Base digital sólida</h4>
+          <p style="font-size:13px; color:var(--muted); line-height:1.6;">SEO técnico, contacto visible, GMB optimizado. Google te encuentra. El cliente te llama.</p>
+        </div>
+        <div class="card-teal" style="padding:20px 22px;">
+          <div style="font-size:24px; margin-bottom:10px;">🤖</div>
+          <h4 style="font-size:14px; font-weight:700; color:var(--teal2); margin-bottom:6px;">Agente IA en WhatsApp</h4>
+          <p style="font-size:13px; color:var(--muted); line-height:1.6;">Responde preguntas, precios y disponibilidad al segundo. A las 11 de la noche también.</p>
+        </div>
+        <div class="card-teal" style="padding:20px 22px;">
+          <div style="font-size:24px; margin-bottom:10px;">🔁</div>
+          <h4 style="font-size:14px; font-weight:700; color:var(--teal2); margin-bottom:6px;">Seguimiento automático</h4>
+          <p style="font-size:13px; color:var(--muted); line-height:1.6;">Recuerda presupuestos enviados a las 48h si no hay respuesta. Sin intervención tuya.</p>
+        </div>
+        <div class="card-teal" style="padding:20px 22px;">
+          <div style="font-size:24px; margin-bottom:10px;">⭐</div>
+          <h4 style="font-size:14px; font-weight:700; color:var(--teal2); margin-bottom:6px;">Reseñas en piloto automático</h4>
+          <p style="font-size:13px; color:var(--muted); line-height:1.6;">Tras cada instalación, el sistema pide la reseña de Google automáticamente. Tu nota sube.</p>
+        </div>
+        <div class="card" style="padding:20px 22px;">
+          <div style="font-size:24px; margin-bottom:10px;">📱</div>
+          <h4 style="font-size:14px; font-weight:700; color:#e2e8f0; margin-bottom:6px;">30 posts para redes sociales</h4>
+          <p style="font-size:13px; color:var(--muted); line-height:1.6;">Contenido profesional de tus trabajos listo para publicar. Sin pensar, sin diseñar.</p>
+        </div>
+        <div class="card" style="padding:20px 22px;">
+          <div style="font-size:24px; margin-bottom:10px;">📣</div>
+          <h4 style="font-size:14px; font-weight:700; color:#e2e8f0; margin-bottom:6px;">Campañas y Anuncios Meta</h4>
+          <p style="font-size:13px; color:var(--muted); line-height:1.6;">Campañas estacionales (toldos en primavera, cortinas en otoño) dirigidas a l'Horta Nord.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 5 — PLAN 1: VECINO DIGITAL
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="5" style="background: var(--bg);">
+    <div class="content-panel">
+
+      <div class="tag tag-indigo" style="margin-bottom:20px;">Plan de entrada</div>
+      <h2 class="font-serif" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom:6px;">
+        Plan 1 — Vecino Digital
+      </h2>
+      <p style="color:var(--muted); font-size:15px; margin-bottom:32px;">
+        Arreglamos los cimientos. Pasas de invisible a estar listo para vender. Sin cuotas mensuales.
+      </p>
+
+      <!-- Price -->
+      <div class="price-block" style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:20px; margin-bottom:28px;">
+        <div>
+          <div class="price-tag"><span class="eur">€</span>1.200<span class="period"> pago único</span></div>
+          <div class="price-sep">Sin permanencia · Sin cuota mensual · Entrega en 7 días</div>
+        </div>
+        <div class="tag tag-indigo">Para quien: quiere frenar la pérdida hoy con poca inversión</div>
+      </div>
+
+      <!-- Desglose de qué incluye -->
+      <h4 style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:16px;">¿Qué incluye exactamente?</h4>
+      <ul class="include-list" style="margin-bottom:28px;">
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>WhatsApp Business clicable + botón de llamada</strong> — visible en móvil y escritorio desde la primera visita. El cliente hace clic y te escribe en 2 segundos.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>SEO Técnico completo</strong> — H1 correcto, meta descriptions únicas por página, schema markup de empresa local. Google entiende qué vendes y dónde estás.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Google My Business optimizado</strong> — fotos de trabajos reales, horarios, categorías específicas (cortinas, estores, toldos), zona l'Horta Nord destacada.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Meta Píxel + Google Analytics 4</strong> — instalados y configurados. Verás cuánta gente entra, de dónde viene y qué páginas visitan.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Hardening básico WordPress</strong> — actualización de plugins críticos, protección de formularios, SSL revisado.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Informe de entrega</strong> — documento con todo lo que se hizo, cómo medirlo y qué esperar en los primeros 30 días.</span>
+        </li>
+      </ul>
+
+      <div class="card-indigo" style="padding:16px 20px;">
+        <div style="font-size:13px; color:#a5b4fc; line-height:1.6;">
+          <strong>Resultado esperado en 30 días:</strong> más visitas orgánicas, botón de contacto usado, aparición en búsquedas locales "cortinas Godella", "toldos l'Horta Nord".
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 6 — PLAN 2: AUTOPILOT 30 (RECOMENDADO)
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="6" style="background: radial-gradient(ellipse at 60% 40%, rgba(13,148,136,0.15) 0%, var(--bg) 65%);">
+    <div class="content-panel">
+
+      <div class="tag tag-teal" style="margin-bottom:20px;">⭐ Plan recomendado para ti</div>
+      <h2 class="font-serif" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom:6px;">
+        Plan 2 — Autopilot 30
+      </h2>
+      <p style="color:var(--muted); font-size:15px; margin-bottom:32px;">
+        El sistema vende por ti mientras instalas cortinas. Incluye todo el Plan 1 más automatización e IA.
+      </p>
+
+      <!-- Price -->
+      <div class="price-block featured" style="margin-bottom:28px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:16px;">
+          <div>
+            <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--teal2); margin-bottom:8px;">Setup inicial</div>
+            <div class="price-tag"><span class="eur">€</span>3.100</div>
+            <div class="price-sep">Pago único de puesta en marcha</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--teal2); margin-bottom:8px;">Cuota mensual</div>
+            <div class="price-tag"><span class="eur">€</span>499<span class="period">/mes</span></div>
+            <div class="price-sep">Mantenimiento + soporte + mejoras</div>
+          </div>
+        </div>
+        <div style="border-top:1px solid rgba(20,184,166,0.2); padding-top:14px; font-size:13px; color:var(--muted);">
+          💡 <strong style="color:var(--teal2);">ROI típico:</strong> con 1–2 trabajos extra al mes recuperados por el sistema, la cuota se paga sola.
+        </div>
+      </div>
+
+      <!-- Desglose -->
+      <h4 style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:16px;">¿Qué incluye exactamente?</h4>
+      <ul class="include-list" style="margin-bottom:20px;">
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Todo lo del Plan Vecino Digital</strong> — SEO, contacto visible, GMB, Píxel/GA4, WordPress.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Agente IA en WhatsApp Business (24/7)</strong> — responde a preguntas sobre precios, materiales, tiempos de instalación, disponibilidad. Filtra leads reales y los redirige a ti.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Flujo automático de seguimiento de presupuestos</strong> — si el cliente no responde en 48h, el sistema le manda un recordatorio personalizado. Recupera ventas perdidas.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Petición automática de reseñas en Google</strong> — tras cada instalación confirmada, el sistema envía un mensaje al cliente pidiéndole la reseña. Automático, sin recordarlo tú.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Kit de 30 posts para Instagram/Facebook</strong> — imágenes y textos profesionales sobre tus productos (estores, toldos, cortinas, colchones) listos para publicar.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Panel de métricas mensual</strong> — ves en un vistazo cuántos leads, cuántas respuestas automáticas y cuántas reseñas genera el sistema cada mes.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:var(--teal2);">✦</span>
+          <span><strong>Soporte técnico mensual</strong> — ajustes, mejoras y actualizaciones del sistema incluidas en la cuota.</span>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 7 — PLAN 3: SOCIO DIGITAL
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="7" style="background: var(--bg);">
+    <div class="content-panel">
+
+      <div class="tag tag-indigo" style="margin-bottom:20px;">Plan de expansión</div>
+      <h2 class="font-serif" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom:6px;">
+        Plan 3 — Socio Digital
+      </h2>
+      <p style="color:var(--muted); font-size:15px; margin-bottom:32px;">
+        Delegas el 100% del marketing y escalas a toda l'Horta Nord. Nosotros traemos clientes. Tú instalas y cobras.
+      </p>
+
+      <!-- Price -->
+      <div class="price-block aspirational" style="margin-bottom:28px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:16px;">
+          <div>
+            <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#a5b4fc; margin-bottom:8px;">Setup inicial</div>
+            <div class="price-tag"><span class="eur">€</span>4.900</div>
+            <div class="price-sep">Pago único de puesta en marcha</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#a5b4fc; margin-bottom:8px;">Cuota mensual</div>
+            <div class="price-tag"><span class="eur">€</span>799<span class="period">/mes</span></div>
+            <div class="price-sep">Gestión completa + soporte + mejoras</div>
+          </div>
+        </div>
+        <div style="border-top:1px solid rgba(99,102,241,0.2); padding-top:14px; font-size:13px; color:var(--muted);">
+          ⚠️ <strong style="color:#a5b4fc;">El presupuesto de anuncios (Meta Ads) va aparte</strong> y lo controlas tú directamente. Recomendado: 300–500€/mes para empezar.
+        </div>
+      </div>
+
+      <!-- Desglose -->
+      <h4 style="font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:16px;">¿Qué incluye exactamente?</h4>
+      <ul class="include-list" style="margin-bottom:20px;">
+        <li class="include-item">
+          <span class="icon" style="color:#a5b4fc;">✦</span>
+          <span><strong>Todo lo del Plan Autopilot 30</strong> — SEO, contacto, GMB, Píxel, agente IA, seguimiento, reseñas.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:#a5b4fc;">✦</span>
+          <span><strong>Gestión completa de Meta Ads</strong> — creación de campañas, segmentación por zona l'Horta Nord, optimización continua, informes de coste por lead.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:#a5b4fc;">✦</span>
+          <span><strong>Agente de Voz IA para llamadas entrantes</strong> — cuando no puedes coger el teléfono, el agente atiende, recoge nombre y motivo, y te lo envía como nota de voz por WhatsApp.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:#a5b4fc;">✦</span>
+          <span><strong>Campañas estacionales</strong> — campaña de toldos en primavera (marzo–mayo), campaña de cortinas/estores en otoño (sept–nov), con creatividades adaptadas.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:#a5b4fc;">✦</span>
+          <span><strong>30 posts mensuales gestionados por el equipo PalferIA</strong> — diseñamos, escribimos y publicamos. Tú solo validas.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:#a5b4fc;">✦</span>
+          <span><strong>Expansión geográfica</strong> — tu presencia online cubrirá Rocafort, Godella, Burjassot y Paterna con contenido y anuncios específicos por zona.</span>
+        </li>
+        <li class="include-item">
+          <span class="icon" style="color:#a5b4fc;">✦</span>
+          <span><strong>Reunión mensual de seguimiento</strong> — revisamos métricas, oportunidades y ajustamos la estrategia. 45 minutos al mes.</span>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 8 — COMPARATIVA DE PLANES
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="8" style="background: var(--bg);">
+    <div class="content-panel-wide">
+
+      <div class="tag tag-teal" style="margin-bottom:20px;">Resumen comparativo</div>
+      <h2 class="font-serif" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom:8px;">
+        Los 3 planes de un vistazo
+      </h2>
+      <p style="color:var(--muted); font-size:15px; margin-bottom:32px;">
+        Elige el que encaje con tu momento actual. Puedes empezar por Plan 1 y escalar en 3–6 meses.
+      </p>
+
+      <!-- Plan cards summary -->
+      <div class="grid-3" style="margin-bottom:36px;">
+        <div class="card" style="text-align:center; padding:24px 20px;">
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:12px;">Vecino Digital</div>
+          <div style="font-size:28px; font-weight:900; color:#fff; margin-bottom:4px;">1.200€</div>
+          <div style="font-size:12px; color:var(--muted); margin-bottom:16px;">pago único</div>
+          <div style="font-size:13px; color:#94a3b8; line-height:1.6;">Base digital sólida. SEO, GMB, contacto visible, tracking.</div>
+        </div>
+        <div class="card-teal" style="text-align:center; padding:24px 20px; position:relative;">
+          <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--teal); color:#fff; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1px; padding:3px 12px; border-radius:20px; white-space:nowrap;">⭐ Recomendado</div>
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--teal2); margin-bottom:12px;">Autopilot 30</div>
+          <div style="font-size:28px; font-weight:900; color:#fff; margin-bottom:2px;">3.100€</div>
+          <div style="font-size:12px; color:var(--muted); margin-bottom:2px;">setup + <strong style="color:var(--teal2);">499€/mes</strong></div>
+          <div style="font-size:11px; color:var(--muted); margin-bottom:16px;">(cuota mensual)</div>
+          <div style="font-size:13px; color:#94a3b8; line-height:1.6;">IA 24/7, seguimiento, reseñas, posts y panel de métricas.</div>
+        </div>
+        <div class="card-indigo" style="text-align:center; padding:24px 20px;">
+          <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:#a5b4fc; margin-bottom:12px;">Socio Digital</div>
+          <div style="font-size:28px; font-weight:900; color:#fff; margin-bottom:2px;">4.900€</div>
+          <div style="font-size:12px; color:var(--muted); margin-bottom:2px;">setup + <strong style="color:#a5b4fc;">799€/mes</strong></div>
+          <div style="font-size:11px; color:var(--muted); margin-bottom:16px;">(cuota mensual)</div>
+          <div style="font-size:13px; color:#94a3b8; line-height:1.6;">Marketing completo delegado. Anuncios, voz IA, expansión a 4 municipios.</div>
+        </div>
+      </div>
+
+      <!-- Feature table -->
+      <div style="overflow-x:auto;">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Qué incluye</th>
+              <th>Vecino Digital<br/><span style="font-size:11px;color:var(--muted);">1.200€</span></th>
+              <th class="col-rec">Autopilot 30 ⭐<br/><span style="font-size:11px;color:var(--teal2);">3.100€ + 499/mes</span></th>
+              <th>Socio Digital<br/><span style="font-size:11px;color:var(--muted);">4.900€ + 799/mes</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>WhatsApp clicable + botón llamada</td>
+              <td><span class="chk">✔</span></td>
+              <td class="col-rec"><span class="chk">✔</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>SEO técnico (H1, meta, schema)</td>
+              <td><span class="chk">✔</span></td>
+              <td class="col-rec"><span class="chk">✔</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Google My Business optimizado</td>
+              <td><span class="chk">✔</span></td>
+              <td class="col-rec"><span class="chk">✔</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Meta Píxel + Google Analytics 4</td>
+              <td><span class="chk">✔</span></td>
+              <td class="col-rec"><span class="chk">✔</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Agente IA WhatsApp 24/7</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="chk">✔</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Seguimiento automático de presupuestos</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="chk">✔</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Petición automática de reseñas Google</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="chk">✔</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Kit 30 posts Instagram/Facebook</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="chk">✔</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Gestión Meta Ads (anuncios)</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="xmark">—</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Agente de Voz IA (llamadas)</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="xmark">—</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Campañas estacionales (toldos/cortinas)</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="xmark">—</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>30 posts/mes gestionados por PalferIA</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="xmark">—</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+            <tr>
+              <td>Expansión a 4 municipios (Rocafort, Burjassot…)</td>
+              <td><span class="xmark">—</span></td>
+              <td class="col-rec"><span class="xmark">—</span></td>
+              <td><span class="chk">✔</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 9 — ROI CALCULADORA
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="9" style="background: radial-gradient(ellipse at 20% 80%, rgba(13,148,136,0.1) 0%, var(--bg) 60%);">
+    <div class="content-panel">
+
+      <div class="tag tag-teal" style="margin-bottom:20px;">Calculadora de retorno</div>
+      <h2 class="font-serif" style="font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom:8px;">
+        ¿Cuánto vale recuperar los leads perdidos?
+      </h2>
+      <p style="color:var(--muted); font-size:15px; margin-bottom:36px;">
+        Ajusta los valores de tu negocio. El sistema Autopilot 30 suele recuperar un 20–35% más de ventas cerrando leads que antes se perdían.
+      </p>
+
+      <div class="card" style="padding:32px; margin-bottom:24px;">
+        <div class="roi-input-group">
+          <div class="roi-label">Presupuestos que recibes al mes <span id="roi-leads-val">20</span></div>
+          <input type="range" class="roi-range" id="roi-leads" min="5" max="80" value="20" oninput="calcROI()"/>
+        </div>
+        <div class="roi-input-group">
+          <div class="roi-label">Tasa de cierre actual <span id="roi-close-val">30%</span></div>
+          <input type="range" class="roi-range" id="roi-close" min="10" max="70" value="30" oninput="calcROI()"/>
+        </div>
+        <div class="roi-input-group">
+          <div class="roi-label">Ticket medio por trabajo (€) <span id="roi-ticket-val">800€</span></div>
+          <input type="range" class="roi-range" id="roi-ticket" min="200" max="3000" step="100" value="800" oninput="calcROI()"/>
+        </div>
+        <div class="roi-input-group" style="margin-bottom:0;">
+          <div class="roi-label">Mejora de cierre con Autopilot 30 <span id="roi-boost-val">+25%</span></div>
+          <input type="range" class="roi-range" id="roi-boost" min="10" max="50" value="25" oninput="calcROI()"/>
+        </div>
+      </div>
+
+      <div class="roi-result-box" style="margin-bottom:16px;">
+        <div>
+          <div class="roi-result-label">Ingreso mensual extra estimado</div>
+          <div class="roi-result-value" id="roi-mes">0€</div>
+        </div>
+        <div>
+          <div class="roi-result-label">Ingreso anual extra estimado</div>
+          <div class="roi-result-value" id="roi-anual">0€</div>
+        </div>
+        <div>
+          <div class="roi-result-label">Payback del setup (3.100€)</div>
+          <div class="roi-result-value" id="roi-payback" style="font-size:18px;">—</div>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--muted);">* Estimación conservadora basada en el impacto típico del seguimiento automático y respuesta inmediata de IA en negocios locales.</p>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       SLIDE 10 — CTA
+  ══════════════════════════════════════════════ -->
+  <div class="slide" data-slide="10" style="background: radial-gradient(ellipse at 50% 60%, rgba(13,148,136,0.18) 0%, var(--bg) 60%);">
+    <div class="full-center" style="padding:48px 24px;">
+      <div style="max-width:660px; width:100%; text-align:center;">
+
+        <div class="tag tag-teal" style="margin-bottom:28px;">El siguiente paso</div>
+
+        <h2 class="font-serif" style="font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom:16px; line-height:1.2;">
+          Arrancamos cuando quieras
+        </h2>
+        <p style="font-size: clamp(15px, 2vw, 18px); color:#94a3b8; margin-bottom:40px; line-height:1.7;">
+          Una llamada de 20 minutos es suficiente para confirmar el plan, resolver dudas y fijar la fecha de inicio.<br/>Sin presión, sin permanencia.
+        </p>
+
+        <!-- Plan reminder -->
+        <div class="card-teal" style="padding:20px 24px; text-align:left; margin-bottom:36px;">
+          <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--teal2); margin-bottom:10px;">Plan recomendado para Cortinajes Valls & París</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <div style="font-size:18px; font-weight:800; color:#fff;">Autopilot 30</div>
+              <div style="font-size:13px; color:var(--muted);">IA 24/7 · seguimiento · reseñas · posts</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:22px; font-weight:900; color:var(--teal2);">3.100€ + 499€/mes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:40px;">
+          <a href="https://wa.me/34623176981?text=Hola%2C%20he%20visto%20la%20propuesta%20de%20PalferIA%20para%20Cortinajes%20Valls%20%26%20Par%C3%ADs.%20Quiero%20saber%20m%C3%A1s." class="btn-cta" target="_blank">
+            Hablar por WhatsApp →
+          </a>
+          <a href="mailto:ri@palferia.com?subject=Propuesta%20PalferIA%20-%20Cortinajes%20Valls%20%26%20Par%C3%ADs&body=Hola%2C%20he%20revisado%20la%20propuesta%20y%20quiero%20agendar%20una%20llamada." class="btn-wa" target="_blank">
+            Enviar email →
+          </a>
+        </div>
+
+        <!-- Contact -->
+        <div style="font-size:14px; color:var(--muted);">
+          ri@palferia.com &nbsp;·&nbsp; palferia.com &nbsp;·&nbsp; PalferIA COM-studio
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- #presentation-container -->
+
+<!-- NAV CONTROLS -->
+<div id="nav-controls">
+  <button class="nav-btn" id="btn-prev" disabled>
+    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+    </svg>
+  </button>
+  <div id="slide-counter">
+    <span id="counter-current">1</span> / <span id="counter-total">10</span>
+  </div>
+  <button class="nav-btn next" id="btn-next">
+    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+  // ── ROI CALCULATOR ──────────────────────────────────────
+  function calcROI() {
+    var leads   = parseInt(document.getElementById('roi-leads').value);
+    var close   = parseInt(document.getElementById('roi-close').value);
+    var ticket  = parseInt(document.getElementById('roi-ticket').value);
+    var boost   = parseInt(document.getElementById('roi-boost').value);
+
+    document.getElementById('roi-leads-val').textContent = leads;
+    document.getElementById('roi-close-val').textContent = close + '%';
+    document.getElementById('roi-ticket-val').textContent = ticket + '€';
+    document.getElementById('roi-boost-val').textContent = '+' + boost + '%';
+
+    var baseRev  = leads * (close / 100) * ticket;
+    var newClose = Math.min(close + boost, 100);
+    var newRev   = leads * (newClose / 100) * ticket;
+    var extra    = Math.round(newRev - baseRev);
+    var extraAnual = extra * 12;
+
+    document.getElementById('roi-mes').textContent   = extra.toLocaleString('es-ES') + '€';
+    document.getElementById('roi-anual').textContent = extraAnual.toLocaleString('es-ES') + '€';
+
+    if (extra <= 0) {
+      document.getElementById('roi-payback').textContent = 'Ajusta los valores';
+    } else {
+      var meses = Math.ceil(3100 / extra);
+      document.getElementById('roi-payback').textContent = meses <= 1 ? 'Mes 1 ✔' : meses + ' meses';
+    }
+  }
+  calcROI();
+
+  // ── SLIDE ENGINE ────────────────────────────────────────
+  (function() {
+    var slides        = Array.from(document.querySelectorAll('.slide'));
+    var btnPrev       = document.getElementById('btn-prev');
+    var btnNext       = document.getElementById('btn-next');
+    var bar           = document.getElementById('progress-bar');
+    var counterCurr   = document.getElementById('counter-current');
+    var counterTotal  = document.getElementById('counter-total');
+    var total         = slides.length;
+    var current       = 0;
+
+    counterTotal.textContent = total;
+
+    function goTo(idx) {
+      slides.forEach(function(s, i) {
+        if (i === idx) {
+          s.classList.add('active');
+          s.scrollTop = 0;
+        } else {
+          s.classList.remove('active');
+        }
+      });
+      current = idx;
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = current === total - 1;
+      counterCurr.textContent = current + 1;
+      bar.style.width = (((current + 1) / total) * 100) + '%';
+    }
+
+    btnPrev.addEventListener('click', function() { if (current > 0) goTo(current - 1); });
+    btnNext.addEventListener('click', function() { if (current < total - 1) goTo(current + 1); });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (current < total - 1) goTo(current + 1); }
+      if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { if (current > 0) goTo(current - 1); }
+    });
+
+    var touchStartX = 0;
+    document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', function(e) {
+      var diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0 && current < total - 1) goTo(current + 1);
+        if (diff < 0 && current > 0)         goTo(current - 1);
+      }
+    });
+
+    goTo(0);
+  })();
+</script>
+
+</body>
+</html>

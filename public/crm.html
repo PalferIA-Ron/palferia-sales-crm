@@ -49,8 +49,10 @@
       top: 0;
       left: 0;
       height: 100vh;
+      height: 100dvh;
       z-index: 200;
       transition: transform 0.25s ease;
+      overflow: hidden;
     }
 
     .sidebar-logo {
@@ -104,6 +106,7 @@
     .sidebar-bottom {
       padding: 16px 20px;
       border-top: 1px solid rgba(65, 104, 112, 0.4);
+      flex-shrink: 0;
     }
 
     .user-email {
@@ -146,6 +149,7 @@
     #topbar {
       display: none;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
       padding: 14px 16px;
       background: var(--bg-mid);
@@ -417,18 +421,27 @@
     }
 
     /* ── MODAL ── */
-    .modal-backdrop {
+    .modal-backdrop,
+    .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(1,31,41,.8);
+      background: rgba(1,31,41,.85);
       z-index: 1000;
       display: none;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .modal-backdrop.open { display: flex; }
+
+    /* Safari iOS fix: usa altura real visible sin browser chrome */
+    @supports (-webkit-touch-callout: none) {
+      .modal-backdrop,
+      .modal-overlay { padding-top: max(20px, env(safe-area-inset-top)); }
+    }
 
     .modal {
       background: var(--bg-mid);
@@ -436,10 +449,11 @@
       border-radius: 14px;
       width: 100%;
       max-width: 600px;
-      max-height: 90vh;
+      max-height: 88vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      margin: auto;
     }
 
     .modal-header {
@@ -751,6 +765,29 @@
     #wa-send-btn:hover { opacity: 0.88; }
     #wa-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    /* ── SKILLS CHIPS ── */
+    .skills-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .skill-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 10px; border-radius: 20px; cursor: pointer;
+      font-size: 12px; font-weight: 500; user-select: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04); color: var(--base);
+      transition: all 0.15s;
+    }
+    .skill-chip:hover { border-color: rgba(177,247,39,0.4); color: var(--iron); }
+    .skill-chip.selected {
+      background: rgba(177,247,39,0.12); border-color: rgba(177,247,39,0.5);
+      color: var(--cta);
+    }
+    .skill-chip .chip-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; border-radius: 50%;
+      font-size: 10px; font-weight: 700;
+      background: rgba(255,255,255,0.08); color: var(--base);
+    }
+    .skill-chip.selected .chip-num { background: var(--cta); color: #000; }
+
     /* ── PROPUESTAS ── */
     .propuestas-intro {
       color: var(--base);
@@ -823,6 +860,43 @@
       color: var(--cta);
       font-weight: 500;
     }
+
+    .propuesta-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .propuesta-actions button {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: var(--font);
+      cursor: pointer;
+      border: 1px solid var(--secondary);
+      background: transparent;
+      color: var(--base);
+      transition: all 0.15s;
+    }
+
+    .propuesta-actions button:hover { border-color: var(--cta); color: var(--cta); }
+    .propuesta-actions button.btn-ver { color: var(--cta); border-color: rgba(177,247,39,.4); }
+
+    .propuesta-estado {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .estado-borrador  { background: rgba(120,120,120,.2); color: #888; }
+    .estado-enviada   { background: rgba(100,160,255,.15); color: #7eb6ff; }
+    .estado-vista     { background: rgba(255,200,50,.12); color: #f5c542; }
+    .estado-aceptada  { background: rgba(177,247,39,.15); color: var(--cta); }
+    .estado-rechazada { background: rgba(255,77,109,.12); color: #ff8080; }
 
     /* ── LOG ── */
     .log-timeline {
@@ -943,65 +1017,80 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      #sidebar {
-        transform: translateX(-100%);
-      }
-
-      #sidebar.open {
-        transform: translateX(0);
-      }
-
+    /* ── RESPONSIVE — TABLET / IPAD ── */
+    @media (max-width: 1100px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
       #overlay.open { display: block; }
-
-      #main {
-        margin-left: 0;
-      }
-
+      #main { margin-left: 0; }
       #topbar { display: flex; }
 
       .section { padding: 20px 16px; }
 
-      .propuestas-grid {
-        grid-template-columns: 1fr;
+      .section-header {
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
       }
+      .section-header h2 { font-size: 18px; }
+      .section-header .btn-primary { font-size: 13px; padding: 7px 14px; }
 
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .form-grid .full-width {
-        grid-column: 1;
-      }
-
-      #wa-layout {
-        flex-direction: column;
-        height: auto;
-        min-height: 600px;
-      }
-
-      #wa-contacts {
+      .filter-row {
         width: 100%;
-        min-width: unset;
-        max-height: 240px;
-        border-right: none;
-        border-bottom: 1px solid rgba(65,104,112,.4);
+        flex-wrap: wrap;
+        gap: 6px;
+        order: 3;
       }
 
-      #wa-chat {
-        min-height: 360px;
-      }
+      .propuestas-grid { grid-template-columns: 1fr 1fr; }
+
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full-width { grid-column: 1; }
+
+      #wa-layout { flex-direction: column; height: auto; min-height: 600px; }
+      #wa-contacts { width: 100%; min-width: unset; max-height: 240px; border-right: none; border-bottom: 1px solid rgba(65,104,112,.4); }
+      #wa-chat { min-height: 360px; }
+
+      .modal { max-width: 92vw; max-height: 90vh; overflow-y: auto; }
+
+      /* Tabla: scroll horizontal */
+      .table-wrapper { -webkit-overflow-scrolling: touch; }
+      table { min-width: 600px; }
+      thead th, tbody td { padding: 10px 10px; font-size: 13px; }
     }
 
+    /* ── RESPONSIVE — MÓVIL ── */
     @media (max-width: 640px) {
-      .section-header {
-        gap: 10px;
-      }
+      .section { padding: 16px 12px; }
 
-      .kanban-col {
-        min-width: 175px;
-      }
+      .section-header { gap: 8px; margin-bottom: 16px; }
+      .section-header h2 { font-size: 16px; width: 100%; }
+      .section-header .btn-primary { width: 100%; text-align: center; justify-content: center; }
+
+      .propuestas-grid { grid-template-columns: 1fr; }
+
+      .kanban-col { min-width: 160px; }
+      .kanban-board { gap: 10px; }
+
+      /* Tabla móvil: ocultar columnas secundarias */
+      thead th:nth-child(2),
+      thead th:nth-child(3),
+      thead th:nth-child(7),
+      tbody td:nth-child(2),
+      tbody td:nth-child(3),
+      tbody td:nth-child(7) { display: none; }
+
+      table { min-width: 360px; }
+
+      .modal { max-width: 98vw; margin: 6px; border-radius: 10px; }
+      .modal-header { padding: 14px 16px; }
+      .modal-body { padding: 16px; }
+      .modal-footer { padding: 12px 16px; flex-wrap: wrap; }
+      .modal-footer button { flex: 1; }
+
+      #topbar { padding: 10px 12px; }
+
+      .btn-ghost { padding: 5px 10px; font-size: 12px; }
     }
   </style>
 </head>
@@ -1072,6 +1161,14 @@
         </svg>
       </button>
       <img src="https://palferia.com/wp-content/uploads/2026/03/Palferia_logo02-scaled.png" alt="PalferIA" id="topbar-logo" />
+      <button id="logoutBtnMobile" aria-label="Cerrar sesión" style="background:none;border:1px solid rgba(65,104,112,.5);border-radius:6px;color:#7BA7B2;cursor:pointer;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:13px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Salir
+      </button>
     </div>
 
     <!-- ═══════════ SECTION: PROSPECTOS ═══════════ -->
@@ -1211,10 +1308,70 @@
     <section class="section" id="section-propuestas">
       <div class="section-header">
         <h2>Propuestas</h2>
+        <button class="btn-primary" id="btnNuevaPropuesta">+ Nueva propuesta</button>
       </div>
-      <p class="propuestas-intro">Informes de prospección generados para los proyectos COM-studio y ME-sport. Haz clic en cualquier informe para abrirlo en nueva pestaña.</p>
+      <p class="propuestas-intro">Landings de propuesta generadas por prospecto. Cada URL incluye un token único — el cliente solo puede ver su propuesta.</p>
       <div class="propuestas-grid" id="propuestas-grid"></div>
     </section>
+
+    <!-- Modal nueva propuesta -->
+    <div class="modal-overlay" id="modalPropuesta" style="display:none">
+      <div class="modal" style="max-width:520px">
+        <div class="modal-header">
+          <h3 id="modalPropuestaTitulo">Nueva propuesta</h3>
+          <button class="modal-close" id="closePropuestaModal">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="field full-width">
+              <label>Prospecto</label>
+              <select id="pProspectoId">
+                <option value="">— Selecciona prospecto —</option>
+              </select>
+            </div>
+            <div class="field full-width">
+              <label>Título de la propuesta</label>
+              <input type="text" id="pTitulo" placeholder="Ej: Vecino Digital — Cortinajes Valls & París">
+            </div>
+            <div class="field">
+              <label>Proyecto</label>
+              <select id="pProyecto">
+                <option value="COM-studio">COM-studio</option>
+                <option value="ME-sport">ME-sport</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Estado</label>
+              <select id="pEstado">
+                <option value="borrador">Borrador</option>
+                <option value="enviada">Enviada</option>
+                <option value="vista">Vista</option>
+                <option value="aceptada">Aceptada</option>
+                <option value="rechazada">Rechazada</option>
+              </select>
+            </div>
+            <div class="field full-width">
+              <label>URL de la propuesta</label>
+              <input type="text" id="pUrl" placeholder="https://sales.palferia.me/propuestas/[token].html">
+              <span style="font-size:11px;color:var(--secondary);margin-top:4px;">Déjala vacía si aún no está generada</span>
+            </div>
+            <div class="field full-width">
+              <label>Skills usadas <span style="font-size:11px;color:var(--secondary);font-weight:400;">— en orden de ejecución</span></label>
+              <div class="skills-chips" id="skillsChips"></div>
+              <input type="hidden" id="pSkills" />
+            </div>
+            <div class="field full-width">
+              <label>Notas internas (para la vista ?interno)</label>
+              <textarea id="pNotas" rows="3" placeholder="Puntos clave para la reunión, objecciones esperadas..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="cancelPropuestaModal">Cancelar</button>
+          <button class="btn-primary" id="savePropuestaBtn">Guardar propuesta</button>
+        </div>
+      </div>
+    </div>
 
     <!-- ═══════════ SECTION: LOG ═══════════ -->
     <section class="section" id="section-log">
@@ -1292,6 +1449,18 @@
             <label>Teléfono</label>
             <input type="tel" id="p-telefono" placeholder="+34 600 000 000" />
           </div>
+          <div class="field full-width">
+            <label>Web</label>
+            <input type="url" id="p-web" placeholder="https://www.negocio.com" />
+          </div>
+          <div class="field full-width">
+            <label>Instagram</label>
+            <input type="text" id="p-instagram" placeholder="@handle o https://instagram.com/handle" />
+          </div>
+          <div class="field full-width">
+            <label>Pain principal <span style="font-size:11px;color:var(--secondary);font-weight:400;">— qué le falta digitalmente</span></label>
+            <input type="text" id="p-pain" placeholder="Sin WhatsApp, sin cita online, sin redes activas..." />
+          </div>
           <div class="field">
             <label>Socios estimados</label>
             <input type="text" id="p-socios" placeholder="50-100" />
@@ -1366,12 +1535,13 @@
 <div id="toast-container"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════════
-//  CONFIG — fill in your Supabase credentials
+//  CONFIG — credenciales desde config.js (no tracked en git)
 // ════════════════════════════════════════════════════════════════
-const SUPABASE_URL      = 'https://aqaiqmsypbwhgknbbmae.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_lxcUh7WtArLQbbP7CA-1Vw_yt7wOyje';
+const SUPABASE_URL      = window.PALFERIA_CONFIG.SUPABASE_URL;
+const SUPABASE_ANON_KEY = window.PALFERIA_CONFIG.SUPABASE_ANON_KEY;
 
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -1413,7 +1583,7 @@ const ESTADO_LABELS = {
 async function authGuard() {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) {
-    window.location.replace('index.html');
+    window.location.replace('/');
     return null;
   }
   return session;
@@ -1447,7 +1617,7 @@ function showSection(name) {
   // Lazy-load section content
   if (name === 'prospectos')  loadProspectos();
   if (name === 'whatsapp')    { loadWASessionsPanel(); loadWhatsAppContacts(); }
-  if (name === 'propuestas')  renderPropuestas();
+  if (name === 'propuestas')  loadPropuestas();
   if (name === 'log')         loadLog();
 
   closeSidebar();
@@ -1479,10 +1649,12 @@ document.querySelectorAll('.nav-item[data-section]').forEach(item => {
 // ════════════════════════════════════════════════════════════════
 //  LOGOUT
 // ════════════════════════════════════════════════════════════════
-document.getElementById('logoutBtn').addEventListener('click', async () => {
+async function doLogout() {
   await sb.auth.signOut();
-  window.location.replace('index.html');
-});
+  window.location.replace('/');
+}
+document.getElementById('logoutBtn').addEventListener('click', doLogout);
+document.getElementById('logoutBtnMobile').addEventListener('click', doLogout);
 
 // ════════════════════════════════════════════════════════════════
 //  MODAL HELPERS
@@ -1607,6 +1779,14 @@ function renderProspectosTable() {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+        <button class="action-btn" onclick="openPropuestaDesdeProspecto('${p.id}','${esc(p.nombre)}','${esc(p.proyecto||'')}','${esc(p.web||'')}','${esc(p.instagram||'')}')" title="Generar propuesta" style="color:#B1F727;border-color:rgba(177,247,39,.3)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
           </svg>
         </button>
         <button class="action-btn delete" onclick="deleteProspecto('${p.id}', '${esc(p.nombre)}')" title="Eliminar">
@@ -1734,6 +1914,9 @@ function openEditProspecto(id) {
   document.getElementById('p-proyecto').value     = p.proyecto || '';
   document.getElementById('p-email').value        = p.email || '';
   document.getElementById('p-telefono').value     = p.telefono || '';
+  document.getElementById('p-web').value          = p.web || '';
+  document.getElementById('p-instagram').value    = p.instagram || '';
+  document.getElementById('p-pain').value         = p.pain || '';
   document.getElementById('p-socios').value       = p.socios_est || '';
   document.getElementById('p-ultimo-contacto').value = p.ultimo_contacto || '';
   document.getElementById('p-proxima-accion').value  = p.proxima_accion || '';
@@ -1759,6 +1942,9 @@ document.getElementById('btn-save-prospecto').addEventListener('click', async ()
     proyecto:        document.getElementById('p-proyecto').value || null,
     email:           document.getElementById('p-email').value.trim() || null,
     telefono:        document.getElementById('p-telefono').value.trim() || null,
+    web:             document.getElementById('p-web').value.trim() || null,
+    instagram:       document.getElementById('p-instagram').value.trim() || null,
+    pain:            document.getElementById('p-pain').value.trim() || null,
     socios_est:      document.getElementById('p-socios').value.trim() || null,
     ultimo_contacto: document.getElementById('p-ultimo-contacto').value || null,
     proxima_accion:  document.getElementById('p-proxima-accion').value.trim() || null,
@@ -2188,52 +2374,225 @@ document.getElementById('wa-textarea').addEventListener('input', function () {
 // ════════════════════════════════════════════════════════════════
 //  PROPUESTAS
 // ════════════════════════════════════════════════════════════════
-const propuestas = [
-  {
-    titulo: 'Prospección COM-studio — Horta Nord Semana 1',
-    desc: 'Análisis de 4 prospectos prioritarios. Sectores: decoración, fontanería, fisioterapia, restauración.',
-    url: '/propuestas/prospeccion-horta-nord-semana1.html',
-    fecha: '16/08/2026',
-  },
-  {
-    titulo: 'Prospección ME-sport — Academias Semana 1',
-    desc: 'Análisis de 5 academias deportivas: pilates, artes marciales, natación, CrossFit, yoga.',
-    url: '/propuestas/prospeccion-academias-semana1.html',
-    fecha: '16/08/2026',
-  },
-  {
-    titulo: 'Tecniluispa — Proyecto Tecni Team 3x3',
-    desc: 'Web propuesta para Luis Pascual García Notario. Baloncesto 3x3: academia, tecnificación, sponsors y campus. Automatización omnicanal con agente IA.',
-    url: 'https://tenic-luispa-100pme1.netlify.app',
-    fecha: '20/08/2026',
-  },
-];
+const ESTADO_LABEL = {
+  borrador: 'Borrador', enviada: 'Enviada', vista: 'Vista',
+  aceptada: 'Aceptada', rechazada: 'Rechazada'
+};
 
-function renderPropuestas() {
+async function loadPropuestas() {
   const grid = document.getElementById('propuestas-grid');
+  grid.innerHTML = '<div class="empty-state"><p>Cargando...</p></div>';
 
-  if (propuestas.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><p>No hay propuestas disponibles.</p></div>';
+  const { data, error } = await sb
+    .from('propuestas')
+    .select('*, prospectos(nombre)')
+    .order('created_at', { ascending: false });
+
+  if (error) { grid.innerHTML = `<div class="empty-state"><p>Error: ${esc(error.message)}</p></div>`; return; }
+
+  if (!data || data.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><p>No hay propuestas. Crea la primera con el botón "+ Nueva propuesta".</p></div>';
     return;
   }
 
-  grid.innerHTML = propuestas.map(p => `
-    <div class="propuesta-card" onclick="window.open('${p.url}', '_blank')">
-      <div class="propuesta-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-        </svg>
+  grid.innerHTML = data.map(p => {
+    const fecha = p.created_at ? new Date(p.created_at).toLocaleDateString('es-ES') : '—';
+    const prospNombre = p.prospectos?.nombre || '—';
+    const estadoClass = `estado-${p.estado || 'borrador'}`;
+    const hasUrl = p.url && p.url.trim();
+    return `
+    <div class="propuesta-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+        <div class="propuesta-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </div>
+        <span class="propuesta-estado ${estadoClass}">${ESTADO_LABEL[p.estado] || p.estado}</span>
       </div>
-      <div class="propuesta-title">${esc(p.titulo)}</div>
-      <div class="propuesta-desc">${esc(p.desc)}</div>
+      <div class="propuesta-title">${esc(p.titulo || 'Sin título')}</div>
+      <div class="propuesta-desc" style="font-size:12px">${esc(prospNombre)} · ${esc(p.proyecto || '')}</div>
       <div class="propuesta-footer">
-        <span class="propuesta-fecha">${esc(p.fecha)}</span>
-        <span class="propuesta-link">Ver propuesta →</span>
+        <span class="propuesta-fecha">${fecha}</span>
       </div>
-    </div>
-  `).join('');
+      <div class="propuesta-actions">
+        ${hasUrl ? `<button class="btn-ver" onclick="window.open('${esc(p.url)}','_blank');event.stopPropagation()">Ver →</button>` : '<button disabled style="opacity:.4">Sin URL</button>'}
+        ${hasUrl ? `<button onclick="copyPropuestaUrl('${esc(p.url)}');event.stopPropagation()">Copiar URL</button>` : ''}
+        <button onclick="editPropuesta(${JSON.stringify(p).replace(/"/g,'&quot;')});event.stopPropagation()">Editar</button>
+        ${p.slug ? `<button onclick="window.open('/setter/${esc(p.slug)}.html','_blank');event.stopPropagation()" style="border-color:rgba(245,158,11,.4);color:#f59e0b;" title="Herramienta interna del setter">🔒 Setter</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
 }
+
+function copyPropuestaUrl(url) {
+  navigator.clipboard.writeText(url).then(() => showToast('URL copiada al portapapeles'));
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) { t = document.createElement('div'); t.id='toast'; t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#B1F727;color:#011F29;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;transition:opacity .3s'; document.body.appendChild(t); }
+  t.textContent = msg; t.style.opacity = '1';
+  setTimeout(() => t.style.opacity = '0', 2500);
+}
+
+// ── SKILLS CHIPS ─────────────────────────────────────────────
+const SKILLS_CATALOG = [
+  { id: 'kit-prospeccion',         label: 'Kit Prospección',      icon: '🔍' },
+  { id: 'web-analyzer-extension',  label: 'Web Analyzer',         icon: '🌐' },
+  { id: 'kit-auditoria-negocio',   label: 'Auditoría Negocio',    icon: '📋' },
+  { id: 'kit-auditoria-meta-ads',  label: 'Auditoría Meta Ads',   icon: '📊' },
+  { id: 'kit-instagram-web',       label: 'Instagram Web',        icon: '📸' },
+  { id: 'hormozi-skill',           label: 'Hormozi Skill',        icon: '💡' },
+  { id: 'orquestador-palferia',    label: 'Orquestador',          icon: '🎛️' },
+  { id: 'mantenimiento-ia',        label: 'Mantenimiento IA',     icon: '🔧' },
+  { id: 'prompt-builder-agentes',  label: 'Prompt Builder',       icon: '🤖' },
+];
+
+const SKILLS_DEFAULT = {
+  'COM-studio': ['web-analyzer-extension','kit-auditoria-negocio','kit-auditoria-meta-ads','hormozi-skill','orquestador-palferia','mantenimiento-ia'],
+  'ME-sport':   ['web-analyzer-extension','kit-auditoria-negocio','hormozi-skill','orquestador-palferia','mantenimiento-ia'],
+};
+
+function renderSkillsChips(selected = []) {
+  const container = document.getElementById('skillsChips');
+  container.innerHTML = '';
+  SKILLS_CATALOG.forEach((sk, idx) => {
+    const isSelected = selected.includes(sk.id);
+    const order = selected.indexOf(sk.id) + 1;
+    const chip = document.createElement('div');
+    chip.className = 'skill-chip' + (isSelected ? ' selected' : '');
+    chip.dataset.id = sk.id;
+    chip.innerHTML = `<span class="chip-num">${isSelected ? order : '·'}</span>${sk.icon} ${sk.label}`;
+    chip.addEventListener('click', () => toggleSkillChip(sk.id));
+    container.appendChild(chip);
+  });
+  syncSkillsHidden();
+}
+
+function toggleSkillChip(skillId) {
+  const current = getSelectedSkills();
+  const idx = current.indexOf(skillId);
+  if (idx === -1) current.push(skillId);
+  else current.splice(idx, 1);
+  renderSkillsChips(current);
+}
+
+function getSelectedSkills() {
+  return Array.from(document.querySelectorAll('.skill-chip.selected')).map(c => c.dataset.id);
+}
+
+function syncSkillsHidden() {
+  document.getElementById('pSkills').value = getSelectedSkills().join(', ');
+}
+
+// Actualizar chips por defecto cuando cambia el proyecto
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pProyecto').addEventListener('change', (e) => {
+    const current = getSelectedSkills();
+    if (current.length === 0) renderSkillsChips(SKILLS_DEFAULT[e.target.value] || []);
+  });
+});
+
+// Abrir modal propuesta desde fila de prospecto (pre-rellena datos)
+function openPropuestaDesdeProspecto(id, nombre, proyecto, web, instagram) {
+  showSection('propuestas');
+  setTimeout(async () => {
+    await openPropuestaModal();
+    document.getElementById('pProspectoId').value = id;
+    document.getElementById('pTitulo').value = `Propuesta — ${nombre}`;
+    const proy = proyecto || 'COM-studio';
+    document.getElementById('pProyecto').value = proy;
+    document.getElementById('modalPropuestaTitulo').textContent = `Nueva propuesta — ${nombre}`;
+    // Skills por defecto según proyecto
+    // Web Analyzer siempre incluido — descubre la presencia digital aunque no la conozcamos
+    // Instagram Web solo si el prospecto ya tiene instagram conocido
+    const defaults = [...(SKILLS_DEFAULT[proy] || [])];
+    if (instagram && !defaults.includes('kit-instagram-web')) {
+      defaults.splice(defaults.indexOf('kit-auditoria-negocio') + 1, 0, 'kit-instagram-web');
+    }
+    renderSkillsChips(defaults);
+  }, 100);
+}
+
+// Abrir modal nueva propuesta
+async function openPropuestaModal(propuesta = null) {
+  const { data } = await sb.from('prospectos').select('id,nombre').order('nombre');
+  const sel = document.getElementById('pProspectoId');
+  sel.innerHTML = '<option value="">— Selecciona prospecto —</option>' +
+    (data || []).map(p => `<option value="${p.id}">${esc(p.nombre)}</option>`).join('');
+
+  if (propuesta) {
+    document.getElementById('modalPropuestaTitulo').textContent = 'Editar propuesta';
+    document.getElementById('pProspectoId').value = propuesta.prospecto_id || '';
+    document.getElementById('pTitulo').value = propuesta.titulo || '';
+    document.getElementById('pProyecto').value = propuesta.proyecto || 'COM-studio';
+    document.getElementById('pEstado').value = propuesta.estado || 'borrador';
+    document.getElementById('pUrl').value = propuesta.url || '';
+    document.getElementById('pNotas').value = propuesta.notas_internas || '';
+    document.getElementById('savePropuestaBtn').dataset.editId = propuesta.id;
+    renderSkillsChips(propuesta.skills_usadas || []);
+  } else {
+    document.getElementById('modalPropuestaTitulo').textContent = 'Nueva propuesta';
+    document.getElementById('pProspectoId').value = '';
+    document.getElementById('pTitulo').value = '';
+    document.getElementById('pProyecto').value = 'COM-studio';
+    document.getElementById('pEstado').value = 'borrador';
+    document.getElementById('pUrl').value = '';
+    document.getElementById('pNotas').value = '';
+    delete document.getElementById('savePropuestaBtn').dataset.editId;
+    renderSkillsChips(SKILLS_DEFAULT['COM-studio']);
+  }
+
+  document.getElementById('modalPropuesta').style.display = 'flex';
+}
+
+function editPropuesta(p) { openPropuestaModal(p); }
+
+function closePropuestaModal() {
+  document.getElementById('modalPropuesta').style.display = 'none';
+}
+
+async function savePropuesta() {
+  const editId = document.getElementById('savePropuestaBtn').dataset.editId;
+  const titulo = document.getElementById('pTitulo').value.trim();
+  if (!titulo) { alert('El título es obligatorio'); return; }
+
+  const url = document.getElementById('pUrl').value.trim();
+  const skillsRaw = document.getElementById('pSkills').value.trim();
+  const skills = skillsRaw ? skillsRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+  // Generar slug único si no hay URL todavía
+  const slug = editId
+    ? undefined
+    : `${crypto.randomUUID().slice(0,8)}-${titulo.toLowerCase().replace(/[^a-z0-9]/g,'-').slice(0,20)}`;
+
+  const payload = {
+    prospecto_id: document.getElementById('pProspectoId').value || null,
+    titulo,
+    proyecto:        document.getElementById('pProyecto').value,
+    estado:          document.getElementById('pEstado').value,
+    url:             url || null,
+    skills_usadas:   skills,
+    notas_internas:  document.getElementById('pNotas').value.trim() || null,
+    ...(slug ? { slug } : {})
+  };
+
+  if (editId) {
+    await sb.from('propuestas').update(payload).eq('id', editId);
+  } else {
+    await sb.from('propuestas').insert(payload);
+  }
+
+  closePropuestaModal();
+  loadPropuestas();
+}
+
+document.getElementById('btnNuevaPropuesta').addEventListener('click', () => openPropuestaModal());
+document.getElementById('closePropuestaModal').addEventListener('click', closePropuestaModal);
+document.getElementById('cancelPropuestaModal').addEventListener('click', closePropuestaModal);
+document.getElementById('savePropuestaBtn').addEventListener('click', savePropuesta);
 
 // ════════════════════════════════════════════════════════════════
 //  UTILS

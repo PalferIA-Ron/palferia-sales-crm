@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tecni Workout | Campus de Tecnificación de Baloncesto</title>
+<style>
+  :root {
+    --yellow: #F5C518;
+    --yellow-dark: #d4a800;
+    --yellow-light: #FFD93D;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --gray: #1a1a1a;
+    --mid: #2a2a2a;
+    --border: #2a2a2a;
+    --border-y: rgba(245,197,24,0.3);
+    --light-gray: #888888;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 2rem;
+    background: rgba(10,10,10,0.95); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-weight: 900; font-size: 1.1rem; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--yellow);
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { color: var(--light-gray); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.05em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--yellow); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 8rem 2rem 4rem;
+    background: var(--black);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -30%; left: -10%;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(245,197,24,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: -20%; right: -10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(245,197,24,0.04) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.4rem 1rem; border-radius: 100px;
+    background: rgba(245,197,24,0.1); border: 1px solid var(--border-y);
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--yellow); margin-bottom: 1.5rem;
+  }
+  .hero-name {
+    font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 900;
+    line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 0.8rem;
+  }
+  .hero-name span { color: var(--yellow); }
+  .hero-subtitle { font-size: 1.05rem; color: #aaaaaa; margin-bottom: 2rem; font-weight: 300; }
+  .hero-bio { font-size: 1rem; color: #888; max-width: 480px; line-height: 1.8; margin-bottom: 2.5rem; }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--yellow); color: var(--black);
+    padding: 0.9rem 2rem; border-radius: 6px;
+    font-weight: 800; font-size: 0.9rem; text-decoration: none;
+    transition: background 0.2s; display: inline-block;
+    letter-spacing: 0.03em;
+  }
+  .btn-primary:hover { background: var(--yellow-light); }
+  .btn-secondary {
+    border: 1px solid var(--border-y); color: var(--yellow);
+    padding: 0.9rem 2rem; border-radius: 6px;
+    font-weight: 600; font-size: 0.9rem; text-decoration: none;
+    transition: all 0.2s; display: inline-block;
+  }
+  .btn-secondary:hover { background: rgba(245,197,24,0.07); }
+
+  /* STATS CARD */
+  .stats-card {
+    background: var(--gray); border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+  }
+  .stats-card-header {
+    background: var(--yellow); padding: 1.2rem 1.5rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .stats-card-header .icon { font-size: 1.8rem; }
+  .stats-card-title { color: var(--black); font-weight: 800; font-size: 1rem; }
+  .stats-card-handle { color: rgba(0,0,0,0.6); font-size: 0.8rem; }
+  .stats-body { padding: 1.5rem; }
+  .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--border); }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--light-gray); font-size: 0.85rem; }
+  .stat-value { font-weight: 700; color: var(--white); }
+  .stat-value.yellow { color: var(--yellow); }
+  .ig-link {
+    display: block; margin-top: 1.2rem;
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white; text-align: center; padding: 0.8rem;
+    border-radius: 8px; font-weight: 700; font-size: 0.85rem;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .ig-link:hover { opacity: 0.85; }
+
+  /* SECTIONS */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--yellow); margin-bottom: 0.8rem; }
+  .section-title { font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 1rem; }
+  .section-sub { color: var(--light-gray); max-width: 560px; line-height: 1.7; margin-bottom: 3rem; }
+  .divider { width: 40px; height: 3px; background: var(--yellow); margin-bottom: 1.5rem; border-radius: 2px; }
+
+  /* QUÉ ES */
+  #que-es { background: var(--dark); border-top: 1px solid var(--border); }
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+  .pillar {
+    background: var(--gray); border: 1px solid var(--border); border-radius: 12px;
+    padding: 2rem; transition: border-color 0.2s;
+  }
+  .pillar:hover { border-color: var(--border-y); }
+  .pillar-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+  .pillar-title { font-weight: 700; margin-bottom: 0.5rem; font-size: 1rem; }
+  .pillar-text { color: var(--light-gray); font-size: 0.88rem; line-height: 1.6; }
+  .pillar-accent { color: var(--yellow); }
+
+  /* CAMPUS */
+  #campus { background: var(--black); }
+  .campus-box {
+    background: var(--gray); border: 1px solid var(--border-y); border-radius: 16px;
+    overflow: hidden; max-width: 900px; margin: 0 auto;
+  }
+  .campus-header {
+    background: var(--yellow); padding: 2.5rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+  }
+  .campus-header h3 { color: var(--black); font-size: 1.6rem; font-weight: 900; }
+  .campus-header p { color: rgba(0,0,0,0.7); font-size: 0.9rem; margin-top: 0.3rem; }
+  .campus-date-badge {
+    background: var(--black); color: var(--yellow);
+    padding: 0.8rem 1.5rem; border-radius: 8px;
+    font-weight: 800; font-size: 0.9rem; white-space: nowrap;
+  }
+  .campus-details { padding: 2.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+  .campus-detail-item { }
+  .campus-detail-label { color: var(--light-gray); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem; }
+  .campus-detail-value { font-weight: 700; font-size: 1.05rem; }
+  .campus-cta { padding: 0 2.5rem 2.5rem; }
+  .btn-signup {
+    display: inline-block; background: var(--yellow); color: var(--black);
+    padding: 1rem 2.5rem; border-radius: 8px; font-weight: 800;
+    font-size: 1rem; text-decoration: none; transition: background 0.2s;
+  }
+  .btn-signup:hover { background: var(--yellow-light); }
+
+  /* PARA QUIÉN */
+  #para-quien { background: var(--dark); border-top: 1px solid var(--border); }
+  .audience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; }
+  .audience-card {
+    border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;
+    display: flex; align-items: flex-start; gap: 1rem;
+    transition: border-color 0.2s;
+  }
+  .audience-card:hover { border-color: var(--border-y); }
+  .audience-card .icon { font-size: 1.8rem; flex-shrink: 0; }
+  .audience-card h4 { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .audience-card p { color: var(--light-gray); font-size: 0.82rem; line-height: 1.5; }
+
+  /* METODOLOGÍA */
+  #metodologia { background: var(--black); }
+  .metodologia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .metodologia-img {
+    border-radius: 16px; overflow: hidden; position: sticky; top: 6rem;
+  }
+  .metodologia-img img { width: 100%; display: block; object-fit: cover; border-radius: 16px; }
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: flex; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
+    background: var(--yellow); color: var(--black);
+    font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+  }
+  .step-content { }
+  .step-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.4rem; }
+  .step-desc { color: var(--light-gray); font-size: 0.88rem; line-height: 1.6; }
+
+  /* HASHTAG */
+  .hashtag-hero {
+    background: var(--yellow); padding: 5rem 2rem; text-align: center;
+  }
+  .hashtag-hero h2 { color: var(--black); font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+  .hashtag-hero p { color: rgba(0,0,0,0.7); font-size: 1.1rem; }
+
+  /* CONTACTO */
+  #contacto { background: var(--dark); border-top: 1px solid var(--border); }
+  .contact-box { max-width: 700px; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.2rem 1.5rem; border: 1px solid var(--border); border-radius: 10px;
+    text-decoration: none; color: var(--white); transition: all 0.2s;
+  }
+  .contact-link:hover { border-color: var(--border-y); background: var(--gray); }
+  .contact-link-icon { font-size: 1.4rem; }
+  .contact-link-label { font-size: 0.7rem; color: var(--light-gray); text-transform: uppercase; letter-spacing: 0.1em; }
+  .contact-link-value { font-weight: 600; font-size: 0.95rem; }
+
+  /* FOOTER */
+  footer { background: var(--black); border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--light-gray); font-size: 0.8rem; }
+
+  /* GALLERY */
+  #galeria { background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .gallery-item {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--gray);
+    position: relative;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease, opacity 0.35s;
+    opacity: 0.9;
+  }
+  .gallery-item:hover img { transform: scale(1.06); opacity: 1; }
+  .gallery-footer { margin-top: 2rem; text-align: center; }
+
+  /* FLOATING WHATSAPP */
+  .wa-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+    width: 60px; height: 60px;
+    background: #25D366; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 32px rgba(37,211,102,0.6); }
+  .wa-float svg { width: 30px; height: 30px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem; }
+    .nav-links { display: none; }
+    .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .campus-header { flex-direction: column; align-items: flex-start; }
+    section { padding: 4rem 1.2rem; }
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .wa-float { bottom: 1.2rem; right: 1.2rem; width: 52px; height: 52px; }
+    .metodologia-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .metodologia-img { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Tecni Workout</div>
+  <div class="nav-links">
+    <a href="#que-es">Qué es</a>
+    <a href="#campus">Campus</a>
+    <a href="#para-quien">Para quién</a>
+    <a href="#metodologia">Metodología</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-tag">🏟️ Campus de tecnificación · Baloncesto</div>
+      <h1 class="hero-name">Tecni<br><span>Workout</span></h1>
+      <p class="hero-subtitle">Trabajo, análisis y mejora individual del baloncesto</p>
+      <p class="hero-bio">
+        Campus intensivo de tecnificación donde cada jugador recibe atención individualizada, análisis de su juego y un plan de mejora real. Para jugadores de ambos sexos con ganas de dar el siguiente nivel.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSe4gjAtFodJJ_3Mku0J5vRkapEhUNNYaDssXD9dZ28JZDcmEw/viewform" target="_blank" class="btn-primary">Apuntarse al campus →</a>
+        <a href="#que-es" class="btn-secondary">Saber más</a>
+      </div>
+    </div>
+    <div>
+      <div class="stats-card">
+        <div class="stats-card-header">
+          <img src="assets/tecni_workout/avatar.jpg" alt="Tecni Workout" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,0,0,0.3);flex-shrink:0;">
+          <div>
+            <div class="stats-card-title">TECNI WORKOUT</div>
+            <div class="stats-card-handle">@tecni_workout</div>
+          </div>
+        </div>
+        <div class="stats-body">
+          <div class="stat-row">
+            <span class="stat-label">Seguidores</span>
+            <span class="stat-value yellow">256</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Publicaciones</span>
+            <span class="stat-value">78</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Próximo campus</span>
+            <span class="stat-value yellow">6–10 Julio</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Hashtag</span>
+            <span class="stat-value">#tecniperfomance</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Director</span>
+            <span class="stat-value">@tecni_luispa</span>
+          </div>
+          <a href="https://www.instagram.com/tecni_workout/" target="_blank" class="ig-link">Ver Instagram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUÉ ES -->
+<section id="que-es">
+  <div class="container">
+    <p class="section-label">El programa</p>
+    <h2 class="section-title">¿Qué es Tecni Workout?</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Un campus de tecnificación donde el foco está en el jugador como individuo: su técnica, su físico, su análisis y su crecimiento.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">🏀</div>
+        <div class="pillar-title">Tecnificación individual</div>
+        <div class="pillar-text">Trabajo técnico profundo adaptado al perfil de cada jugador. Gestos técnicos, toma de decisiones, posicionamiento.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">💪</div>
+        <div class="pillar-title">Preparación física</div>
+        <div class="pillar-text">Plan físico específico para baloncesto. Velocidad, agilidad, resistencia y fuerza orientadas al rendimiento en pista.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">📊</div>
+        <div class="pillar-title">Análisis de juego</div>
+        <div class="pillar-text">Vídeo, datos y feedback continuo. Cada jugador entiende sus puntos fuertes y las áreas de mejora con evidencia real.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">🧪</div>
+        <div class="pillar-title">#TecniPerformance</div>
+        <div class="pillar-text">Metodología propia que combina tecnificación y análisis para acelerar la mejora individual de forma medible.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAMPUS -->
+<section id="campus">
+  <div class="container">
+    <p class="section-label">Próxima edición</p>
+    <h2 class="section-title">Campus de Tecnificación</h2>
+    <div class="divider"></div>
+    <div class="campus-box">
+      <div class="campus-header">
+        <div>
+          <h3>Campus Tecni Workout</h3>
+          <p>Tecnificación + Preparación física + Análisis individual</p>
+        </div>
+        <div class="campus-date-badge">📅 6 al 10 de Julio</div>
+      </div>
+      <div class="campus-details">
+        <div class="campus-detail-item">
+          <div class="campus-detail-label">Duración</div>
+          <div class="campus-detail-value">5 días intensivos</div>
+        </div>
+        <div class="campus-detail-item">
+          <div class="campus-detail-label">Modalidad</div>
+          <div class="campus-detail-value">Campus presencial</div>
+        </div>
+        <div class="campus-detail-item">
+          <div class="campus-detail-label">Público</div>
+          <div class="campus-detail-value">Ambos sexos</div>
+        </div>
+        <div class="campus-detail-item">
+          <div class="campus-detail-label">Enfoque</div>
+          <div class="campus-detail-value">Mejora individual</div>
+        </div>
+      </div>
+      <div class="campus-cta">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSe4gjAtFodJJ_3Mku0J5vRkapEhUNNYaDssXD9dZ28JZDcmEw/viewform" target="_blank" class="btn-signup">Apuntarme ahora →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUIÉN -->
+<section id="para-quien">
+  <div class="container">
+    <p class="section-label">Público objetivo</p>
+    <h2 class="section-title">¿Para quién es?</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Tecni Workout es para jugadores que quieren mejorar de verdad, con trabajo serio y metodología real.</p>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <span class="icon">⛹️‍♀️</span>
+        <div>
+          <h4>Jugadoras</h4>
+          <p>Programa adaptado y completo para jugadoras de cualquier posición y nivel.</p>
+        </div>
+      </div>
+      <div class="audience-card">
+        <span class="icon">⛹️</span>
+        <div>
+          <h4>Jugadores</h4>
+          <p>Trabajo técnico, físico y analítico específico para cada perfil de jugador.</p>
+        </div>
+      </div>
+      <div class="audience-card">
+        <span class="icon">📈</span>
+        <div>
+          <h4>Quieres mejorar</h4>
+          <p>Si tienes claros tus puntos débiles y quieres trabajarlos con metodología.</p>
+        </div>
+      </div>
+      <div class="audience-card">
+        <span class="icon">🎯</span>
+        <div>
+          <h4>Con objetivos</h4>
+          <p>Jugadores con metas concretas: subir de categoría, ganar titularidad, mejorar un gesto técnico.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METODOLOGÍA -->
+<section id="metodologia">
+  <div class="container">
+    <p class="section-label">Cómo trabajamos</p>
+    <h2 class="section-title">Metodología</h2>
+    <div class="divider"></div>
+    <div class="metodologia-grid">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Evaluación inicial</div>
+            <div class="step-desc">Al inicio del campus analizamos el perfil técnico y físico de cada jugador para personalizar el trabajo.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Sesiones de tecnificación</div>
+            <div class="step-desc">Trabajo técnico diario con atención individualizada. Gestos técnicos, mecánica de tiro, manejo, movimiento sin balón.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Preparación física específica</div>
+            <div class="step-desc">Plan físico orientado al baloncesto. Velocidad de reacción, agilidad, potencia y resistencia específica.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Análisis y feedback</div>
+            <div class="step-desc">Revisión de vídeo y métricas. Cada jugador recibe feedback claro y accionable sobre su progreso.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-title">Plan de continuidad</div>
+            <div class="step-desc">Al finalizar, cada jugador sale con un plan de trabajo personalizado para continuar mejorando por su cuenta.</div>
+          </div>
+        </div>
+      </div>
+      <div class="metodologia-img">
+        <img src="assets/tecni_workout/metodologia.jpg" alt="Tecni Workout — Metodología en acción">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section id="galeria">
+  <div class="container">
+    <p class="section-label">Instagram</p>
+    <h2 class="section-title">Últimas fotos</h2>
+    <div class="divider"></div>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="assets/tecni_workout/post_1.jpg" alt="Post tecni_workout" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecni_workout/post_2.jpg" alt="Post tecni_workout" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecni_workout/post_3.jpg" alt="Post tecni_workout" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecni_workout/post_4.jpg" alt="Post tecni_workout" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecni_workout/post_5.jpg" alt="Post tecni_workout" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecni_workout/post_6.jpg" alt="Post tecni_workout" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecni_workout/post_7.jpg" alt="Post tecni_workout" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecni_workout/post_8.jpg" alt="Post tecni_workout" loading="lazy"></div>
+      <div class="gallery-item"><img src="assets/tecni_workout/post_9.jpg" alt="Post tecni_workout" loading="lazy"></div>
+    </div>
+    <div class="gallery-footer">
+      <a href="https://www.instagram.com/tecni_workout/" target="_blank" class="btn-secondary">Ver todo en Instagram →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HASHTAG HERO -->
+<div class="hashtag-hero">
+  <h2>#TecniPerformance 👨🏽‍💻🧪🏀</h2>
+  <p>Tecnificación + Análisis + Mejora Individual</p>
+</div>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="container">
+    <div class="contact-box">
+      <p class="section-label">¿Tienes dudas?</p>
+      <h2 class="section-title">Contacto</h2>
+      <div class="divider"></div>
+      <p class="section-sub">Para cualquier consulta sobre el campus, inscripciones o el programa.</p>
+      <div class="contact-links">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSe4gjAtFodJJ_3Mku0J5vRkapEhUNNYaDssXD9dZ28JZDcmEw/viewform" target="_blank" class="contact-link">
+          <span class="contact-link-icon">📋</span>
+          <div>
+            <div class="contact-link-label">Inscripción</div>
+            <div class="contact-link-value">Formulario de inscripción</div>
+          </div>
+        </a>
+        <a href="mailto:luispagn@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉️</span>
+          <div>
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-value">luispagn@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/tecni_workout/" target="_blank" class="contact-link">
+          <span class="contact-link-icon">📸</span>
+          <div>
+            <div class="contact-link-label">Instagram</div>
+            <div class="contact-link-value">@tecni_workout</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/tecni_luispa/" target="_blank" class="contact-link">
+          <span class="contact-link-icon">👤</span>
+          <div>
+            <div class="contact-link-label">Director del campus</div>
+            <div class="contact-link-value">@tecni_luispa · Luis Garcia Notario</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/34623176981" target="_blank" class="wa-float" title="Contactar por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<footer>
+  <p>© 2026 Tecni Workout · @tecni_workout · Un proyecto de <a href="https://www.instagram.com/tecni_luispa/" target="_blank" style="color: var(--yellow); text-decoration: none;">@tecni_luispa</a></p>
+</footer>
+
+</body>
+</html>

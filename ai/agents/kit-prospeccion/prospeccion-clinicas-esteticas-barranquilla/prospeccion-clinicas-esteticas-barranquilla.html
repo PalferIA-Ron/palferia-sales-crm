@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prospección — Clínicas Cirugía Estética · Barranquilla</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #151821;
+      --card: #1c2030;
+      --border: #2a2f45;
+      --accent: #6c63ff;
+      --accent2: #ff6584;
+      --green: #2ecc71;
+      --yellow: #f1c40f;
+      --red: #e74c3c;
+      --text: #e8eaf0;
+      --muted: #7a82a0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #1a1d2e 0%, #12151f 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 40px 28px;
+    }
+    header h1 { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+    header p { color: var(--muted); margin-top: 6px; font-size: 13px; }
+    .tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .tag {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--muted);
+    }
+    .tag span { color: var(--accent); font-weight: 600; }
+
+    /* LAYOUT */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 36px 0; }
+
+    /* KPI CARDS */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .kpi {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px 24px;
+    }
+    .kpi .val { font-size: 36px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .kpi .lbl { color: var(--muted); font-size: 12px; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* OPPORTUNITY DIST */
+    .dist-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .dist-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px; text-align: center;
+    }
+    .dist-card .num { font-size: 40px; font-weight: 800; }
+    .dist-card .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .alta .num { color: var(--red); }
+    .media .num { color: var(--yellow); }
+    .baja .num { color: var(--green); }
+
+    /* SECTION TITLE */
+    h2 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 20px; border-left: 3px solid var(--accent); padding-left: 12px; }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: #1a1d2e; color: var(--muted); font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      padding: 12px 16px; text-align: left; font-weight: 600;
+    }
+    td { padding: 14px 16px; border-top: 1px solid var(--border); vertical-align: middle; }
+    tr:hover td { background: #1a1d2e; }
+    .name { font-weight: 600; color: #fff; font-size: 13px; }
+    .sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* SCORE BAR */
+    .score-wrap { display: flex; align-items: center; gap: 10px; min-width: 120px; }
+    .score-num { font-weight: 700; font-size: 16px; min-width: 32px; }
+    .bar-bg { flex: 1; height: 6px; background: var(--border); border-radius: 3px; }
+    .bar-fill { height: 6px; border-radius: 3px; }
+    .score-alta .score-num { color: var(--red); }
+    .score-media .score-num { color: var(--yellow); }
+    .score-baja .score-num { color: var(--green); }
+    .fill-alta { background: var(--red); }
+    .fill-media { background: var(--yellow); }
+    .fill-baja { background: var(--green); }
+
+    /* BADGES */
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-alta { background: rgba(231,76,60,0.15); color: #e74c3c; }
+    .badge-media { background: rgba(241,196,15,0.15); color: #f1c40f; }
+    .badge-baja { background: rgba(46,204,113,0.15); color: #2ecc71; }
+
+    /* PROBLEMS */
+    .problems { list-style: none; }
+    .problems li { font-size: 11px; color: var(--muted); padding: 2px 0; }
+    .problems li::before { content: "⚠ "; color: #f1c40f; }
+
+    /* TECH ICONS */
+    .tech { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ico {
+      width: 22px; height: 22px; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .ico-ok { background: rgba(46,204,113,0.15); color: #2ecc71; }
+    .ico-no { background: rgba(231,76,60,0.15); color: #e74c3c; }
+
+    /* TOP CARDS */
+    .top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px; }
+    .top-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 24px; position: relative; overflow: hidden;
+    }
+    .top-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .top-card h3 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .top-card .addr { color: var(--muted); font-size: 12px; margin-bottom: 14px; }
+    .detail-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
+    .detail-row .lbl { color: var(--muted); }
+    .detail-row .val { color: var(--text); font-weight: 500; text-align: right; max-width: 55%; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+    .problems-detail { list-style: none; margin-bottom: 14px; }
+    .problems-detail li { font-size: 12px; padding: 5px 0; border-bottom: 1px solid var(--border); color: var(--muted); }
+    .problems-detail li::before { content: "🔴 "; }
+    .proposal { background: rgba(108,99,255,0.08); border: 1px solid rgba(108,99,255,0.3); border-radius: 8px; padding: 12px; font-size: 12px; color: #c0bfff; margin-bottom: 14px; }
+    .msg-box {
+      background: #12151f; border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px; font-size: 12px; line-height: 1.7; color: var(--text); position: relative;
+    }
+    .msg-label { font-size: 11px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .copy-btn {
+      position: absolute; top: 10px; right: 10px;
+      background: var(--border); border: none; color: var(--muted);
+      padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px;
+    }
+    .copy-btn:hover { background: var(--accent); color: #fff; }
+    .score-big { font-size: 48px; font-weight: 900; float: right; line-height: 1; opacity: 0.15; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px;
+    }
+    .stat-bar-bg { background: var(--border); border-radius: 4px; height: 8px; margin: 10px 0; }
+    .stat-bar-fill { height: 8px; border-radius: 4px; background: var(--accent); }
+    .stat-pct { font-size: 28px; font-weight: 800; color: var(--accent); }
+    .stat-lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* EXPORT */
+    .export-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+    .export-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .export-table th { color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    .export-table td { padding: 8px 12px; border-bottom: 1px solid rgba(42,47,69,0.5); }
+    .export-btn {
+      background: var(--accent); color: #fff; border: none; border-radius: 8px;
+      padding: 10px 24px; cursor: pointer; font-size: 13px; font-weight: 600;
+      margin-bottom: 20px; display: inline-block;
+    }
+    .export-btn:hover { background: #5a52e0; }
+
+    footer { padding: 32px 0; text-align: center; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Prospección · Clínicas de Cirugía Estética</h1>
+    <p>Barranquilla, Colombia — Generado el 21 de agosto de 2026</p>
+    <div class="tags">
+      <div class="tag">Sector <span>Cirugía Estética</span></div>
+      <div class="tag">Ciudad <span>Barranquilla</span></div>
+      <div class="tag">Servicio <span>Diseño Web + SEO + Marketing Digital + Automatización</span></div>
+      <div class="tag">Proyecto <span>COM-studio</span></div>
+      <div class="tag">Semana <span>1</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- KPIs -->
+  <section>
+    <h2>Resumen ejecutivo</h2>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="val">15</div><div class="lbl">Prospectos analizados</div></div>
+      <div class="kpi"><div class="val">7</div><div class="lbl">Sin sitio web propio</div></div>
+      <div class="kpi"><div class="val">9</div><div class="lbl">Sin meta description</div></div>
+      <div class="kpi"><div class="val">5</div><div class="lbl">Solo redes sociales</div></div>
+      <div class="kpi"><div class="val">11</div><div class="lbl">Sin email público visible</div></div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div class="dist-grid">
+        <div class="dist-card alta"><div class="num">8</div><div class="lbl">Oportunidad ALTA (≥70)</div></div>
+        <div class="dist-card media"><div class="num">4</div><div class="lbl">Oportunidad MEDIA (40-69)</div></div>
+        <div class="dist-card baja"><div class="num">3</div><div class="lbl">Oportunidad BAJA (≤39)</div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px;">
+      <div style="font-size:13px; color:var(--muted); margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">🏆 Top 5 recomendados</div>
+      <ol style="padding-left:20px; line-height:2; font-size:13px; color:var(--text);">
+        <li><strong>Giao Estética y Spa</strong> — Score 92 · Sin web, sin redes verificables, sin SEO</li>
+        <li><strong>Imagen Spa C. Cirugía Plástica</strong> — Score 90 · Sin web, sin presencia digital activa</li>
+        <li><strong>Dr. Carlos Romero Barros</strong> — Score 91 · Sin web, solo directorio médico</li>
+        <li><strong>Crystal Face Clinic</strong> — Score 85 · Solo Facebook, sin web, sin SEO</li>
+        <li><strong>Beauty Balance</strong> — Score 88 · Solo Instagram, sin web, sin automatización</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- TABLE -->
+  <section>
+    <h2>Tabla de prospectos</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Negocio</th>
+            <th>Contacto</th>
+            <th>Score</th>
+            <th>Nivel digital</th>
+            <th>Problemas detectados</th>
+            <th>Tech</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- 1 GIAO -->
+          <tr>
+            <td style="color:var(--muted)">1</td>
+            <td>
+              <div class="name">Giao Estética y Spa</div>
+              <div class="sub">Calle 87 #45-18, Barranquilla</div>
+            </td>
+            <td>
+              <div class="sub">Sin web propia</div>
+              <div class="sub">Sin tel. verificado</div>
+            </td>
+            <td>
+              <div class="score-wrap score-alta">
+                <div class="score-num">92</div>
+                <div class="bar-bg"><div class="bar-fill fill-alta" style="width:92%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-alta">BAJO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin sitio web</li>
+                <li>Sin SEO ni Google Biz activo</li>
+                <li>Sin automatización</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-no">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-no">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 2 CARLOS ROMERO -->
+          <tr>
+            <td style="color:var(--muted)">2</td>
+            <td>
+              <div class="name">Dr. Carlos Romero Barros</div>
+              <div class="sub">Cl 86 #49C-34, Barranquilla</div>
+            </td>
+            <td>
+              <div class="sub">Solo directorio médico</div>
+            </td>
+            <td>
+              <div class="score-wrap score-alta">
+                <div class="score-num">91</div>
+                <div class="bar-bg"><div class="bar-fill fill-alta" style="width:91%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-alta">BAJO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin sitio web propio</li>
+                <li>Sin redes detectadas</li>
+                <li>Sin email público</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-no">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-no">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 3 IMAGEN SPA -->
+          <tr>
+            <td style="color:var(--muted)">3</td>
+            <td>
+              <div class="name">Imagen Spa C. Cirugía Plástica</div>
+              <div class="sub">Cra 51b #94-334, Barranquilla</div>
+            </td>
+            <td>
+              <div class="sub">Sin datos digitales</div>
+            </td>
+            <td>
+              <div class="score-wrap score-alta">
+                <div class="score-num">90</div>
+                <div class="bar-bg"><div class="bar-fill fill-alta" style="width:90%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-alta">BAJO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin sitio web</li>
+                <li>Sin redes activas</li>
+                <li>Sin captación digital</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-no">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-no">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 4 BEAUTY BALANCE -->
+          <tr>
+            <td style="color:var(--muted)">4</td>
+            <td>
+              <div class="name">Beauty Balance</div>
+              <div class="sub">Cra 45 #85-128, Barranquilla</div>
+            </td>
+            <td>
+              <div class="sub"><a href="https://www.instagram.com/beautybalancebaq/" target="_blank">@beautybalancebaq</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-alta">
+                <div class="score-num">88</div>
+                <div class="bar-bg"><div class="bar-fill fill-alta" style="width:88%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-alta">BAJO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin sitio web propio</li>
+                <li>Sin email público</li>
+                <li>Sin funnel de captación</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-no">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-ok">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 5 ORLANDO PEREZ -->
+          <tr>
+            <td style="color:var(--muted)">5</td>
+            <td>
+              <div class="name">Dr. Orlando Pérez de la Rosa</div>
+              <div class="sub">Cl. 78 #53-90, Riomar, Barranquilla</div>
+            </td>
+            <td>
+              <div class="sub"><a href="https://www.facebook.com/Dr.Orlandoperezdelarosa/" target="_blank">Facebook</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-alta">
+                <div class="score-num">87</div>
+                <div class="bar-bg"><div class="bar-fill fill-alta" style="width:87%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-alta">BAJO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin sitio web propio</li>
+                <li>Solo Facebook</li>
+                <li>Sin SEO ni automatización</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-no">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-ok">FB</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 6 CRYSTAL FACE -->
+          <tr>
+            <td style="color:var(--muted)">6</td>
+            <td>
+              <div class="name">Crystal Face Clinic</div>
+              <div class="sub">Torres del Atlántico, Cra. 57 #99A-65, Riomar</div>
+            </td>
+            <td>
+              <div class="sub"><a href="https://www.facebook.com/crystalfaceclinic/" target="_blank">Facebook</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-alta">
+                <div class="score-num">85</div>
+                <div class="bar-bg"><div class="bar-fill fill-alta" style="width:85%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-alta">BAJO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin sitio web propio</li>
+                <li>Sin teléfono público</li>
+                <li>Sin email visible</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-no">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-ok">FB</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 7 HAROLD NORIEGA -->
+          <tr>
+            <td style="color:var(--muted)">7</td>
+            <td>
+              <div class="name">Dr. Harold Noriega Garrido</div>
+              <div class="sub">Calle 90 #42B1-82, Barranquilla</div>
+            </td>
+            <td>
+              <div class="sub">Solo directorio</div>
+            </td>
+            <td>
+              <div class="score-wrap score-alta">
+                <div class="score-num">82</div>
+                <div class="bar-bg"><div class="bar-fill fill-alta" style="width:82%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-alta">BAJO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin web propia</li>
+                <li>Sin redes activas</li>
+                <li>Sin captación online</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-no">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-no">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 8 EUGENIO LAFAURIE -->
+          <tr>
+            <td style="color:var(--muted)">8</td>
+            <td>
+              <div class="name">Dr. Eugenio Lafaurie</div>
+              <div class="sub">Calle 85 #50-37 Torre Médica del Mar C307</div>
+            </td>
+            <td>
+              <div class="sub">Facebook: Dr. Eugenio Lafaurie</div>
+              <div class="sub">YouTube activo</div>
+            </td>
+            <td>
+              <div class="score-wrap score-alta">
+                <div class="score-num">70</div>
+                <div class="bar-bg"><div class="bar-fill fill-alta" style="width:70%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-alta">BAJO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Dominio web caído / sin resolver</li>
+                <li>Sin email público</li>
+                <li>Sin automatización de citas</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-no">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-ok">FB</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 9 CLINICA REINA CATALINA -->
+          <tr>
+            <td style="color:var(--muted)">9</td>
+            <td>
+              <div class="name">Clínica Reina Catalina</div>
+              <div class="sub">Calle 82 #47-12, Barranquilla</div>
+            </td>
+            <td>
+              <div class="sub">(605) 3670800</div>
+              <div class="sub"><a href="mailto:atencionalusuario@clinicareinacatalina.com">atencionalusuario@clinicareinacatalina.com</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-media">
+                <div class="score-num">55</div>
+                <div class="bar-bg"><div class="bar-fill fill-media" style="width:55%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-media">MEDIO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Web antigua sin meta description</li>
+                <li>Sin H1 principal claro</li>
+                <li>Sin Instagram activo</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-ok">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-ok">FB</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 10 LEONARDO FORERO -->
+          <tr>
+            <td style="color:var(--muted)">10</td>
+            <td>
+              <div class="name">Dr. Leonardo Forero Obregón</div>
+              <div class="sub">cirugiaplasticabarranquilla.com</div>
+            </td>
+            <td>
+              <div class="sub">+57 317 647 5027 (WhatsApp)</div>
+              <div class="sub">Sin email visible</div>
+            </td>
+            <td>
+              <div class="score-wrap score-media">
+                <div class="score-num">65</div>
+                <div class="bar-bg"><div class="bar-fill fill-media" style="width:65%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-media">MEDIO</span></td>
+            <td>
+              <ul class="problems">
+                <li>HTTPS no confirmado</li>
+                <li>Sin meta description</li>
+                <li>Sin redes sociales</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-ok">W</div>
+                <div class="ico ico-no">S</div>
+                <div class="ico ico-no">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 11 CLINICA ESPECIALISTAS -->
+          <tr>
+            <td style="color:var(--muted)">11</td>
+            <td>
+              <div class="name">Clínica Especialistas de Barranquilla</div>
+              <div class="sub"><a href="https://clinicaespecialistasdebarranquilla.com/" target="_blank">clinicaespecialistasdebarranquilla.com</a></div>
+            </td>
+            <td>
+              <div class="sub">317 4051292</div>
+              <div class="sub"><a href="https://www.instagram.com/clinicaespecialistasdebquilla/" target="_blank">@clinicaespecialistasdebquilla</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-media">
+                <div class="score-num">45</div>
+                <div class="bar-bg"><div class="bar-fill fill-media" style="width:45%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-media">MEDIO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin meta description</li>
+                <li>Sin dirección visible en web</li>
+                <li>Sin automatización de citas</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-ok">W</div>
+                <div class="ico ico-ok">S</div>
+                <div class="ico ico-ok">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 12 ROLF SMIT -->
+          <tr>
+            <td style="color:var(--muted)">12</td>
+            <td>
+              <div class="name">Dr. Rolf Smit</div>
+              <div class="sub"><a href="https://drsmit.com.co/" target="_blank">drsmit.com.co</a> · Clínica Portoazul C519</div>
+            </td>
+            <td>
+              <div class="sub">(+57) 323 5998220</div>
+              <div class="sub"><a href="mailto:consultasrolfsmit@gmail.com">consultasrolfsmit@gmail.com</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-baja">
+                <div class="score-num">40</div>
+                <div class="bar-bg"><div class="bar-fill fill-media" style="width:40%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-media">MEDIO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin meta description</li>
+                <li>Sin automatización / CRM</li>
+                <li>Diseño mejorable</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-ok">W</div>
+                <div class="ico ico-ok">S</div>
+                <div class="ico ico-ok">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 13 JUAN CARLOS HERRERA -->
+          <tr>
+            <td style="color:var(--muted)">13</td>
+            <td>
+              <div class="name">Dr. Juan Carlos Herrera P.</div>
+              <div class="sub"><a href="https://www.drjuancherrera.com/" target="_blank">drjuancherrera.com</a> · Calle 85 #49C-17</div>
+            </td>
+            <td>
+              <div class="sub">+57 316 4535458</div>
+              <div class="sub"><a href="mailto:info@drjuancherrera.com">info@drjuancherrera.com</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-baja">
+                <div class="score-num">38</div>
+                <div class="bar-bg"><div class="bar-fill fill-baja" style="width:38%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-baja">ALTO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin meta description</li>
+                <li>Sin automatización de leads</li>
+                <li>Diseño web mejorable</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-ok">W</div>
+                <div class="ico ico-ok">S</div>
+                <div class="ico ico-ok">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 14 DARIO CABELLO -->
+          <tr>
+            <td style="color:var(--muted)">14</td>
+            <td>
+              <div class="name">Darío Cabello Cirujanos Plásticos</div>
+              <div class="sub"><a href="https://dariocabello.com/" target="_blank">dariocabello.com</a> · Cra 52 #84-131</div>
+            </td>
+            <td>
+              <div class="sub">+57 313 739-2805</div>
+              <div class="sub"><a href="mailto:contactenos@dariocabello.com">contactenos@dariocabello.com</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-baja">
+                <div class="score-num">30</div>
+                <div class="bar-bg"><div class="bar-fill fill-baja" style="width:30%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-baja">ALTO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Sin meta description SEO</li>
+                <li>Sin automatización CRM</li>
+                <li>Sin blog activo</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-ok">W</div>
+                <div class="ico ico-ok">S</div>
+                <div class="ico ico-ok">IG</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- 15 ACTIVA BIOMEDICA -->
+          <tr>
+            <td style="color:var(--muted)">15</td>
+            <td>
+              <div class="name">Activa Biomedica Wellness Center</div>
+              <div class="sub"><a href="https://activabiomedica.com/" target="_blank">activabiomedica.com</a> · Cra 53 #106-280</div>
+            </td>
+            <td>
+              <div class="sub">+57 300 494-4248</div>
+              <div class="sub"><a href="mailto:servicioalcliente@activabiomedica.com">servicioalcliente@activabiomedica.com</a></div>
+            </td>
+            <td>
+              <div class="score-wrap score-baja">
+                <div class="score-num">20</div>
+                <div class="bar-bg"><div class="bar-fill fill-baja" style="width:20%"></div></div>
+              </div>
+            </td>
+            <td><span class="badge badge-baja">ALTO</span></td>
+            <td>
+              <ul class="problems">
+                <li>Presencia digital sólida</li>
+                <li>Potencial mejora en conversión</li>
+                <li>Automatización avanzada</li>
+              </ul>
+            </td>
+            <td>
+              <div class="tech">
+                <div class="ico ico-ok">W</div>
+                <div class="ico ico-ok">S</div>
+                <div class="ico ico-ok">IG</div>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TOP 5 DETAILED -->
+  <section>
+    <h2>Fichas detalladas — Top 5 prospectos</h2>
+    <div class="top-grid">
+
+      <!-- GIAO -->
+      <div class="top-card">
+        <div class="score-big">92</div>
+        <h3>Giao Estética y Spa</h3>
+        <div class="addr">📍 Calle 87 #45-18, Barranquilla</div>
+        <div class="detail-row"><span class="lbl">Teléfono</span><span class="val">No verificado</span></div>
+        <div class="detail-row"><span class="lbl">Web</span><span class="val">❌ Sin sitio web</span></div>
+        <div class="detail-row"><span class="lbl">Instagram</span><span class="val">❌ No detectado</span></div>
+        <div class="detail-row"><span class="lbl">SEO</span><span class="val">❌ Nulo</span></div>
+        <hr class="divider">
+        <div style="font-size:11px; color:var(--muted); margin-bottom:8px; font-weight:600;">PROBLEMAS DETECTADOS</div>
+        <ul class="problems-detail">
+          <li>No tiene sitio web — invisible en Google para búsquedas de pacientes</li>
+          <li>Sin presencia en redes sociales detectada — sin captación de pacientes online</li>
+          <li>Sin formulario de contacto ni WhatsApp Business — pierde leads 24/7</li>
+        </ul>
+        <div class="proposal">
+          💡 <strong>Propuesta:</strong> Diseñamos una web profesional con landing de tratamientos, formulario de cita automático vía WhatsApp y posicionamiento en Google para "cirugía estética Barranquilla". En 90 días, captas pacientes mientras duermes.
+        </div>
+        <div class="msg-label">MENSAJE DE CONTACTO EN FRÍO</div>
+        <div class="msg-box">
+          <button class="copy-btn" onclick="this.nextElementSibling.select(); document.execCommand('copy'); this.textContent='✓ Copiado'">Copiar</button>
+          <textarea style="opacity:0;position:absolute;pointer-events:none;" readonly>Hola, soy [Tu nombre] de COM-studio. Busqué clínicas de estética en Barranquilla en Google y Giao no aparece — y eso significa que pacientes que buscan sus tratamientos están yendo a la competencia. Les podemos crear un sitio web profesional con reservas automáticas y posicionamiento local en Google. ¿Tienen 15 minutos esta semana para verlo?</textarea>
+          Hola, soy [Tu nombre] de COM-studio. Busqué clínicas de estética en Barranquilla en Google y <strong>Giao no aparece</strong> — y eso significa que pacientes que buscan sus tratamientos están yendo a la competencia.<br><br>
+          Les podemos crear un sitio web profesional con reservas automáticas y posicionamiento local en Google.<br><br>
+          ¿Tienen 15 minutos esta semana para verlo?
+        </div>
+      </div>
+
+      <!-- IMAGEN SPA -->
+      <div class="top-card">
+        <div class="score-big">90</div>
+        <h3>Imagen Spa C. Cirugía Plástica</h3>
+        <div class="addr">📍 Cra 51b #94-334, Barranquilla</div>
+        <div class="detail-row"><span class="lbl">Teléfono</span><span class="val">No verificado</span></div>
+        <div class="detail-row"><span class="lbl">Web</span><span class="val">❌ Sin sitio web</span></div>
+        <div class="detail-row"><span class="lbl">Redes</span><span class="val">❌ Sin redes activas</span></div>
+        <div class="detail-row"><span class="lbl">Email</span><span class="val">❌ No visible</span></div>
+        <hr class="divider">
+        <div style="font-size:11px; color:var(--muted); margin-bottom:8px; font-weight:600;">PROBLEMAS DETECTADOS</div>
+        <ul class="problems-detail">
+          <li>Sin sitio web — toda captación depende del boca a boca</li>
+          <li>Sin email público — pacientes no pueden contactarlos fácilmente</li>
+          <li>Sin automatización — sin sistema para seguimiento de consultas</li>
+        </ul>
+        <div class="proposal">
+          💡 <strong>Propuesta:</strong> Web con catálogo de procedimientos, galería antes/después, formulario de consulta y bot de WhatsApp para agendar citas automáticamente. El sector de cirugía estética en Barranquilla es muy competitivo — quien no aparece online, no existe.
+        </div>
+        <div class="msg-label">MENSAJE DE CONTACTO EN FRÍO</div>
+        <div class="msg-box">
+          <button class="copy-btn" onclick="this.nextElementSibling.select(); document.execCommand('copy'); this.textContent='✓ Copiado'">Copiar</button>
+          <textarea style="opacity:0;position:absolute;pointer-events:none;" readonly>Buenos días, soy [Tu nombre] de COM-studio. Revisé la presencia digital de Imagen Spa y noté que no tienen sitio web, lo que hace que no aparezcan cuando un paciente busca "cirugía plástica Barranquilla" en Google. Trabajamos con clínicas estéticas para crear webs que generan consultas automáticas. ¿Les puedo mostrar cómo funciona con una demo de 10 minutos?</textarea>
+          Buenos días, soy [Tu nombre] de COM-studio. Revisé la presencia digital de Imagen Spa y noté que <strong>no tienen sitio web</strong>, lo que hace que no aparezcan cuando un paciente busca "cirugía plástica Barranquilla" en Google.<br><br>
+          Trabajamos con clínicas estéticas para crear webs que generan consultas automáticas.<br><br>
+          ¿Les puedo mostrar cómo funciona con una demo de 10 minutos?
+        </div>
+      </div>
+
+      <!-- DR CARLOS ROMERO -->
+      <div class="top-card">
+        <div class="score-big">91</div>
+        <h3>Dr. Carlos Romero Barros</h3>
+        <div class="addr">📍 Cl 86 #49C-34, Barranquilla</div>
+        <div class="detail-row"><span class="lbl">Teléfono</span><span class="val">No público</span></div>
+        <div class="detail-row"><span class="lbl">Web</span><span class="val">❌ Sin sitio web</span></div>
+        <div class="detail-row"><span class="lbl">Redes</span><span class="val">❌ No detectadas</span></div>
+        <div class="detail-row"><span class="lbl">Directorio</span><span class="val">MedicosDoc (solo)</span></div>
+        <hr class="divider">
+        <div style="font-size:11px; color:var(--muted); margin-bottom:8px; font-weight:600;">PROBLEMAS DETECTADOS</div>
+        <ul class="problems-detail">
+          <li>Depende de directorios de terceros para ser encontrado</li>
+          <li>Sin redes sociales — sin construcción de autoridad digital</li>
+          <li>Sin sistema de citas online ni automatización</li>
+        </ul>
+        <div class="proposal">
+          💡 <strong>Propuesta:</strong> Web personal de cirujano con portafolio de casos, testimonios, SEO local y sistema de agendamiento online. Los pacientes de cirugía estética investigan extensamente online antes de decidir — sin web propia, el Dr. Romero pierde credibilidad frente a competidores.
+        </div>
+        <div class="msg-label">MENSAJE DE CONTACTO EN FRÍO</div>
+        <div class="msg-box">
+          <button class="copy-btn" onclick="this.nextElementSibling.select(); document.execCommand('copy'); this.textContent='✓ Copiado'">Copiar</button>
+          <textarea style="opacity:0;position:absolute;pointer-events:none;" readonly>Doctor Romero, le escribo de COM-studio. Busqué su nombre en Google y solo aparece en directorios de terceros — no tiene web propia, y eso hace que potenciales pacientes no puedan ver su portafolio ni agendar una consulta directamente. Creamos sitios web para cirujanos plásticos que generan consultas y refuerzan su autoridad online. ¿Le interesa una propuesta sin compromiso?</textarea>
+          Doctor Romero, le escribo de COM-studio. Busqué su nombre en Google y solo aparece en directorios de terceros — <strong>no tiene web propia</strong>, y eso hace que potenciales pacientes no puedan ver su portafolio ni agendar consulta directamente.<br><br>
+          Creamos sitios web para cirujanos plásticos que generan consultas y refuerzan su autoridad online.<br><br>
+          ¿Le interesa una propuesta sin compromiso?
+        </div>
+      </div>
+
+      <!-- BEAUTY BALANCE -->
+      <div class="top-card">
+        <div class="score-big">88</div>
+        <h3>Beauty Balance</h3>
+        <div class="addr">📍 Cra 45 #85-128, Barranquilla</div>
+        <div class="detail-row"><span class="lbl">Instagram</span><span class="val"><a href="https://www.instagram.com/beautybalancebaq/" target="_blank">@beautybalancebaq</a></span></div>
+        <div class="detail-row"><span class="lbl">Web</span><span class="val">❌ Sin sitio web</span></div>
+        <div class="detail-row"><span class="lbl">Email</span><span class="val">❌ No público</span></div>
+        <div class="detail-row"><span class="lbl">Teléfono</span><span class="val">No verificado</span></div>
+        <hr class="divider">
+        <div style="font-size:11px; color:var(--muted); margin-bottom:8px; font-weight:600;">PROBLEMAS DETECTADOS</div>
+        <ul class="problems-detail">
+          <li>Solo Instagram — si la cuenta se bloquea, pierde toda su presencia</li>
+          <li>Sin web propia ni sistema de reservas automatizado</li>
+          <li>Sin SEO — no aparece en Google fuera de redes</li>
+        </ul>
+        <div class="proposal">
+          💡 <strong>Propuesta:</strong> Web que complementa su Instagram: galería de antes/después, formulario de agendamiento con bot, Google My Business optimizado y campaña de SEO local. Las clínicas que combinan Instagram + web convierten 3x más pacientes.
+        </div>
+        <div class="msg-label">MENSAJE DE CONTACTO EN FRÍO</div>
+        <div class="msg-box">
+          <button class="copy-btn" onclick="this.nextElementSibling.select(); document.execCommand('copy'); this.textContent='✓ Copiado'">Copiar</button>
+          <textarea style="opacity:0;position:absolute;pointer-events:none;" readonly>Hola Beauty Balance! Vi su Instagram (@beautybalancebaq) — tienen contenido muy bueno, pero no encontré su sitio web. Eso significa que cuando alguien los busca en Google, no aparecen, y pierden pacientes que no están en Instagram. En COM-studio creamos webs que convierten visitantes en consultas reales, integrando su contenido de redes. ¿Les interesa una propuesta?</textarea>
+          Hola Beauty Balance! Vi su Instagram (@beautybalancebaq) — tienen contenido muy bueno, pero <strong>no encontré su sitio web</strong>. Eso significa que cuando alguien los busca en Google, no aparecen.<br><br>
+          En COM-studio creamos webs que convierten visitantes en consultas reales, integrando su contenido de redes.<br><br>
+          ¿Les interesa una propuesta?
+        </div>
+      </div>
+
+      <!-- CRYSTAL FACE -->
+      <div class="top-card">
+        <div class="score-big">85</div>
+        <h3>Crystal Face Clinic</h3>
+        <div class="addr">📍 Torres del Atlántico, Cra. 57 #99A-65, Riomar</div>
+        <div class="detail-row"><span class="lbl">Facebook</span><span class="val"><a href="https://www.facebook.com/crystalfaceclinic/" target="_blank">crystalfaceclinic</a></span></div>
+        <div class="detail-row"><span class="lbl">Web</span><span class="val">❌ Sin sitio web propio</span></div>
+        <div class="detail-row"><span class="lbl">Teléfono</span><span class="val">❌ No público</span></div>
+        <div class="detail-row"><span class="lbl">Email</span><span class="val">❌ No visible</span></div>
+        <hr class="divider">
+        <div style="font-size:11px; color:var(--muted); margin-bottom:8px; font-weight:600;">PROBLEMAS DETECTADOS</div>
+        <ul class="problems-detail">
+          <li>Sin sitio web — dependen solo de Facebook</li>
+          <li>Sin teléfono ni email públicos — dificulta el contacto</li>
+          <li>Sin SEO ni posicionamiento Google</li>
+        </ul>
+        <div class="proposal">
+          💡 <strong>Propuesta:</strong> Web especializada en procedimientos faciales mínimamente invasivos con portfolio de casos, precios orientativos, y sistema de citas integrado con su Facebook. Tienen buena ubicación (Riomar) — hay que aprovecharla en Google Maps.
+        </div>
+        <div class="msg-label">MENSAJE DE CONTACTO EN FRÍO</div>
+        <div class="msg-box">
+          <button class="copy-btn" onclick="this.nextElementSibling.select(); document.execCommand('copy'); this.textContent='✓ Copiado'">Copiar</button>
+          <textarea style="opacity:0;position:absolute;pointer-events:none;" readonly>Buenas, soy [Tu nombre] de COM-studio. Encontré Crystal Face Clinic en directorios médicos pero no tienen sitio web propio — eso hace que cuando alguien busca "clínica estética Riomar Barranquilla" en Google, no aparezcan. Creamos webs para clínicas estéticas que generan citas automáticas. ¿Les puedo enviar una propuesta esta semana?</textarea>
+          Buenas, soy [Tu nombre] de COM-studio. Encontré Crystal Face Clinic en directorios médicos pero <strong>no tienen sitio web propio</strong> — eso hace que cuando alguien busca "clínica estética Riomar Barranquilla" en Google, no aparezcan.<br><br>
+          Creamos webs para clínicas estéticas que generan citas automáticas.<br><br>
+          ¿Les puedo enviar una propuesta esta semana?
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section>
+    <h2>Estadísticas del nicho</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-pct">47%</div>
+        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:47%"></div></div>
+        <div class="stat-lbl">Sin sitio web propio (7/15)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-pct">60%</div>
+        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:60%"></div></div>
+        <div class="stat-lbl">Sin meta description SEO (9/15)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-pct">73%</div>
+        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:73%"></div></div>
+        <div class="stat-lbl">Sin email público visible (11/15)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-pct">33%</div>
+        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:33%"></div></div>
+        <div class="stat-lbl">Solo redes, sin web (5/15)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-pct">80%</div>
+        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:80%"></div></div>
+        <div class="stat-lbl">Sin automatización de citas (12/15)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-pct">53%</div>
+        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:53%"></div></div>
+        <div class="stat-lbl">Oportunidad ALTA score ≥70 (8/15)</div>
+      </div>
+    </div>
+    <div style="margin-top:20px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; font-size:13px; line-height:1.8; color:var(--text);">
+      <strong style="color:var(--accent);">Conclusión del nicho:</strong> El sector de cirugía estética en Barranquilla tiene una brecha digital notable — casi la mitad de los consultorios no tiene web propia y más del 70% carece de email público. Esto representa una oportunidad directa: los pacientes de cirugía estética investigan exhaustivamente online antes de decidir, y los consultorios sin presencia digital pierden esos pacientes frente a clínicas mejor posicionadas. El servicio de mayor impacto inmediato es <strong>web + automatización de citas vía WhatsApp</strong>, seguido de SEO local en Google Maps.
+    </div>
+  </section>
+
+  <!-- EXPORT -->
+  <section>
+    <h2>Datos exportables</h2>
+    <div class="export-box">
+      <button class="export-btn" onclick="copyContacts()">📋 Copiar todos los contactos</button>
+      <div style="overflow-x:auto;">
+        <table class="export-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Teléfono</th>
+              <th>Email</th>
+              <th>Instagram</th>
+              <th>Web</th>
+              <th>Score</th>
+              <th>Dirección</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Giao Estética y Spa</td><td>—</td><td>—</td><td>—</td><td>—</td><td>92</td><td>Calle 87 #45-18</td></tr>
+            <tr><td>Dr. Carlos Romero Barros</td><td>—</td><td>—</td><td>—</td><td>—</td><td>91</td><td>Cl 86 #49C-34</td></tr>
+            <tr><td>Imagen Spa C. Cirugía Plástica</td><td>—</td><td>—</td><td>—</td><td>—</td><td>90</td><td>Cra 51b #94-334</td></tr>
+            <tr><td>Beauty Balance</td><td>—</td><td>—</td><td>@beautybalancebaq</td><td>—</td><td>88</td><td>Cra 45 #85-128</td></tr>
+            <tr><td>Dr. Orlando Pérez de la Rosa</td><td>—</td><td>—</td><td>—</td><td>—</td><td>87</td><td>Cl. 78 #53-90</td></tr>
+            <tr><td>Crystal Face Clinic</td><td>—</td><td>—</td><td>—</td><td>—</td><td>85</td><td>Cra. 57 #99A-65</td></tr>
+            <tr><td>Dr. Harold Noriega Garrido</td><td>—</td><td>—</td><td>—</td><td>—</td><td>82</td><td>Calle 90 #42B1-82</td></tr>
+            <tr><td>Dr. Eugenio Lafaurie</td><td>—</td><td>—</td><td>—</td><td>dreugeniolafaurie.com</td><td>70</td><td>Calle 85 #50-37 Torre Médica</td></tr>
+            <tr><td>Clínica Reina Catalina</td><td>(605) 3670800</td><td>atencionalusuario@clinicareinacatalina.com</td><td>—</td><td>clinicareinacatalina.com</td><td>55</td><td>Calle 82 #47-12</td></tr>
+            <tr><td>Dr. Leonardo Forero Obregón</td><td>+57 317 647 5027</td><td>—</td><td>—</td><td>cirugiaplasticabarranquilla.com</td><td>65</td><td>—</td></tr>
+            <tr><td>Clínica Especialistas de Barranquilla</td><td>317 4051292</td><td>—</td><td>@clinicaespecialistasdebquilla</td><td>clinicaespecialistasdebarranquilla.com</td><td>45</td><td>—</td></tr>
+            <tr><td>Dr. Rolf Smit</td><td>(+57) 323 5998220</td><td>consultasrolfsmit@gmail.com</td><td>@dr.rolfsmit</td><td>drsmit.com.co</td><td>40</td><td>Clínica Portoazul C519</td></tr>
+            <tr><td>Dr. Juan Carlos Herrera P.</td><td>+57 316 4535458</td><td>info@drjuancherrera.com</td><td>@drjuancherrera</td><td>drjuancherrera.com</td><td>38</td><td>Calle 85 #49C-17</td></tr>
+            <tr><td>Darío Cabello Cirujanos Plásticos</td><td>+57 313 739-2805</td><td>contactenos@dariocabello.com</td><td>@drdariocabello</td><td>dariocabello.com</td><td>30</td><td>Cra 52 #84-131</td></tr>
+            <tr><td>Activa Biomedica Wellness Center</td><td>+57 300 494-4248</td><td>servicioalcliente@activabiomedica.com</td><td>@activabiomedica</td><td>activabiomedica.com</td><td>20</td><td>Cra 53 #106-280</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    Generado con kit-prospeccion v3 · COM-studio · Semana 1 · 15 prospectos reales analizados
+  </div>
+</footer>
+
+<script>
+function copyContacts() {
+  const rows = document.querySelectorAll('.export-table tbody tr');
+  let txt = 'Nombre\tTeléfono\tEmail\tInstagram\tWeb\tScore\tDirección\n';
+  rows.forEach(r => {
+    txt += Array.from(r.querySelectorAll('td')).map(td => td.textContent.trim()).join('\t') + '\n';
+  });
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.querySelector('.export-btn');
+    btn.textContent = '✓ Copiado al portapapeles';
+    setTimeout(() => btn.textContent = '📋 Copiar todos los contactos', 2000);
+  });
+}
+</script>
+
+</body>
+</html>
