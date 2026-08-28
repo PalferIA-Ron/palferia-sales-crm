@@ -6,11 +6,11 @@
 
 ## ESTADO ACTUAL
 **Fase:** 1 — MVP en producción / Consolidación de arquitectura
-**Última sesión:** 2026-08-26
+**Última sesión:** 2026-08-28
 **Próxima acción prioritaria:**
-1. Seguimiento Tecniluispa — **29/08/2026** (recordatorio suave + pedir referidos)
-2. Sensibilizar Cortinajes Valls & París — semana **25/08** (regresa de vacaciones)
-3. Construir plugin `palferia-ai-agent` en OpenWA (respuestas IA automáticas por WA)
+1. Seguimiento Tecniluispa — **29/08/2026** (recordatorio suave + pedir referidos) ⚠️ mañana
+2. Sensibilizar Cortinajes Valls & París (regresa de vacaciones ~25/08 — ya debería estar de vuelta)
+3. Añadir bloque 3C DraftDayES al Orquestador + referenciar deliverables en Fase 5 (S7)
 
 ---
 
@@ -127,6 +127,29 @@ Deploy:       push main → GitHub Actions → rsync --exclude='config.js'
 ---
 
 ## SESIONES
+
+---
+
+### Sesión 2026-08-28 — Deliverables Orquestador + Paths corregidos
+**Objetivo:** Crear archivos de referencia de deliverables para el Orquestador de Propuestas (COM-studio y ME-SportCenter) + corregir rutas rotas en SKILL.md
+
+**Completado:**
+- [x] Creado `_deliverables/COM-studio/deliverables-planes.md`
+  - Fuentes: `oferta-sistema-autopilot30.md` + `planes-pricing.md`
+  - Cubre: Vecino Digital (1.200€) / Autopilot 30 (3.100€) / Socio Digital (4.900€)
+  - Incluye: checklist S7 por plan, módulos add-on, cuotas mantenimiento, costes de APIs, objeciones, frases de cierre, escasez real, caso Grupo Cueva
+- [x] Creado `_deliverables/ME-SportCenter/deliverables-planes.md`
+  - Fuentes: `planes.md` + `servicios.md` + `servicios-vertical-academias-clubes.md` + `vertical-eventos.md`
+  - Cubre: Sprint IA (900€/mes) / Equipo IA (1.500€/mes) / Liga IA (2.500€+/mes) + modalidad por evento (1.200 / 2.000 / 3.500€) + patrocinios + integración apps deportivas
+  - **Diferenciador clave:** sección de Verticales sector-específicas — los deliverables se adaptan según academia / club / evento / federación / turismo activo / patrocinios
+- [x] Rutas rotas en `ai/workflows/kit-orquestador-propuestas/SKILL.md` corregidas:
+  - `skills/kit-auditoria-negocio/` → `ai/auditorias/kit-auditoria-negocio/`
+  - `skills/kit-auditoria-meta-ads/` → `ai/auditorias/kit-auditoria-meta-ads/`
+  - `skills/kit-auditoria-seo/` → `ai/auditorias/kit-auditoria-seo/`
+
+**Pendiente del Orquestador (próxima sesión):**
+- [ ] Añadir bloque 3C (DraftDayES) en las fases de preview de SKILL.md
+- [ ] Referenciar `_deliverables/COM-studio/deliverables-planes.md` y `_deliverables/ME-SportCenter/deliverables-planes.md` en la Fase 5 (S7) del SKILL.md
 
 ---
 

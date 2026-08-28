@@ -29,8 +29,8 @@ Antes de preguntar, comprobar si el prospecto ya existe:
 
 ```bash
 curl -s "https://aqaiqmsypbwhgknbbmae.supabase.co/rest/v1/prospectos?nombre=ilike.*[NOMBRE]*&select=*" \
-  -H "apikey: sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
-  -H "Authorization: Bearer sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2"
+  -H "apikey: $SUPABASE_SERVICE_KEY" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_KEY"
 ```
 
 - Si existe → mostrar los datos y preguntar: "¿Es este prospecto? ¿Los datos siguen siendo correctos?"
@@ -92,7 +92,7 @@ Correr en orden según lo disponible. Mostrar resultado resumido tras cada una y
 ### 1.1 — Auditoría de presencia digital
 
 Si tiene web → usar `kit-auditoria-negocio` de:
-`/Users/macbook/Desktop/workspace/palferia-sales-crm/skills/kit-auditoria-negocio/SKILL.md`
+`/Users/macbook/Desktop/workspace/palferia-sales-crm/ai/auditorias/kit-auditoria-negocio/SKILL.md`
 
 Guardar resultado en:
 `clientes/[proyecto]/[nombre-slug]/auditoria/auditoria-negocio-[nombre-slug].html`
@@ -113,7 +113,7 @@ Gaps críticos: [3 bullets principales]
 Correr si: tiene presencia en Facebook/Instagram O si score < 55 (el 0 anuncios es argumento de venta).
 
 Usar `kit-auditoria-meta-ads` de:
-`/Users/macbook/Desktop/workspace/palferia-sales-crm/skills/kit-auditoria-meta-ads/SKILL.md`
+`/Users/macbook/Desktop/workspace/palferia-sales-crm/ai/auditorias/kit-auditoria-meta-ads/SKILL.md`
 
 Guardar en:
 `clientes/[proyecto]/[nombre-slug]/auditoria/auditoria-meta-ads-[nombre-slug].html`
@@ -134,7 +134,7 @@ Argumento clave:   [frase de venta]
 Correr si tiene web y el proyecto es COM-studio.
 
 Usar `kit-auditoria-seo` de:
-`/Users/macbook/Desktop/workspace/palferia-sales-crm/skills/kit-auditoria-seo/SKILL.md`
+`/Users/macbook/Desktop/workspace/palferia-sales-crm/ai/auditorias/kit-auditoria-seo/SKILL.md`
 
 ### 1.4 — Actualizar score en Supabase
 
@@ -143,8 +143,8 @@ Si el prospecto ya existía en Supabase, actualizar el score con el resultado de
 ```bash
 curl -s -X PATCH \
   "https://aqaiqmsypbwhgknbbmae.supabase.co/rest/v1/prospectos?id=eq.[ID]" \
-  -H "apikey: sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
-  -H "Authorization: Bearer sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
+  -H "apikey: $SUPABASE_SERVICE_KEY" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
   -H "Content-Type: application/json" \
   -d '{"score": [SCORE], "web": "[URL]", "pain": "[PAIN_RESUMIDO]"}'
 ```
@@ -579,8 +579,8 @@ Si el prospecto no existía:
 ```bash
 curl -s -X POST \
   "https://aqaiqmsypbwhgknbbmae.supabase.co/rest/v1/prospectos" \
-  -H "apikey: sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
-  -H "Authorization: Bearer sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
+  -H "apikey: $SUPABASE_SERVICE_KEY" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
   -H "Content-Type: application/json" \
   -H "Prefer: return=representation" \
   -d '{"nombre":"[NOMBRE]","municipio":"[MUN]","sector":"[SEC]","score":[SCORE],"web":"[WEB]","instagram":"[IG]","email":"[EMAIL]","pain":"[PAIN]","proyecto":"[PROYECTO]","estado":"proposal"}'
@@ -593,8 +593,8 @@ Si ya existía → actualizar estado a `proposal` y el score si cambió.
 ```bash
 curl -s -X POST \
   "https://aqaiqmsypbwhgknbbmae.supabase.co/rest/v1/propuestas" \
-  -H "apikey: sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
-  -H "Authorization: Bearer sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
+  -H "apikey: $SUPABASE_SERVICE_KEY" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
   -H "Content-Type: application/json" \
   -H "Prefer: return=representation" \
   -d '{
@@ -614,8 +614,8 @@ curl -s -X POST \
 ```bash
 curl -s -X POST \
   "https://aqaiqmsypbwhgknbbmae.supabase.co/rest/v1/pipeline_log" \
-  -H "apikey: sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
-  -H "Authorization: Bearer sb_secret_Jtsn1Qe7tWlMvWThaDOJfg_TpNUCOP2" \
+  -H "apikey: $SUPABASE_SERVICE_KEY" \
+  -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
   -H "Content-Type: application/json" \
   -d '{"prospecto_id":"[ID]","accion":"Propuesta generada via kit-orquestador","resultado":"[SLUG] — Plan [PLAN] — [PRECIO]€ setup + [PRECIO]€/mes","fecha":"[HOY]"}'
 ```
