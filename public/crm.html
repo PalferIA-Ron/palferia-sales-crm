@@ -2566,16 +2566,19 @@ function esc(str) {
   const session = await authGuard();
   if (!session) return;
 
+  // Refresh token antes de cargar datos — garantiza que las queries usan un JWT válido
+  const { data: refreshData, error: refreshError } = await sb.auth.refreshSession();
+  if (refreshError || !refreshData?.session) {
+    await sb.auth.signOut();
+    window.location.replace('/');
+    return;
+  }
+
   // Set user email
-  document.getElementById('userEmail').textContent = session.user.email || '—';
+  document.getElementById('userEmail').textContent = refreshData.session.user.email || '—';
 
   // Load initial section
   showSection('prospectos');
-
-  // Refresh token en background (sin bloquear la carga)
-  sb.auth.refreshSession().then(({ error }) => {
-    if (error) { sb.auth.signOut(); window.location.replace('/'); }
-  });
 })();
 </script>
 </body>
