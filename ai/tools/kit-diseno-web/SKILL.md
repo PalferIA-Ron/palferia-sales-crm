@@ -20,6 +20,56 @@ es lo memorable — el resto debe ser quieto y disciplinado.
 
 ---
 
+## LOS DOS EJES DEL TRABAJO
+
+### Eje 1 — Webs impactantes para clientes
+
+La web de un cliente de PalferIA no es un folleto digital. Es una máquina de captura.
+Cada decisión de diseño responde a una sola pregunta: **¿esto acerca al visitante a convertir?**
+
+Principios que no se negocian:
+- El titular de la hero habla del dolor del cliente, no del nombre del negocio
+- El primer CTA aparece sin necesidad de hacer scroll
+- La velocidad de carga es parte del diseño (sin imágenes pesadas, CSS inline si aplica)
+- La identidad del negocio (colores, tono, sector) impregna cada elemento — no es un template con el logo cambiado
+- Mobile-first siempre — el 80% del tráfico de los clientes de PalferIA viene de móvil
+
+### Eje 2 — El agente multicanal es el caballo de batalla
+
+El agente IA integrado en la web es el producto principal de PalferIA.
+La web no presenta el negocio — **presenta el agente y lo pone en acción**.
+
+**El agente es visible desde el primer segundo:**
+- Widget de chat flotante activo (no oculto, no "¿necesitas ayuda?")
+- Mensaje de bienvenida personalizado del agente visibles en hero
+- Demo funcional o screenshot del agente respondiendo en el sector del cliente
+- Canal preferente destacado: WhatsApp > Chat web > Email según el cliente
+
+**La web demuestra el agente, no lo promete:**
+```
+❌ "Implementamos agentes de IA para tu negocio"
+✅ "Hola, soy el asistente de [Nombre negocio]. ¿Buscas [servicio principal]?
+    Respondo en segundos — pruébame."
+```
+
+**Integración visual del agente según plan:**
+- Vecino Digital / Sprint IA → widget WhatsApp flotante + CTA directo
+- Autopilot 30 / Equipo IA → widget chat web + WhatsApp + formulario inteligente
+- Socio Digital / Liga IA → chat omnicanal con selector de canal (WA / Email / Chat)
+
+**El agente como diferenciador en el diseño:**
+- Sección "Habla con [Nombre negocio] ahora" con demo real o simulada
+- Contador de respuestas: "Responde en menos de 30 segundos · 24/7"
+- Casos de uso del agente específicos para el sector en formato conversacional:
+  ```
+  👤 "¿Tenéis mesa para 4 personas el viernes?"
+  🤖 "Claro, ¿a qué hora te viene bien? Tengo disponibilidad a las 20h y 21:30h."
+  ```
+
+---
+
+---
+
 ## SISTEMA DE DISEÑO PALFERIA
 
 ### Paletas por proyecto
@@ -147,6 +197,74 @@ Si pide cambios → ajustar el plan, no el código.
 ---
 
 ## TIPOS DE PÁGINA POR CASO DE USO
+
+### Web cliente con agente integrado (producto estrella)
+
+Estructura obligatoria para cualquier web entregada a un cliente de PalferIA:
+
+```
+SECCIÓN 1 — HERO (above the fold, sin scroll)
+  Titular: dolor resuelto en 8 palabras máximo
+  Subtítulo: qué hace el agente + para quién
+  CTA primario: botón WhatsApp / Chat (el agente en acción)
+  Elemento visual: screenshot/demo del agente en contexto del sector
+
+SECCIÓN 2 — PRUEBA INMEDIATA (agente visible)
+  Widget activo con mensaje de bienvenida personalizado
+  3 preguntas frecuentes del sector como chips clickables
+  Respuesta simulada o real del agente
+
+SECCIÓN 3 — EL PROBLEMA (empathy)
+  2-3 dolores del sector con SUS palabras
+  Coste invisible en números: "Cada lead no respondido en 5 min = -30% probabilidad"
+
+SECCIÓN 4 — CÓMO FUNCIONA (el método en 3 pasos)
+  Paso 1: El cliente escribe → respuesta en segundos
+  Paso 2: El agente clasifica, responde y agenda
+  Paso 3: Tú recibes solo lo que necesita tu atención
+
+SECCIÓN 5 — PARA TU SECTOR (específico)
+  Ejemplos de conversaciones reales del sector del cliente
+  Adaptado: restaurante ≠ clínica ≠ academia ≠ taller
+
+SECCIÓN 6 — PRUEBA SOCIAL
+  Resultado con número si existe: "X leads capturados / Y% conversión / Z horas ahorradas"
+  Sin clientes → caso de ejemplo honesto con proyección
+
+SECCIÓN 7 — CTA FINAL
+  Repetir CTA principal (WhatsApp/Chat)
+  Urgencia real si existe
+  Datos de contacto del negocio
+```
+
+**Widget de WhatsApp/Chat — implementación estándar:**
+```html
+<!-- Widget WhatsApp flotante (bottom-right) -->
+<a href="https://wa.me/[NÚMERO]?text=[MENSAJE_PREDEFINIDO]"
+   class="wa-widget" target="_blank" aria-label="Chat por WhatsApp">
+  <svg><!-- icono WhatsApp --></svg>
+  <span class="wa-pulse"></span>
+</a>
+
+<style>
+.wa-widget {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: #25D366; border-radius: 50%; width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  transition: transform 0.2s;
+}
+.wa-widget:hover { transform: scale(1.1); }
+.wa-pulse {
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid #25D366; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0; transform: scale(1.3); }
+}
+</style>
+```
 
 ### Propuesta comercial (slides HTML)
 - Motor: position-absolute, opacity 0→1, transición suave
