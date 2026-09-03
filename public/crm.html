@@ -2273,7 +2273,7 @@ async function sendWhatsApp(session, phone, message) {
   return await res.json();
 }
 
-document.getElementById('wa-send-btn').addEventListener('click', async () => {
+document.getElementById('wa-send-btn')?.addEventListener('click', async () => {
   if (!waSelectedId || !waSelectedPhone) return;
 
   const textarea = document.getElementById('wa-textarea');
@@ -2314,7 +2314,7 @@ document.getElementById('wa-send-btn').addEventListener('click', async () => {
 });
 
 // Auto-resize textarea
-document.getElementById('wa-textarea').addEventListener('input', function () {
+document.getElementById('wa-textarea')?.addEventListener('input', function () {
   this.style.height = '44px';
   this.style.height = Math.min(this.scrollHeight, 120) + 'px';
 });
