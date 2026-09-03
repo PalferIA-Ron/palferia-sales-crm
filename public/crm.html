@@ -2331,6 +2331,17 @@ async function loadPropuestas() {
   const grid = document.getElementById('propuestas-grid');
   grid.innerHTML = '<div class="empty-state"><p>Cargando...</p></div>';
 
+  try { await _loadPropuestasInner(grid); }
+  catch (ex) {
+    grid.innerHTML = `<div class="empty-state" style="text-align:left;padding:16px">
+      <p style="color:#f87171;font-weight:600">Excepción JS no capturada</p>
+      <p style="font-size:12px;opacity:.8;margin-top:4px">${esc(String(ex))}</p>
+      <button onclick="loadPropuestas()" style="margin-top:10px;padding:6px 14px;background:transparent;border:1px solid #B1F727;border-radius:6px;color:#B1F727;cursor:pointer;font-size:12px">Reintentar</button>
+    </div>`;
+  }
+}
+
+async function _loadPropuestasInner(grid) {
   // DEBUG — verificar sesión activa
   const { data: { session: dbgSession } } = await sb.auth.getSession();
   const dbgUser = dbgSession?.user?.email || 'SIN SESIÓN';
