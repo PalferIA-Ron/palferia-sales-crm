@@ -10,3 +10,7 @@ Thumbs.db
 
 # Editor
 .vscode/
+
+# Solo local — no subir al repo
+2.0/
+clientes/
