@@ -139,6 +139,45 @@ Deploy:       push main → GitHub Actions → rsync --exclude='config.js'
 
 ## SESIONES
 
+### 2026-09-03 (noche, 2ª sesión) — Emil Kowalski → kit-diseno-web + UD Rocafort CF rediseño v2
+
+**Hecho:**
+- **Web UD Rocafort CF reconstruida desde cero** (commit `314767f`):
+  - Logo escudo embebido en base64 (`data:image/jpeg;base64,...`) — sin dependencia de URL externa
+  - 9 fotos reales de fútbol vía Unsplash (hero, noticias ×3, galería ×9)
+  - Hero a pantalla completa con overlay oscuro y tipografía `clamp(64px, 10vw, 128px)`
+  - Ken Burns: CSS scale animation en imagen de fondo (`scale(1.08)` → `scale(1)` al cargar)
+  - Nav transparente → glassmorphism oscuro al scroll (clase `scrolled` via JS, `passive:true`)
+  - Galería: zoom `scale(1.1)` real con `<img>` + hover
+  - Categorías: relleno naranja completo con `::after` scaleY
+  - CTA: negro puro con radial orange glow
+  - Todas las transiciones: `cubic-bezier(0.16, 1, 0.3, 1)` uniforme
+  - Tamaño final: ~293 KB (incluye ~118 KB logo base64)
+- **Emil Kowalski animation standards integrados en kit-diseno-web** (commit `3ffec1b`):
+  - Tabla de frecuencia de animación (siempre / casi siempre / solo si añade / nunca)
+  - GPU-only: solo `transform` + `opacity`
+  - `scale(0.95–0.97)` en vez de `scale(0)` para entradas
+  - `ease-out` en todas las entradas — `ease-in` bloqueado
+  - Tabla de duraciones (micro 80–120ms / interacción 150–250ms / reveal 300–500ms / layout 200–350ms)
+  - `transform-origin` siempre en el punto de trigger
+  - `prefers-reduced-motion`: suavizar (reducir `transform`), no eliminar (`animation:none` es error)
+  - Hover gating: `@media (hover: hover) and (pointer: fine)`
+  - Tabla antes/después de revisión de animaciones
+- **Arsenal V2.0 añadido al kit** (commit `1a998d9`) — técnicas reservadas para DraftDayES y palferia.me v2.0:
+  - Springs (Framer Motion): `damping`, `stiffness`, interruptibilidad por defecto, velocity-aware
+  - `@starting-style`: animación CSS-only de entrada cuando el elemento se añade al DOM (Chrome 117+)
+  - `setPointerCapture`: tracking de puntero fuera del elemento para drags, con velocity history
+  - `animate-expo`: Reanimated 2 + Gesture Handler para React Native/Expo
+  - `write-swift`: SwiftUI, concurrencia (`async/await`), `@Observable`
+  - Tabla de activación: qué trigger (milestone de proyecto) activa cada técnica
+
+**Commits:** `314767f` (web Rocafort v2) · `3ffec1b` (Emil Kowalski standards) · `1a998d9` (Arsenal V2.0)
+
+**Pendiente:**
+- Ayudaventas/setter tool UD Rocafort CF (interno)
+
+---
+
 ### 2026-09-03 (noche) — CRM fixes: logout, propuestas y addEventListener null
 
 **Hecho:**
