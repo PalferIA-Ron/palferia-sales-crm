@@ -1529,6 +1529,13 @@ async function authGuard() {
     window.location.replace('/');
     return null;
   }
+  // Validar que el token es aceptado por el servidor (detecta expiración real)
+  const { error } = await sb.auth.getUser();
+  if (error) {
+    await sb.auth.signOut();
+    window.location.replace('/');
+    return null;
+  }
   return session;
 }
 
@@ -2566,8 +2573,17 @@ function esc(str) {
   const session = await authGuard();
   if (!session) return;
 
+  // Refresh token si está a punto de expirar (o si ya expiró)
+  const { data: refreshData, error: refreshError } = await sb.auth.refreshSession();
+  if (refreshError || !refreshData?.session) {
+    // Token no renovable — forzar login limpio
+    await sb.auth.signOut();
+    window.location.replace('/');
+    return;
+  }
+
   // Set user email
-  document.getElementById('userEmail').textContent = session.user.email || '—';
+  document.getElementById('userEmail').textContent = refreshData.session.user.email || '—';
 
   // Load initial section
   showSection('prospectos');
