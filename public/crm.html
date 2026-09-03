@@ -1121,7 +1121,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
-        WhatsApp
+        Inbox
       </div>
 
       <div class="nav-item" data-section="propuestas">
@@ -1221,86 +1221,16 @@
       </div>
     </section>
 
-    <!-- ═══════════ SECTION: WHATSAPP ═══════════ -->
+    <!-- ═══════════ SECTION: INBOX ═══════════ -->
     <section class="section" id="section-whatsapp">
       <div class="section-header">
-        <h2>WhatsApp</h2>
-        <button class="btn-primary" onclick="openNewSessionModal()">+ Nueva sesión</button>
+        <h2>Inbox</h2>
       </div>
-
-      <!-- Sessions panel -->
-      <div id="wa-sessions-panel" style="margin-bottom:24px">
-        <div style="font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--base);margin-bottom:12px">Sesiones conectadas</div>
-        <div id="wa-sessions-list" style="display:flex;gap:12px;flex-wrap:wrap">
-          <div class="empty-state" style="padding:16px"><p>Cargando sesiones...</p></div>
-        </div>
-      </div>
-
-      <!-- QR Modal -->
-      <div id="modal-qr" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeQRModal()">
-        <div class="modal-box" style="max-width:400px;text-align:center">
-          <h3 style="margin-bottom:4px">Escanea el QR</h3>
-          <p style="font-size:.85rem;color:var(--base);margin-bottom:20px">Abre WhatsApp en tu móvil → Dispositivos vinculados → Vincular dispositivo</p>
-          <div id="qr-container" style="background:#fff;padding:16px;border-radius:12px;display:inline-block;margin-bottom:16px">
-            <div class="loading-spinner"></div>
-          </div>
-          <p id="qr-status" style="font-size:.8rem;color:var(--base)">Esperando QR...</p>
-          <button class="btn-secondary" onclick="closeQRModal()" style="margin-top:16px">Cerrar</button>
-        </div>
-      </div>
-
-      <!-- New session modal -->
-      <div id="modal-new-session" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeNewSessionModal()">
-        <div class="modal-box" style="max-width:360px">
-          <h3 style="margin-bottom:20px">Nueva sesión WhatsApp</h3>
-          <div class="field">
-            <label>Nombre de la sesión</label>
-            <input type="text" id="new-session-name" placeholder="ej: palferia-principal" />
-            <small style="color:var(--base)">Solo letras, números y guiones. Sin espacios.</small>
-          </div>
-          <div style="display:flex;gap:12px;margin-top:20px">
-            <button class="btn-secondary" onclick="closeNewSessionModal()">Cancelar</button>
-            <button class="btn-primary" onclick="createWASession()">Crear y obtener QR</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="wa-layout">
-        <!-- Contacts -->
-        <div id="wa-contacts">
-          <div class="wa-search">
-            <input type="text" id="wa-search-input" placeholder="Buscar contacto..." />
-          </div>
-          <div id="wa-contact-list">
-            <div class="empty-state"><p>Cargando...</p></div>
-          </div>
-        </div>
-
-        <!-- Chat -->
-        <div id="wa-chat">
-          <div id="wa-chat-placeholder" class="wa-placeholder">
-            <p>Selecciona un contacto para chatear</p>
-          </div>
-
-          <div id="wa-chat-active" style="display:none; flex:1; flex-direction:column; overflow:hidden; display:none;">
-            <div id="wa-chat-header">
-              <div class="wa-chat-title">
-                <h4 id="wa-contact-name">—</h4>
-                <p id="wa-contact-phone">—</p>
-              </div>
-              <select id="session-select" title="Sesión WhatsApp">
-                <option value="">Cargando sesión...</option>
-              </select>
-            </div>
-
-            <div id="wa-messages"></div>
-
-            <div id="wa-input-area">
-              <textarea id="wa-textarea" placeholder="Escribe un mensaje..." rows="1"></textarea>
-              <button id="wa-send-btn">Enviar</button>
-            </div>
-          </div>
-        </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:60px 20px;">
+        <p style="color:var(--text-secondary);font-size:15px;">Gestiona todos los canales de comunicación desde el inbox centralizado.</p>
+        <a href="https://inbox.palferia.me" target="_blank" class="btn-primary" style="text-decoration:none;padding:12px 28px;font-size:15px;">
+          Abrir Inbox →
+        </a>
       </div>
     </section>
 

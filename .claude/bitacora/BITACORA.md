@@ -6,11 +6,11 @@
 
 ## ESTADO ACTUAL
 **Fase:** 1 — MVP en producción / Consolidación de arquitectura
-**Última sesión:** 2026-08-28
+**Última sesión:** 2026-09-03
 **Próxima acción prioritaria:**
-1. Seguimiento Tecniluispa — **29/08/2026** (recordatorio suave + pedir referidos) ⚠️ mañana
-2. Sensibilizar Cortinajes Valls & París (regresa de vacaciones ~25/08 — ya debería estar de vuelta)
-3. Añadir bloque 3C DraftDayES al Orquestador + referenciar deliverables en Fase 5 (S7)
+1. Completar integración OpenWA ↔ Chatwoot (ver pasos pendientes abajo)
+2. Orquestador de propuestas — añadir bloque 3C DraftDayES + referenciar deliverables en S7
+3. Seguimiento Tecniluispa y Cortinajes Valls & París
 
 ---
 
@@ -32,6 +32,10 @@
 - [ ] Identificar 4 prospectos más ME-sport (slots 7–10)
 
 ### Infraestructura / Técnico
+- [ ] **INBOX — 3 pasos para completar integración OpenWA ↔ Chatwoot:**
+  1. Verificar error exacto en logs: `docker logs openwa-api --tail=5 | grep error` — debería mostrar 401 con accountId=1 o token incorrecto
+  2. Si sigue en 401: reiniciar OpenWA (`cd /opt/OpenWA && docker compose restart`), esperar 20s, luego activar adapter vía API (`curl -s -X POST -H "x-api-key: M4rtin091121+" http://localhost:2785/api/plugins/chatwoot-adapter/enable`) y probar con WhatsApp de prueba
+  3. Configurar webhook de vuelta en Chatwoot: Settings → Integrations → Webhooks → URL: `https://wa.palferia.me/api/ingress/chatwoot-adapter/6b4c21ab-6f5b-464d-ae7c-2e04d76e141d/chatwoot` (eventos: Message Created + Conversation Status Changed)
 - [ ] Construir plugin `palferia-ai-agent` para OpenWA (roadmap en `docs/roadmap-plugin-openwa.md`)
 - [ ] Conectar webhook http-action OpenWA → n8n para clientes
 - [ ] Sesión Cortinajes Valls en OpenWA — pendiente escanear QR
@@ -107,6 +111,9 @@
 VPS:          31.97.192.164 (Ubuntu 24.04 LTS)
 CRM:          sales.palferia.me → /var/www/sales.palferia.me/
 OpenWA:       wa.palferia.me → puerto interno 2785 | API Key: M4rtin091121+
+              Sesión: ronia-palferia | ID: 6b4c21ab-6f5b-464d-ae7c-2e04d76e141d | Tel: 34672037621
+Chatwoot:     inbox.palferia.me | ripvlad@gmail.com / M1ch3_020927
+              Account ID: 3 | Inbox ID: 1 | API Token: 63kAV4Ldevd6SEiFw7cbouyN
 n8n:          n8n.srv905238.hstgr.cloud | N8N_API_KEY: PENDIENTE
 Supabase:     aqaiqmsypbwhgknbbmae.supabase.co
 GitHub:       PalferIA-Ron/palferia-sales-crm
@@ -127,6 +134,36 @@ Deploy:       push main → GitHub Actions → rsync --exclude='config.js'
 ---
 
 ## SESIONES
+
+---
+
+### Sesión 2026-08-29/30 + 2026-09-03 — Inbox Chatwoot + CRM actualizado
+**Objetivo:** Integrar inbox centralizado (WhatsApp + otros canales) vía Chatwoot + OpenWA
+
+**Completado:**
+- [x] Catálogo de 15 automatizaciones n8n con pricing (`_deliverables/COM-studio/catalogo-automatizaciones.md`)
+  - Precios: Simple 1.200€ / Media 1.500€ / Compleja 1.800€ / Multi-flujo 2.500€
+  - La Tribu Divisual: 130€/mes por todos sus workflows
+- [x] CRM: sección WhatsApp reemplazada por botón → `inbox.palferia.me` (ya no iframe)
+- [x] Chatwoot instalado en VPS (`inbox.palferia.me`) — Docker con pgvector:pg16 + Redis
+  - Usuario: ripvlad@gmail.com / M1ch3_020927
+  - Account ID: 3 | Inbox ID: 1 | Inbox Identifier: JEeHukSqa9mHLsvWi2GBfj1v
+  - API Token usuario: 63kAV4Ldevd6SEiFw7cbouyN
+- [x] OpenWA reinstalado limpio desde `/opt/OpenWA/`
+  - Sesión: ronia-palferia (ID: 6b4c21ab-6f5b-464d-ae7c-2e04d76e141d, teléfono: 34672037621)
+  - API Key: M4rtin091121+
+- [x] chatwoot-adapter habilitado en registry.json con config correcta (accountId=3, token actualizado)
+- [x] Plugin se carga correctamente: "Plugin loaded: Chatwoot Adapter v0.9.4" ✅
+- [x] Plugin se activa correctamente vía API: `{"success":true}` ✅
+
+**Estado integración:** El adapter recibe mensajes y los intenta enviar a Chatwoot — último error conocido: `401` apuntando a accountId=1. Config en registry.json actualizada a accountId=3 pero necesita verificación post-reinicio.
+
+**Pendiente (3 pasos):** Ver sección Infraestructura/Técnico arriba.
+
+**Decisiones tomadas:**
+- Opción B (OpenWA → Chatwoot) en vez de WhatsApp Cloud API (Meta) — número nuevo reservado para futuro Meta API
+- Meta Developer App creada: ID 2375385899536563 (para uso futuro con número dedicado)
+- inbox.palferia.me = herramienta independiente, NO embebida en el CRM (fue iframe, ahora botón)
 
 ---
 

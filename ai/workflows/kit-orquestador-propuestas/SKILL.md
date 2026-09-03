@@ -287,125 +287,342 @@ Preguntar: **"¿Ajusto algún precio o cambio el plan antes de generar la propue
 
 ---
 
-### 3A — Preview COM-studio (negocios locales)
+### 3A — Preview COM-studio (negocios locales B2B)
+
+> Framework Hormozi/StoryBrand: el cliente es el héroe, PalferIA es el guía.
+> Los datos de auditoría se integran en el relato — no son slides técnicos.
+> El diagnóstico alimenta "El Problema" y "Resultado"; el ROI alimenta "Inversión".
 
 ```
 📋 ESTRUCTURA DE LA PROPUESTA — [NOMBRE]  ·  COM-studio
 ══════════════════════════════════════════════════════
 
 SLIDE 1 — PORTADA
-  Título: "Sistema Omnicanal IA — [Nombre negocio]"
+  Título: "[Nombre negocio] en piloto automático"
   Subtítulo: [sector] · [municipio]
+  Badge: "Powered by COM-studio · PalferIA"
   CTA: "Ver propuesta"
 
-SLIDE 2 — DIAGNÓSTICO
-  Score: [X]/100
-  Problema principal: [descripción]
-  3 gaps críticos: [lista]
+SLIDE 2 — QUIÉN SOY (autoridad)
+  PalferIA: especialistas en automatización IA para negocios locales en Valencia y España
+  · [dato de credibilidad: proyectos entregados / sectores / resultado concreto]
+  · Metodología propia: diagnóstico → implementación → entrega en [N] semanas
+  · [si aplica: primeros en España gestionando anuncios en ChatGPT desde ago-2026]
+  Adaptar con logros reales de Ronald. Sin clientes → usar "fase de validación con
+  negocios de Horta Nord" y ser directo.
 
-SLIDE 3 — META ADS (si aplica)
-  [si hubo auditoría de Meta Ads]
+SLIDE 3 — EL PROBLEMA (su dolor, con sus palabras)
+  Integrar aquí los gaps reales de la auditoría en lenguaje del cliente, no técnico:
+  · "Recibes consultas por WhatsApp, Instagram y email — y ninguna tiene seguimiento"
+  · "Tu web tiene [X visitas/mes] pero convierte [Y%] — los leads se pierden sin responder"
+  · [gap específico de la auditoría: score bajo en SEO / sin pixel / sin anuncios activos]
+  Coste invisible: [X leads/mes ignorados] × [ticket medio €] = [€ perdidos/año]
+  Fuente: datos reales del diagnóstico de Fase 1.
 
-SLIDE 4 — COSTE REAL DEL PROBLEMA
-  Estimación de lo que pierde mensualmente sin automatización
-  Ej: leads ignorados × ticket medio × meses = [€ perdidos/año]
+SLIDE 4 — PARA QUIÉN ES (avatar COM-studio)
+  "Esta propuesta es para ti si..."
+  · Tienes un negocio local con [X-Y empleados / facturación >X€/año]
+  · Recibes clientes por WhatsApp, teléfono o walk-in sin sistema
+  · Pierdes leads por falta de respuesta rápida fuera del horario
+  · Quieres crecer sin contratar más personal de atención
+  "No es para ti si buscas solo una web bonita o gestión de redes sin estrategia"
 
-SLIDE 5 — LA SOLUCIÓN
-  Qué hace el agente IA: [descripción adaptada al negocio]
-  Canales: WhatsApp · Web · Instagram · Email · Voz (según plan)
-  Funciones clave: respuesta 24/7, captación de leads, seguimiento automático
+SLIDE 5 — LA SOLUCIÓN / EL MÉTODO (en 3 pasos)
+  Cómo trabajamos:
+  1. Radiografía digital — analizamos tu presencia, tus canales y tus puntos de fuga.
+     Sabrás exactamente dónde pierdes clientes y cuánto te cuesta.
+  2. Implementación — desplegamos el agente IA en tus canales: responde en segundos,
+     captura el lead, lo clasifica y te avisa. Sin código, sin fricción.
+  3. Entrega + soporte — te entregamos el sistema funcionando y formamos a tu equipo.
+     Ajustes incluidos [según plan].
+  Canales según plan: WhatsApp · Web · Instagram · Email · Voz
 
-SLIDE 6 — PLAN RECOMENDADO
-  [Vecino Digital / Autopilot 30 / Socio Digital] — [precio] € (pago único)
-  Qué incluye: [lista de deliverables del plan]
+SLIDE 6 — ENTREGABLES (lo que recibes)
+  Plan [Vecino Digital / Autopilot 30 / Socio Digital] — checklist completo:
+  [Usar lista de `_deliverables/COM-studio/deliverables-planes.md` según plan elegido]
+  · Agente IA configurado y probado
+  · Landing / web [si incluida en el plan]
+  · Flujos de automatización [N flujos según plan]
+  · Dashboard de leads
+  · Formación [horas según plan]
+  · Soporte [plazo según plan]
 
-SLIDE 7 — CUOTA MENSUAL
-  Plan [Básico/Profesional/Avanzado] — [precio] €/mes
-  Qué incluye: [X] h/mes ajustes, soporte [plazo], reporting
+SLIDE 7 — PRUEBA / CASO REAL
+  Si hay cliente → resultado con números:
+  "[Nombre o "un negocio de [sector] en [municipio]"] redujo su tiempo de respuesta
+  de [X horas] a [Y minutos] y capturó [Z leads adicionales/mes] en [N semanas]"
+  Sin clientes → caso de ejemplo con honestidad:
+  "Basado en negocios similares: un restaurante con 200 visitas/mes a su web
+  y 0 seguimiento automatizado recupera entre 8 y 15 clientes/mes con este sistema"
+  Fuente del caso Grupo Cueva disponible en `_deliverables/COM-studio/deliverables-planes.md`
 
-SLIDE 7B — MÓDULOS ADICIONALES (si se proponen)
-  [módulo 1]: [precio] — qué incluye
-  [módulo 2]: [precio] — qué incluye
-  Nota: contratos/anexos independientes
+SLIDE 8 — POR QUÉ NOSOTROS Y NO OTRO
+  Lo que hace distinto a COM-studio:
+  · Especialización local — conocemos el tejido empresarial de Valencia y Horta Nord
+  · IA aplicada, no prometida — entregamos sistemas que funcionan el día 1
+  · ChatGPT Ads 🆕 — somos de las primeras agencias en España que gestiona anuncios
+    en ChatGPT (disponible desde ago-2026)
+  · Precio justo con margen de negociación — setup único + cuota predecible, sin sorpresas
+  · [diferenciador encontrado en auditoría: ej. "tu competencia más cercana no tiene pixel"]
 
-SLIDE 8 — INFRAESTRUCTURA Y COSTES
-  Opción [A/B/C] — [explicación]
-  Costes cliente directos: APIs IA, WhatsApp Business, dominio, ads
+SLIDE 9 — RESULTADO + PLAZO (antes vs después)
+  ANTES (hoy — basado en diagnóstico, score [X]/100):
+  · [gap 1 de la auditoría en lenguaje humano]
+  · [gap 2]
+  · [gap 3]
+  · Estimación: [€ perdidos/mes sin automatización]
 
-SLIDE 9 — ROI PROYECTADO
-  Basado en: [X leads/mes actuales] × [ticket medio] × [% conversión mejora]
-  Recuperación inversión estimada: [N] meses
+  DESPUÉS (con [plan] en [N] semanas):
+  · Respuesta automática 24/7 en todos los canales
+  · [X leads/mes capturados que hoy se pierden]
+  · [reducción de tiempo gestión manual: Y horas/mes]
+  · ROI estimado: inversión recuperada en [N] meses
 
-SLIDE 10 — SIGUIENTE PASO
-  CTA + datos de contacto PalferIA
+SLIDE 10 — INVERSIÓN + SIGUIENTE PASO
+  PAGO ÚNICO (setup):     [precio plan] €
+  CUOTA MENSUAL:          [precio mantenimiento] €/mes
+  [Módulos adicionales si aplica]
+  Costes directos del cliente: APIs IA + WhatsApp Business [rangos]
+
+  Lo que cuesta NO actuar: [€ perdidos/mes] × 12 = [€/año en oportunidades perdidas]
+
+  SIGUIENTE PASO:
+  "¿Empezamos? Una reunión de 30 min para validar el plan y dar el OK."
+  CTA claro: [link Calendly / WhatsApp / email]
+  Contacto: Ronald Palma · ronald@palferia.me
 
 ══════════════════════════════════════════════════════
 ```
 
 ---
 
-### 3B — Preview ME-sport (academias deportivas)
+### 3B — Preview ME-sport (academias y clubes deportivos)
+
+> Mismo framework Hormozi/StoryBrand adaptado al deporte.
+> El cliente (club/academia) es el héroe. El dolor es operacional y emocional.
+> La cuota mensual es el núcleo de ingreso recurrente — presentarla como inversión, no gasto.
 
 ```
 📋 ESTRUCTURA DE LA PROPUESTA — [NOMBRE]  ·  ME-sport
 ══════════════════════════════════════════════════════
 
 SLIDE 1 — PORTADA
-  Título: "Academia en Piloto Automático — [Nombre academia]"
+  Título: "[Nombre club/academia] en piloto automático"
   Subtítulo: [deporte/actividad] · [municipio]
+  Badge: "Powered by ME-SportCenter · PalferIA"
   CTA: "Ver propuesta"
 
-SLIDE 2 — DIAGNÓSTICO
-  Score: [X]/100
-  Problema principal: [descripción — ej: bajas no detectadas, altas manuales, impagos]
-  3 gaps críticos: [lista adaptada a academia]
-  Ej de gaps: sin recordatorios de pago / alta por WhatsApp manual / sin seguimiento de bajas
+SLIDE 2 — QUIÉN SOY (autoridad)
+  PalferIA ME-SportCenter: especialistas en automatización IA para el deporte en España
+  · [dato de credibilidad: academias / clubes trabajados o en validación]
+  · Entendemos el deporte desde dentro — gestión de socios, cuotas, eventos, captación
+  · No vendemos apps genéricas — construimos sistemas a medida para tu tipo de club
+  Adaptar con logros reales. Sin clientes deportivos → validación con clubes de Horta Nord.
 
-SLIDE 3 — META ADS (si aplica)
-  [si hubo auditoría de Meta Ads — captación de nuevos alumnos]
+SLIDE 3 — EL PROBLEMA (su dolor, con sus palabras)
+  Integrar gaps reales de la auditoría en lenguaje del entrenador/director, no técnico:
+  · [Si academia]: "Das de alta nuevos alumnos por WhatsApp, cobras por Bizum y te
+    enteras de las bajas cuando el alumno lleva 3 semanas sin venir"
+  · [Si club]: "Gestionas [X socios] con un grupo de WhatsApp, una hoja de Excel
+    y la memoria — y aun así se te escapan impagos cada mes"
+  · [Si evento]: "Organizas el torneo en 4 grupos de WhatsApp distintos y el día del
+    evento hay 3 equipos que no saben el horario"
+  Coste real: [X socios] × [% baja] × [cuota media] = [€ perdidos/mes en bajas silenciosas]
+  + [horas/mes en gestión manual] × [coste hora estimado] = [€ tiempo perdido/mes]
 
-SLIDE 4 — COSTE REAL DEL PROBLEMA
-  Estimación de lo que cuesta la gestión manual mensualmente
-  Ej: [X socios] × [% baja mensual] × [cuota media] = [€ perdidos en bajas/mes]
-  Horas gestión manual × coste hora = [€ tiempo perdido/mes]
+SLIDE 4 — PARA QUIÉN ES (avatar ME-sport)
+  "Esta propuesta es para ti si..."
+  · Gestionas entre [X y Y socios / N equipos / Z eventos al año]
+  · Tu administración vive en WhatsApp + Excel + notas de papel
+  · Pierdes socios sin saber por qué y sin poder reactivarlos a tiempo
+  · Quieres crecer en socios sin contratar más administrativo
+  · [Si federación/evento]: coordinas múltiples clubes o sedes sin sistema central
+  "No es para ti si ya tienes WodBuster/Clupik cubriendo todo — nosotros complementamos,
+  no sustituimos plataformas deportivas existentes"
 
-SLIDE 5 — LA SOLUCIÓN
-  Qué automatiza el sistema:
-  · Altas por WhatsApp — el socio se da de alta sin intervención humana
-  · Recordatorios de pago — automáticos antes del vencimiento
-  · Seguimiento de ausencias — detecta inactividad y reactiva al socio
-  · Confirmación de clases — recordatorio 24h antes
-  · Baja gestionada — proceso automatizado con encuesta de salida
-  Canales: WhatsApp · Email (según plan)
+SLIDE 5 — LA SOLUCIÓN / EL MÉTODO (en 3 pasos)
+  Cómo trabajamos:
+  1. Diagnóstico de operaciones — mapeamos cómo gestionas hoy: altas, bajas, pagos,
+     comunicación, eventos. Identificamos qué automatizamos primero y qué ahorra más.
+  2. Implementación — desplegamos los flujos en tus canales:
+     · Altas automatizadas por WhatsApp — sin intervención tuya
+     · Recordatorios de pago — antes del vencimiento, no después del impago
+     · Detección de inactividad — el sistema te avisa antes de que el socio se vaya
+     · Confirmaciones de clase — recordatorio 24h antes, 0 no-shows
+     · Gestión de baja — encuesta automática, aprende por qué se van
+  3. Entrega + soporte mensual — sistema funcionando + ajustes [según plan] + reporting.
 
-SLIDE 6 — PLAN RECOMENDADO
-  [Sprint IA / Equipo IA / Liga IA] — [precio] € (pago único)
-  Qué incluye: [lista de deliverables del plan]
-  [Si Liga IA: mencionar multi-sede y agente de voz]
+SLIDE 6 — ENTREGABLES (lo que recibes)
+  Plan [Sprint IA / Equipo IA / Liga IA] — checklist completo:
+  [Usar lista de `_deliverables/ME-SportCenter/deliverables-planes.md` según plan y vertical]
+  Adaptar según tipo de cliente:
+  · Academia → flujos inscripción + pagos + seguimiento alumnos
+  · Club → gestión socios + cuotas + eventos + comunicación
+  · Evento → registro equipos + logística + comunicación día D
+  · Federación → visibilidad multi-club + reporting centralizado
 
-SLIDE 7 — CUOTA MENSUAL
-  Plan [Básico/Profesional/Avanzado] — [precio] €/mes
-  Qué incluye: [X] h/mes ajustes, soporte [plazo], reportes mensuales de actividad
+SLIDE 7 — PRUEBA / CASO REAL
+  Si hay cliente → resultado con números:
+  "[Nombre o 'una academia de [deporte] en [ciudad]'] redujo sus bajas de [X%] a [Y%]
+  y recuperó [€ Z/mes] en cuotas que antes se perdían por falta de seguimiento"
+  Sin clientes deportivos → caso de ejemplo con honestidad:
+  "Basado en academia tipo con 120 socios y 8% de baja mensual:
+  → Reducir baja a 5% = 4 socios retenidos × 50€ cuota = 200€/mes recuperados
+  → Ahorro gestión: 10h/mes × 15€/h = 150€/mes en tiempo del director
+  → Total: 350€/mes recuperados con un sistema que cuesta [X€/mes]"
 
-SLIDE 7B — MÓDULOS ADICIONALES (si se proponen)
-  [módulo 1]: [precio] — qué incluye
-  Ej habituales en academias: Gestión RRSS IA, Meta Ads captación alumnos
-  Nota: contratos/anexos independientes
+SLIDE 8 — POR QUÉ NOSOTROS Y NO OTRO
+  Lo que hace distinto a ME-SportCenter:
+  · No somos WodBuster ni Clupik — los complementamos, no competimos con ellos
+  · IA aplicada al deporte, no tecnología genérica — sabemos cómo piensa un director
+    de academia y cómo se comporta un socio que está a punto de darse de baja
+  · Retainer mensual, no proyecto único — estamos contigo a largo plazo, el sistema
+    mejora cada mes con los datos reales de tu club
+  · Especialización local — conocemos el deporte amateur en Valencia y España
+  · [diferenciador específico del prospecto: ej. "eres el único club de [deporte] en
+    [municipio] — esa exclusividad la aprovechamos para captación"]
 
-SLIDE 8 — INFRAESTRUCTURA Y COSTES
-  Opción [A/B/C] — [explicación]
-  Costes cliente directos: APIs IA, WhatsApp Business, dominio
+SLIDE 9 — RESULTADO + PLAZO (antes vs después)
+  ANTES (hoy):
+  · [gap 1 en lenguaje humano — de la auditoría]
+  · [gap 2]
+  · [gap 3]
+  · Estimación de coste mensual del caos: [€/mes]
 
-SLIDE 9 — ROI PROYECTADO
-  Retención: reducir baja mensual de [X%] a [Y%] = [€ retenidos/mes]
-  Ahorro gestión: [X] horas/mes × [coste hora] = [€ ahorrados/mes]
-  Recuperación inversión estimada: [N] meses
+  DESPUÉS (con [plan] en [N] semanas):
+  · Altas y bajas gestionadas sin WhatsApp manual
+  · Reducción de baja estimada: de [X%] a [Y%] = [€ retenidos/mes]
+  · Ahorro gestión: [N horas/mes] = [€ tiempo recuperado]
+  · Reportes automáticos — sabes en tiempo real el estado de tu club
+  · Plazo de implementación: [4–8 semanas según plan]
 
-SLIDE 10 — SIGUIENTE PASO
-  CTA + datos de contacto PalferIA
+SLIDE 10 — INVERSIÓN + SIGUIENTE PASO
+  CUOTA MENSUAL (retainer):   [precio plan] €/mes — contrato mensual renovable
+  [Setup si aplica según plan]
+  [Módulos adicionales: captación RRSS, Meta Ads, eventos]
+  Costes directos del cliente: APIs IA + WhatsApp Business [rangos]
+
+  Lo que cuesta NO actuar: [€/mes perdidos en bajas + gestión manual] × 12 = [€/año]
+
+  SIGUIENTE PASO:
+  "¿Empezamos? Una sesión de diagnóstico gratuita de 30 min — sin compromiso.
+  Saldrás con el mapa de qué automatizamos primero y cuánto recuperas."
+  CTA: [link Calendly / WhatsApp / email]
+  Contacto: Ronald Palma · ronald@palferia.me
 
 ══════════════════════════════════════════════════════
 ```
+
+---
+
+### 3C — Preview DraftDayES (SaaS deportivo — early adopters)
+
+> **Nota:** DraftDayES usa un framework de propuesta distinto al de agencia (3A/3B).
+> El objetivo no es vender un servicio — es convencer a un club/academia/federación
+> de ser early adopter de un SaaS. La propuesta habla de visión + tracción + acceso exclusivo.
+> Branding: "Powered by PalferIA" (no COM-studio ni ME-sport directamente).
+
+```
+📋 ESTRUCTURA DE LA PROPUESTA — [NOMBRE]  ·  DraftDayES
+══════════════════════════════════════════════════════
+
+SLIDE 1 — PORTADA
+  Título: "El sistema operativo de tu club — [Nombre club/academia/federación]"
+  Subtítulo: [deporte] · [municipio] · Acceso Early Adopter
+  Badge: "Powered by PalferIA"
+  CTA: "Ver propuesta"
+
+SLIDE 2 — QUIÉN SOY (autoridad)
+  Por qué confiar en PalferIA + DraftDayES:
+  · [experiencia relevante: automatización IA aplicada al deporte]
+  · [dato o logro: ej. "hemos automatizado la gestión de X clubes en Valencia"]
+  · [formación / enfoque]: especialistas en IA aplicada al ecosistema deportivo
+  Nota al orquestador: adaptar con datos reales de Ronald. Si no hay clientes deportivos
+  aún → usar "construcción con validación de [N] clubes en Horta Nord" y ser honesto.
+
+SLIDE 3 — EL PROBLEMA (su dolor, con sus palabras)
+  2-3 dolores concretos del avatar según el tipo de prospecto:
+  · [Si club/academia]: "Gestionas las inscripciones por WhatsApp, los pagos por
+    transferencia y las bajas por silencio — y cada mes pierdes socios sin saber por qué"
+  · [Si organizador eventos]: "Montas el torneo en 4 grupos de WhatsApp, un Excel y
+    rezas para que nadie se confunda con el horario"
+  · [Si federación]: "Tienes 40 clubes afiliados y ningún sistema que te diga en tiempo
+    real cuántos socios activos hay en tu federación"
+  Adaptar los 2-3 más relevantes según el perfil del prospecto.
+
+SLIDE 4 — PARA QUIÉN ES (avatar)
+  "DraftDayES es para ti si..."
+  · Gestionas [X–Y socios / N equipos / Z eventos al año]
+  · Hoy usas Excel + WhatsApp + formularios de papel
+  · Quieres crecer sin contratar más personal administrativo
+  · Eres de los primeros en tu liga en apostar por la tecnología
+  "No es para ti si buscas solo una app de fichajes o un gestor básico de cuotas"
+
+SLIDE 5 — LA SOLUCIÓN / EL MÉTODO (en pasos)
+  Cómo funciona DraftDayES en 3 pasos:
+  1. Diagnóstico digital — mapeamos cómo gestionas hoy: inscripciones, pagos,
+     comunicación, eventos. Identificamos qué se automatiza primero.
+  2. Implementación — configuramos el sistema para tu club: flujos de alta/baja,
+     recordatorios de pago, gestión de eventos, comunicación automática.
+  3. Entrega + autonomía — tu equipo opera sin depender de nosotros.
+     El sistema aprende con el uso y mejora solo.
+  Canales integrados: WhatsApp · Email · Web · (según plan)
+
+SLIDE 6 — ENTREGABLES (lo que recibes)
+  Según el plan seleccionado:
+  · [Plan Fase 1 / Early Adopter / Pro — completar cuando precios estén cerrados]
+  Lista concreta basada en `_deliverables/ME-SportCenter/deliverables-planes.md`
+  Adaptar según si es club, academia, evento o federación.
+  Incluir siempre: onboarding guiado, soporte directo con Ronald, acceso prioritario
+  a nuevas funciones como early adopter.
+
+SLIDE 7 — PRUEBA / CASO REAL
+  Si hay cliente real → resultado con números: "reducimos las bajas de [X%] a [Y%]
+  en [N] meses en [tipo de club]"
+  Si no hay aún → caso de ejemplo con honestidad:
+  "Trabajando con [tipo de club similar] en fase beta, el resultado esperado es:
+  [X horas/mes ahorradas en gestión] · [Y% reducción bajas] · [Z€ recuperados/mes]"
+  Nota: ser transparente sobre el estado early adopter — es un diferenciador, no una debilidad.
+
+SLIDE 8 — POR QUÉ NOSOTROS Y NO OTRO
+  Lo que hace distinto a DraftDayES + PalferIA:
+  · No es una app genérica — está construida específicamente para el ecosistema deportivo
+  · IA nativa desde el primer día — no es un Excel con automatizaciones, es un sistema
+    que aprende
+  · Acceso early adopter — precio especial, influencia directa en el roadmap,
+    soporte directo con el fundador
+  · Especialización local — entendemos cómo funciona el deporte amateur en España
+  · [diferenciador específico encontrado en la auditoría del prospecto]
+
+SLIDE 9 — RESULTADO + PLAZO (antes vs después)
+  ANTES (hoy): [descripción de cómo gestiona el prospecto actualmente — basado en auditoría]
+  · WhatsApp + Excel + llamadas manuales
+  · [X horas/semana perdidas en administración]
+  · [Y% bajas sin detectar / Z pagos tardíos / N torneos con caos logístico]
+
+  DESPUÉS (con DraftDayES en [N] semanas):
+  · Altas y bajas automatizadas — 0 intervención manual
+  · Pagos recordados automáticamente — reduce morosidad [X%]
+  · Eventos gestionados desde un dashboard — sin grupos de WhatsApp paralelos
+  · Plazo de implementación: [4–8 semanas según plan]
+
+SLIDE 10 — INVERSIÓN + SIGUIENTE PASO
+  [Precio o rango según plan — completar cuando pricing DraftDayES esté cerrado]
+  Modalidad early adopter: [precio especial] + acceso prioritario a roadmap
+  Precio de referencia post-lanzamiento: [precio target] — asegura el tuyo ahora.
+
+  SIGUIENTE PASO:
+  "¿Comenzamos? Reserva una sesión de diagnóstico gratuita de 30 minutos.
+  Sin compromiso — saldrás con el mapa exacto de qué automatizamos primero."
+  CTA: [link Calendly o WhatsApp directo]
+  Contacto: Ronald Palma · ronald@palferia.me · wa.me/[número]
+
+══════════════════════════════════════════════════════
+```
+
+> **Nota de precios DraftDayES:** El pricing está en definición (freemium → pro → enterprise).
+> Hasta que esté cerrado, usar rangos orientativos o "precio early adopter a definir en reunión".
+> No bloquear la propuesta por falta de precio — la reunión de diagnóstico es el CTA real.
 
 ---
 
@@ -525,10 +742,49 @@ var PLANS = {
 - Señales de cierre a buscar
 - Timing recomendado
 
-**S7 — Entregables**
-- Checklist de lo que incluye el plan seleccionado
-- Estado / notas / fecha por ítem
+**S7 — Entregables** (3 bloques independientes, cada uno con su checklist)
+
+Leer primero el archivo de referencia según proyecto:
+- COM-studio → `_deliverables/COM-studio/deliverables-planes.md`
+- ME-sport → `_deliverables/ME-SportCenter/deliverables-planes.md`
+
+Construir los 3 bloques según lo propuesto en Fase 2:
+
+**S7A — Plan de setup** (pago único)
+- Título: "Plan [Vecino Digital / Autopilot 30 / Socio Digital / Sprint IA / Equipo IA / Liga IA] — [precio]€"
+- Checklist de todos los entregables del plan elegido (tomados del archivo `_deliverables/`)
+- Cada ítem: ☐ nombre del entregable · campo notas · campo fecha estimada
+- Badge de estado por ítem: pendiente / en progreso / entregado
 - Persistido en localStorage
+
+**S7B — Cuota mensual** (solo si el cliente eligió mantenimiento)
+- Título: "Mantenimiento [Básico / Profesional / Avanzado] — [precio]€/mes"
+- Checklist de lo que incluye la cuota: horas de ajuste, tipo de soporte, reporting, revisiones
+- Referencia: precios y contenidos en `kit-pricing-planes` y en `_deliverables/`
+- Cada ítem: ☐ descripción · frecuencia (mensual/quincenal/semanal)
+- Persistido en localStorage
+
+**S7C — Servicios adicionales** (solo los propuestos en Fase 2, pueden ser 0)
+- Mostrar solo si se propusieron módulos adicionales en la propuesta
+- Un bloque por cada servicio mensual activo:
+  - Meta Ads gestión: ☐ [precio]€/mes · presupuesto ads: [X]€/mes directo al cliente
+  - Google Ads gestión: ☐ [precio]€/mes · presupuesto ads: [X]€/mes directo al cliente
+  - Gestión RRSS IA: ☐ [precio]€/mes · [N] publicaciones/semana · plataformas
+  - SEO local: ☐ [precio]€/mes · objetivos acordados
+  - GEO/AEO: ☐ [precio]€/mes
+  - ChatGPT Ads: ☐ [precio]€/mes · presupuesto OpenAI: [X]€/mes directo al cliente
+- Recordatorio visible: "El presupuesto de ads lo paga el cliente directamente — no es margen PalferIA"
+- Persistido en localStorage
+
+**Total mensual consolidado** (al final de S7):
+```
+Mantenimiento [plan]:        [XXX] €/mes
+[Servicio adicional 1]:      [XXX] €/mes
+[Servicio adicional 2]:      [XXX] €/mes
+────────────────────────────────────
+TOTAL MENSUAL PALFERIA:      [X.XXX] €/mes
++ Costes directos cliente:   [ads + APIs] €/mes (fuera de nuestro cobro)
+```
 
 **S8 — Mapa del proceso**
 - AS-IS (cómo lo hacen ahora) → TO-BE (cómo quedaría)
