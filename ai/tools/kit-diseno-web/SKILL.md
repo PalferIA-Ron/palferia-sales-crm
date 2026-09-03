@@ -463,6 +463,84 @@ DIRECCIÓN C — [nombre conceptual]
 
 ---
 
+## SOPORTE TÉCNICO / QA — FALLOS CONOCIDOS EN HTML DE UNA SOLA PÁGINA
+
+Esta sección recoge bugs reales sufridos en producción. Aplicar en QA antes de entregar cualquier página con JavaScript.
+
+### Regla 1 — `?.addEventListener` en elementos de secciones ocultas
+
+**El bug:** `document.getElementById('elemento-en-seccion-oculta').addEventListener(...)` lanza `TypeError: Cannot read properties of null` si el elemento está dentro de una sección que no es visible al cargar. Esto mata la ejecución del script en ese punto — todo el código declarado después (variables `const`, otras funciones) queda sin inicializar.
+
+**Síntoma en producción:** secciones que cargan correctamente de repente no muestran datos, o aparece "Cargando..." permanente sin mensaje de error visible, porque una `const` usada en el render nunca se inicializó (Temporal Dead Zone).
+
+**La regla:**
+```js
+// ❌ Rompe el script si el elemento no existe en el DOM al cargar
+document.getElementById('wa-send-btn').addEventListener('click', handler);
+
+// ✅ Seguro — no hace nada si el elemento no existe
+document.getElementById('wa-send-btn')?.addEventListener('click', handler);
+```
+
+**Cuándo aplicar:** en TODOS los `getElementById(...).addEventListener` que estén fuera de una función. Si el elemento pertenece a una sección con `display:none` al cargar, es obligatorio usar `?.`.
+
+**Alternativa más robusta:** registrar el listener dentro de la función que activa la sección (`showSection`, `loadWhatsApp`, etc.) en lugar de a nivel global.
+
+---
+
+### Regla 2 — Declarar `const` y `let` ANTES de cualquier código que pueda fallar
+
+**El bug:** si un `const NOMBRE = {...}` está declarado en la línea 200 del script pero hay un error no capturado en la línea 100, el `const` entra en Temporal Dead Zone. Cualquier función que intente acceder a `NOMBRE` (aunque esté definida antes en el archivo) lanzará `ReferenceError: Cannot access 'NOMBRE' before initialization`.
+
+**La regla:** declarar todas las constantes de configuración/datos (objetos de labels, mapas, configuración) al inicio del bloque `<script>`, antes de cualquier código imperativo que pueda lanzar excepciones.
+
+```js
+// ✅ Al inicio del script, antes de event listeners y lógica
+const ESTADO_LABEL = { borrador: 'Borrador', enviada: 'Enviada', ... };
+const CONFIG = { ... };
+
+// Event listeners y código imperativo DESPUÉS
+document.getElementById('btn')?.addEventListener(...);
+```
+
+---
+
+### Regla 3 — Joins en queries Supabase pueden fallar silenciosamente por RLS
+
+**El bug:** `sb.from('tabla').select('*, otra_tabla(campo)')` puede devolver `[]` en vez de datos si la política RLS de `otra_tabla` bloquea la lectura anon/authenticated para el rol activo. No hay `error` — simplemente llega vacío.
+
+**La regla:** si una query con join devuelve vacío y no hay error, separar en dos queries:
+```js
+// Query principal sin join
+const { data } = await sb.from('propuestas').select('id, titulo, prospecto_id');
+
+// Fetch separado de los nombres relacionados
+const { data: prosp } = await sb.from('prospectos').select('id, nombre').in('id', ids);
+const map = Object.fromEntries((prosp || []).map(p => [p.id, p.nombre]));
+```
+
+---
+
+### Regla 4 — Envolver funciones async de carga en try-catch visible
+
+Las funciones `async` que hacen queries no deben dejar al usuario con "Cargando..." si hay una excepción. Siempre mostrar el error en el contenedor:
+
+```js
+async function loadSeccion() {
+  const contenedor = document.getElementById('mi-seccion');
+  contenedor.innerHTML = '<p>Cargando...</p>';
+  try {
+    const { data, error } = await sb.from('tabla').select('*');
+    if (error) { contenedor.innerHTML = `<p>Error: ${esc(error.message)}</p>`; return; }
+    // render...
+  } catch (ex) {
+    contenedor.innerHTML = `<p>Error inesperado: ${esc(String(ex))}</p>`;
+  }
+}
+```
+
+---
+
 ## CHECKLIST ANTES DE ENTREGAR
 
 ```
@@ -477,4 +555,8 @@ DIRECCIÓN C — [nombre conceptual]
 ☐ localStorage si hay estado que persistir
 ☐ Contador de slides no hardcodeado (propuestas)
 ☐ Sin comentarios explicativos en el código entregado
+☐ [JS] ?.addEventListener en todos los elementos de secciones ocultas
+☐ [JS] const/let declarados antes de cualquier código imperativo
+☐ [JS] Queries con join probadas con RLS real — no asumir que devuelven datos
+☐ [JS] try-catch visible en todas las funciones async de carga
 ```

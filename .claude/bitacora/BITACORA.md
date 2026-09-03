@@ -139,6 +139,23 @@ Deploy:       push main → GitHub Actions → rsync --exclude='config.js'
 
 ## SESIONES
 
+### 2026-09-03 (noche) — CRM fixes: logout, propuestas y addEventListener null
+
+**Hecho:**
+- Botón "Cerrar sesión" invisible en desktop y móvil → cambiado a esquema rojo/salmón (#f87171) con borde visible
+- Sección propuestas no cargaba: causa raíz era triple `addEventListener` sin `?.` en elementos del bloque WhatsApp (`wa-search-input`, `wa-send-btn`, `wa-textarea`) que no existen en el DOM al cargar
+  - El crash mataba la ejecución del script antes de que `const ESTADO_LABEL` se inicializara → TDZ error al intentar renderizar tarjetas
+  - Fix: `?.addEventListener(...)` en los tres elementos
+- Query de propuestas cambiada de `select('*, prospectos(nombre)')` a query simple + fetch separado de nombres (más robusto ante RLS del join)
+- Diagnóstico confirmado: los datos SÍ existían en Supabase — el problema era 100% JS, no autenticación ni RLS
+
+**Lección registrada en kit-diseno-web:** Ver sección "Soporte técnico / QA" → regla de `?.` en secciones ocultas
+
+**Pendiente:**
+- Commit de los cambios del botón logout (está desplegado en VPS pero solo commiteado en la sesión anterior como parte de otros fixes)
+
+---
+
 ### 2026-09-03 — UD Rocafort CF: propuesta completa + CI/CD fix
 
 **Hecho:**
