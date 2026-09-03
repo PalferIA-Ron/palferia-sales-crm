@@ -378,33 +378,193 @@ logo-path: [ruta o "pendiente"]
 
 ---
 
-## ANIMACIONES — CUÁNDO Y CÓMO
+## ANIMACIONES — ESTÁNDARES DE CRAFT (Emil Kowalski)
 
-**Usar** (con propósito):
-- Entrada de datos numéricos: counter de 0 → valor real (impacto)
-- Scroll reveal en cards de prueba social
-- Hover states en CTAs (transform + color)
-- Transición entre slides de propuesta
+> Fuente: repositorio `emilkowalski/skills` — reglas aplicables a HTML/CSS vanilla y DraftDayES (React).
+> Las reglas marcadas con 🟦 aplican también a DraftDayES. Las sin marca aplican a todo.
 
-**No usar**:
-- Parallax en texto (ilegible en móvil)
-- Skeleton loaders en páginas estáticas
-- Animaciones en cada elemento sin orchestración
-- Efectos de partículas o confetti
+---
+
+### 1. ¿Debe animar? — La pregunta que va primero
+
+Antes de escribir una sola línea de animación, responde esto:
+
+| Frecuencia de uso | Decisión |
+|---|---|
+| 100+ veces/día (atajos de teclado, command palette, navegación principal) | **Sin animación. Nunca.** |
+| Decenas de veces/día (hover, navegación de lista, toggles frecuentes) | Eliminar o hacer casi imperceptible |
+| Ocasional (modales, drawers, toasts, ajustes) | Animación estándar |
+| Rara / primera vez (onboarding, estados vacíos, confirmaciones) | Aquí vive el presupuesto de deleite |
+
+**Si no puedes nombrar el propósito en una de estas palabras, no la construyas:**
+- **Feedback** — confirmar que la interfaz oyó al usuario
+- **Consistencia espacial** — mostrar de dónde vino o adónde fue algo
+- **Indicación de estado** — hacer legible un cambio de estado
+- **Evitar un cambio brusco** — puentear contenido que de otro modo teleportaría
+- **Explicación** — demostrar cómo funciona algo (solo onboarding/marketing)
+- **Deleite** — permitido únicamente en el nivel raro/primera vez
+
+---
+
+### 2. Propiedades permitidas — solo GPU
 
 ```css
-/* Animación de entrada estándar PalferIA */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.reveal { animation: fadeUp 0.5s ease forwards; }
+/* ✅ Estas dos propiedades y nada más */
+transform: translateY(0) scale(1);
+opacity: 1;
 
-/* Reducir movimiento si el usuario lo prefiere */
+/* ❌ Estas disparan layout + paint — nunca animarlas */
+/* width, height, margin, padding, top, left, right, bottom */
+```
+
+**Nunca `scale(0)`** — nada en el mundo real aparece de la nada.
+Siempre empezar en `scale(0.95–0.97)` + `opacity: 0`.
+
+---
+
+### 3. Easing — la regla que más se viola
+
+```css
+/* ✅ Entradas: ease-out — la respuesta es inmediata */
+transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+
+/* ❌ ease-in en entradas — se siente lento, el usuario espera */
+transition: transform 200ms ease-in;
+
+/* ✅ Para hover/press: ease-out también */
+.btn:hover { transform: translateY(-2px); transition: transform 150ms ease-out; }
+
+/* ✅ Curva estándar PalferIA (rápido al principio, suave al final) */
+--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* ligero rebote — solo en deleite */
+```
+
+`ease-in` en cualquier interacción UI es un bloqueo. `ease-out` da feedback inmediato.
+
+---
+
+### 4. Presupuestos de duración
+
+| Elemento | Duración |
+|---|---|
+| Press / :active feedback | 100–160ms |
+| Tooltips, popovers pequeños | 125–200ms |
+| Dropdowns, selects | 150–250ms |
+| Modales, drawers | 200–350ms |
+| Reveal en scroll (scroll reveal) | 500–700ms |
+| Marketing / explicativo | Sin límite estricto |
+
+UI por encima de 300ms sin justificación = hallazgo. Nunca `0.5s ease` en botones o toggles.
+
+---
+
+### 5. Transform-origin — escalar desde el trigger
+
+```css
+/* ✅ Popovers, dropdowns, tooltips — escalan desde donde se abren */
+.dropdown { transform-origin: top left; } /* o top center, según posición */
+
+/* ✅ Modales — excepción: se quedan centrados */
+.modal { transform-origin: center; }
+
+/* ❌ transform-origin: center en un dropdown anclado a un botón */
+```
+
+---
+
+### 6. prefers-reduced-motion — suavizar, no eliminar
+
+```css
+/* ❌ Esto es demasiado agresivo — quita toda retroalimentación */
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+/* ✅ Mantener opacity/color, quitar el movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 0;
+    transform: none; /* quita el translateY, mantiene el fade */
+    transition: opacity 0.4s ease;
+  }
+  .reveal.visible { opacity: 1; }
+}
 ```
+
+---
+
+### 7. Hover gating — no disparar en táctil
+
+```css
+/* ✅ Solo en dispositivos con puntero fino (mouse) */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.12); }
+  .btn:hover { transform: translateY(-2px); }
+}
+```
+
+Sin este gate, los efectos hover quedan activos en móvil después de un tap.
+
+---
+
+### 8. Reveal estándar PalferIA (corregido)
+
+```css
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transform: none; transition: opacity 0.4s ease; }
+}
+```
+
+---
+
+### 9. Tabla de revisión rápida
+
+Cuando revises animaciones en cualquier HTML generado, comprueba:
+
+| ❌ Antes | ✅ Después | Por qué |
+|---|---|---|
+| `transition: all 300ms` | `transition: transform 200ms ease-out` | `all` anima propiedades de layout |
+| `transform: scale(0)` | `transform: scale(0.95); opacity: 0` | Nada aparece de la nada |
+| `ease-in` en dropdown | `cubic-bezier(0.16, 1, 0.3, 1)` | ease-in retrasa el feedback |
+| Sin `:active` en botón | `transform: scale(0.97)` en `:active` | Los botones deben sentirse físicos |
+| `prefers-reduced-motion: none !important` | Suavizar movimiento, mantener opacity | El usuario pidió menos movimiento, no ceguera |
+| Hover sin `@media (hover: hover)` | Gating con media query | En móvil el hover queda atascado |
+| Animación en cada scroll reveal | Stagger de 80–120ms entre elementos | Todo a la vez abruma |
+
+---
+
+### 10. Qué NO aplicar aquí (contexto importante)
+
+Los siguientes conceptos del repositorio de Emil Kowalski **no aplican a nuestras páginas HTML/CSS** (propuestas, landings, webs muestra):
+- **Springs y física iOS** (Framer Motion, WAAPI, `requestAnimationFrame` avanzado) — no usamos React ni librerías de motion en HTML estático
+- **`@starting-style`, `setPointerCapture`** — nivel de complejidad que no aplica en HTMLs autónomos
+- **`animate-expo` y `write-swift`** — no son relevantes para el stack actual
+
+🟦 **Para DraftDayES (React app):** estas reglas SÍ aplican en su totalidad, más los springs y Framer Motion. Cuando DraftDayES entre en fase de construcción de UI, incorporar los skills `animate`, `review-animations` y `apple-design` de Emil directamente en el entorno de desarrollo.
+
+---
+
+### Uso en propuestas y landings PalferIA
+
+**Usar animación en:**
+- Scroll reveal en headlines y cards (estándar PalferIA)
+- Counters de 0 → valor real en sección de estadísticas
+- Hover en CTAs y tarjetas (con hover gate)
+- Transición entre slides en propuestas comerciales
+
+**No usar animación en:**
+- Navegación de secciones con nav (la respuesta debe ser instantánea)
+- Chips del chat widget (respuesta inmediata, sin delay)
+- Formularios mientras el usuario escribe
+- Efectos decorativos sobre contenido funcional (tablas, datos)
 
 ---
 
