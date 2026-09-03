@@ -541,14 +541,176 @@ Cuando revises animaciones en cualquier HTML generado, comprueba:
 
 ---
 
-### 10. Qué NO aplicar aquí (contexto importante)
+### 10. Contexto de aplicación — qué usar y cuándo
 
-Los siguientes conceptos del repositorio de Emil Kowalski **no aplican a nuestras páginas HTML/CSS** (propuestas, landings, webs muestra):
-- **Springs y física iOS** (Framer Motion, WAAPI, `requestAnimationFrame` avanzado) — no usamos React ni librerías de motion en HTML estático
-- **`@starting-style`, `setPointerCapture`** — nivel de complejidad que no aplica en HTMLs autónomos
-- **`animate-expo` y `write-swift`** — no son relevantes para el stack actual
+**HTML/CSS estático** (propuestas, landings, webs muestra): aplican las reglas 1–9 anteriores.
 
-🟦 **Para DraftDayES (React app):** estas reglas SÍ aplican en su totalidad, más los springs y Framer Motion. Cuando DraftDayES entre en fase de construcción de UI, incorporar los skills `animate`, `review-animations` y `apple-design` de Emil directamente en el entorno de desarrollo.
+**DraftDayES y palferia.me v2.0** (React): ver sección completa abajo → `ARSENAL V2.0`.
+
+---
+
+## ARSENAL V2.0 — Técnicas reservadas para DraftDayES y palferia.me v2.0
+
+> Estas técnicas **no aplican en HTML estático** pero están documentadas aquí para que estén listas cuando construyamos DraftDayES (React app) y la versión 2.0 de palferia.me. Activar cuando el proyecto entre en fase de UI React.
+
+---
+
+### Springs — animaciones que se sienten físicas
+
+Un spring no tiene duración fija. Responde a velocidad, masa y amortiguación — igual que el mundo real. Resultado: las animaciones se pueden interrumpir, redirigir y reanudar en mitad del vuelo sin saltos.
+
+**Por qué importa para DraftDayES:** modales, drawers, drag de cards, transiciones entre pantallas — todo lo que el usuario puede tocar y redirigir necesita springs, no `transition` con duración fija.
+
+**Parámetros clave (Framer Motion / Motion):**
+```jsx
+// Critically damped — sin rebote, asentamiento suave (la mayoría de UI)
+const spring = { type: "spring", damping: 20, stiffness: 300 }
+
+// Con rebote — solo cuando el gesto llevaba momentum (flick, arrastrar y soltar)
+const springBounce = { type: "spring", damping: 15, stiffness: 400 }
+
+// Ejemplo: modal que aparece
+<motion.div
+  initial={{ opacity: 0, scale: 0.95, y: 8 }}
+  animate={{ opacity: 1, scale: 1, y: 0 }}
+  exit={{ opacity: 0, scale: 0.97, y: 4 }}
+  transition={{ type: "spring", damping: 20, stiffness: 300 }}
+/>
+```
+
+**Regla:** `damping: 1.0` (crítico, sin rebote) para la mayoría. Añadir rebote (`damping ~0.8`) solo si el gesto del usuario llevaba momentum. Rebote en un menú que simplemente se abre = error.
+
+**Interruptibilidad — la regla más importante de springs:**
+```jsx
+// ✅ El spring retoma desde el valor actual — interruptible al instante
+const [isOpen, setIsOpen] = useState(false)
+<motion.div animate={{ x: isOpen ? 0 : -300 }} transition={spring} />
+
+// ❌ CSS transition no es interruptible — si el usuario invierte antes de terminar,
+// hay un salto de posición
+```
+
+---
+
+### @starting-style — entrada sin JavaScript
+
+Permite animar la entrada de un elemento en el DOM usando solo CSS, sin JS ni librerías. Equivale al `animate` de entrada de Framer Motion pero sin dependencias.
+
+```css
+/* El elemento entra animado la primera vez que aparece en el DOM */
+.dropdown {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 200ms ease-out, transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@starting-style {
+  .dropdown {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+}
+```
+
+**Cuándo usar en palferia.me v2.0:** tooltips, toasts, dropdowns — entrada limpia sin una sola línea de JS de animación. Soporte: Chrome 117+, Firefox 129+, Safari 17.5+.
+
+---
+
+### setPointerCapture — drag 1:1 con el dedo/cursor
+
+Mantiene el tracking del puntero aunque salga del bounds del elemento. Sin esto, el drag se rompe si el usuario mueve el mouse rápido fuera del área arrastrable.
+
+```js
+// ✅ El elemento sigue al dedo aunque salga de sus límites
+el.addEventListener('pointerdown', (e) => {
+  el.setPointerCapture(e.pointerId) // captura el puntero
+
+  const startY = e.clientY
+  const startVal = currentValue
+
+  el.addEventListener('pointermove', onMove)
+  el.addEventListener('pointerup', onUp, { once: true })
+
+  function onMove(e) {
+    const delta = e.clientY - startY
+    // actualizar valor 1:1 con el movimiento
+  }
+
+  function onUp() {
+    el.removeEventListener('pointermove', onMove)
+  }
+})
+```
+
+**Registrar velocidad para momentum post-release:**
+```js
+// Guardar historial de los últimos 4-5 eventos para calcular velocidad al soltar
+const history = []
+function onMove(e) {
+  history.push({ y: e.clientY, t: performance.now() })
+  if (history.length > 5) history.shift()
+}
+function getVelocity() {
+  if (history.length < 2) return 0
+  const first = history[0], last = history[history.length - 1]
+  return (last.y - first.y) / (last.t - first.t) // px/ms
+}
+```
+
+**Cuándo usar en DraftDayES:** sliders de estadísticas, drag de cards en kanban, swipe de pantallas en móvil, cualquier gesto que el usuario pueda interrumpir.
+
+---
+
+### animate-expo — animaciones en React Native / Expo
+
+Aplica a DraftDayES si en algún momento hay versión móvil nativa. Principios clave:
+
+- **Reanimated 2** para animaciones en el UI thread — no saltan al hacer scroll
+- **Gesture Handler** en lugar de `PanResponder` — más preciso y combinable
+- **`withSpring`** para la mayoría de transiciones — mismos principios que springs web
+- **Shared Element Transitions** para continuidad visual entre pantallas (ej. tarjeta de torneo → detalle de torneo)
+
+```js
+// Ejemplo: card que se arrastra en React Native
+import { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated'
+import { PanGestureHandler } from 'react-native-gesture-handler'
+
+const translateY = useSharedValue(0)
+const animatedStyle = useAnimatedStyle(() => ({
+  transform: [{ translateY: translateY.value }]
+}))
+
+// Al soltar: spring hacia snap point más cercano
+onGestureEnd: (e) => {
+  translateY.value = withSpring(snapPoint, { velocity: e.velocityY })
+}
+```
+
+---
+
+### write-swift — si DraftDayES llega a iOS nativo
+
+Solo relevante si se decide construir una app iOS nativa además de la web/React Native. Principios para tener en cuenta:
+
+- **SwiftUI** sobre UIKit para interfaces nuevas — más declarativo, mejor integración con animaciones
+- **`withAnimation(.spring())`** para todas las transiciones de estado — el mismo principio de springs
+- **Concurrencia moderna** (`async/await`, `Task`, `Actor`) — no usar `DispatchQueue` en código nuevo
+- **`@Observable`** (Swift 5.9+) en lugar de `ObservableObject` — menos boilerplate
+- **Testing**: `XCTest` para lógica, `ViewInspector` para SwiftUI UI tests
+
+> **Estado actual:** DraftDayES es web/React. Esta sección se activa si hay decisión de ir a iOS nativo.
+
+---
+
+### Cuándo activar el arsenal V2.0
+
+| Trigger | Qué activar |
+|---|---|
+| DraftDayES entra en fase UI React | Springs (Framer Motion), `@starting-style`, `setPointerCapture` |
+| DraftDayES añade kanban / drag de cards | `setPointerCapture` + spring con velocity post-release |
+| DraftDayES añade app móvil (React Native) | `animate-expo` completo |
+| palferia.me v2.0 en React | Todo excepto `write-swift` y `animate-expo` |
+| Decisión de app iOS nativa | `write-swift` |
 
 ---
 
