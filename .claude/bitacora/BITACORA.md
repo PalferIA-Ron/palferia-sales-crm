@@ -8,9 +8,9 @@
 **Fase:** 1 — MVP en producción / Consolidación de arquitectura
 **Última sesión:** 2026-09-03
 **Próxima acción prioritaria:**
-1. Completar integración OpenWA ↔ Chatwoot (3 pasos — ver Infraestructura/Técnico)
-2. Generar primera propuesta real con el orquestador actualizado (Hormozi + diseño web)
-3. Seguimiento Tecniluispa y Cortinajes Valls & París
+1. Generar ayudaventas/setter tool para UD Rocafort CF (interno — solo Ronald)
+2. Seguimiento Tecniluispa y Cortinajes Valls & París
+3. Completar integración OpenWA ↔ Chatwoot (3 pasos — ver Infraestructura/Técnico)
 
 ---
 
@@ -49,11 +49,14 @@
 - [ ] Crear documento oficial one-pager COM-studio y ME-sport (desbloquea propuesta UD Rocafort CF)
 - [ ] Integrar `kit-pricing-planes` como referencia oficial en kit-orquestador-propuestas
 
-### UD Rocafort CF (bloqueantes)
-- [ ] Gap 2: Web demo con kit-instagram-web (@udrocafortcf) + kit-web-scrolling
-- [ ] Gap 3: Google My Business en orquestador y deliverables
-- [ ] Gap 4: Correr kit-auditoria-negocio y kit-auditoria-meta-ads reales
-- [ ] Gap 5: Deploy propuesta desde CRM (webhook/n8n)
+### UD Rocafort CF
+- [x] Web muestra desplegada: `sales.palferia.me/propuestas/f2a8c3b1-ud-rocafort-cf-web.html` — rediseñada como website real del club (sin contenido de oferta comercial)
+- [x] Propuesta 10 slides: `sales.palferia.me/propuestas/6977a57c-ud-rocafort-cf.html` — Sprint IA 1.800€ + web + multicanal + 3 planes mantenimiento
+- [x] Supabase actualizado: slug `6977a57c-ud-rocafort-cf` + url correcta
+- [ ] Generar ayudaventas/setter tool (interno Ronald)
+- [ ] Actualizar estado propuesta en Supabase a `enviada` cuando se comparta
+- [ ] Gap: Correr auditorías reales (kit-auditoria-negocio, kit-auditoria-meta-ads)
+- [ ] Gap: Deploy propuesta desde CRM (webhook/n8n)
 
 ---
 
@@ -101,6 +104,7 @@
 | `window.location.replace('/')` en logout | Evita exponer `index.html` en URL | 21/08 |
 | API keys fuera del HTML → `public/config.js` (gitignored) | Buenas prácticas + no exponer en GitHub | 26/08 |
 | rsync con `--exclude='config.js'` en deploy | config.js vive en VPS, no en repo | 26/08 |
+| rsync `--filter='protect propuestas/**.html'` y `setter/**.html'` | `--delete` borraba propuestas manuales en cada push — protección crítica | 03/09 |
 | Skills reorganizadas en `ai/` con 6 categorías | Alineación con arquitectura DraftDayES, mejor discoverabilidad | 26/08 |
 
 ---
@@ -134,6 +138,19 @@ Deploy:       push main → GitHub Actions → rsync --exclude='config.js'
 ---
 
 ## SESIONES
+
+### 2026-09-03 — UD Rocafort CF: propuesta completa + CI/CD fix
+
+**Hecho:**
+- Fix crítico CI/CD: `rsync --delete` borraba todas las propuestas en cada deploy. Añadidos `--filter='protect propuestas/**.html'` y `--filter='protect setter/**.html'` en `.github/workflows/deploy.yml`
+- Web muestra UD Rocafort CF reescrita como website real del club (antes hablaba de la oferta comercial de PalferIA). Nueva estructura: Ticker → Nav → Hero (chat widget) → Logros → Noticias → Categorías → Galería → Contacto → Footer
+- Propuesta 10 slides ME-sport generada y desplegada: Sprint IA 1.800€ + web + multicanal (WhatsApp texto+voz, email, formulario) + 3 planes mantenimiento separados (250/490/900€/mes)
+- Supabase `propuestas`: slug y URL actualizados para UD Rocafort CF
+- Ambas URLs verificadas HTTP 200 en producción
+
+**Pendiente de esta sesión:**
+- Ayudaventas/setter tool UD Rocafort CF (interno)
+- Commit del fix deploy.yml a git (para que CI/CD lo aplique)
 
 ---
 

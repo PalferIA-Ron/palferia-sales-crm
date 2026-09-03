@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UD Rocafort CF — Fútbol Formativo · Rocafort, Valencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --orange:   #f97316;
+      --orange-d: #ea580c;
+      --orange-l: #fb923c;
+      --green:    #84cc16;
+      --bg:       #090d18;
+      --bg2:      #0d1220;
+      --bg3:      #111827;
+      --border:   rgba(71,85,105,0.4);
+      --text:     #f1f5f9;
+      --muted:    #94a3b8;
+      --dim:      #64748b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    /* TICKER */
+    .ticker {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+      background: var(--orange); height: 32px;
+      display: flex; align-items: center; overflow: hidden;
+    }
+    .ticker-label {
+      background: #000; color: var(--orange);
+      font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 0 16px; height: 100%; display: flex; align-items: center;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .ticker-track { display: flex; overflow: hidden; flex: 1; }
+    .ticker-inner { display: flex; white-space: nowrap; animation: ticker-scroll 30s linear infinite; }
+    .ticker-inner span { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 500; color: #000; padding: 0 24px; }
+    .t-sep { color: rgba(0,0,0,0.35) !important; padding: 0 4px !important; font-size: 10px !important; }
+    @keyframes ticker-scroll { 0%{ transform:translateX(0) } 100%{ transform:translateX(-50%) } }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 32px; left: 0; right: 0; z-index: 200;
+      height: 60px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(9,13,24,0.97); backdrop-filter: blur(20px);
+      border-bottom: 2px solid var(--orange);
+    }
+    @media (min-width: 768px) { nav { padding: 0 48px; } }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-shield { width: 36px; height: 36px; position: relative; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .nav-shield::before { content: ''; position: absolute; inset: 0; background: var(--orange); clip-path: polygon(50% 0%,100% 18%,100% 62%,50% 100%,0% 62%,0% 18%); }
+    .nav-shield-txt { position: relative; z-index: 1; font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 700; color: #000; }
+    .nav-brand { font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.1; }
+    .nav-sub { font-size: 10px; color: var(--dim); }
+    .nav-links { display: none; gap: 36px; }
+    @media (min-width: 768px) { .nav-links { display: flex; } }
+    .nav-links a {
+      font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 500;
+      color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+      position: relative; padding-bottom: 4px; transition: color 0.2s;
+    }
+    .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; right: 100%; height: 2px; background: var(--orange); transition: right 0.25s ease; }
+    .nav-links a:hover::after, .nav-links a.active::after { right: 0; }
+    .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+    .nav-cta {
+      background: var(--orange); color: #000;
+      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 600;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      padding: 9px 22px; border-radius: 2px; text-decoration: none; transition: all 0.2s; white-space: nowrap;
+    }
+    .nav-cta:hover { background: var(--orange-l); transform: translateY(-1px); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.1s; } .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; } .reveal-d4 { transition-delay: 0.4s; }
+
+    /* LAYOUT */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    @media (min-width: 768px) { .container { padding: 0 48px; } }
+    section { position: relative; overflow: hidden; }
+
+    .s-label {
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: 2.5px; text-transform: uppercase; color: var(--orange);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    }
+    .s-label::before { content: ''; display: block; width: 28px; height: 2px; background: var(--orange); }
+    h2.sh { font-family: 'Oswald', sans-serif; font-size: clamp(30px, 4.5vw, 58px); font-weight: 700; line-height: 1.05; text-transform: uppercase; margin-bottom: 16px; }
+    p.ss { font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.75; margin-bottom: 44px; max-width: 600px; }
+
+    /* HERO */
+    #inicio {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 140px 0 80px; background: var(--bg);
+    }
+    #inicio::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image: repeating-linear-gradient(-55deg, transparent, transparent 60px, rgba(249,115,22,0.022) 60px, rgba(249,115,22,0.022) 61px);
+    }
+    #inicio::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 800px 500px at 80% 40%, rgba(249,115,22,0.09) 0%, transparent 70%),
+                  radial-gradient(ellipse 400px 300px at 5% 80%, rgba(249,115,22,0.05) 0%, transparent 60%);
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr; gap: 56px; align-items: center;
+    }
+    @media (min-width: 900px) { .hero-inner { grid-template-columns: 1.2fr 1fr; } }
+
+    .hero-season {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 22px;
+    }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; animation: pdot 1.4s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes pdot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.35;transform:scale(0.8)} }
+
+    h1.hero-h { font-family: 'Oswald', sans-serif; font-size: clamp(52px, 9vw, 110px); font-weight: 700; line-height: 0.93; text-transform: uppercase; letter-spacing: -2px; margin-bottom: 24px; }
+    h1.hero-h .accent { color: var(--orange); display: block; }
+    .hero-sub { font-size: clamp(14px, 1.6vw, 17px); font-weight: 300; color: var(--muted); line-height: 1.8; margin-bottom: 36px; max-width: 480px; }
+
+    .btn-main {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--orange); color: #000;
+      font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+      padding: 14px 30px; border-radius: 2px; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-main:hover { background: var(--orange-l); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(249,115,22,0.4); }
+    .btn-out {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: transparent; color: var(--text);
+      font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase;
+      padding: 14px 26px; border-radius: 2px; text-decoration: none; border: 1px solid var(--border); transition: all 0.2s;
+    }
+    .btn-out:hover { border-color: var(--orange); color: var(--orange); }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 48px; }
+
+    /* STATS STRIP */
+    .stats-strip { display: flex; flex-wrap: wrap; border: 1px solid rgba(249,115,22,0.2); border-radius: 3px; overflow: hidden; }
+    .stat-item { flex: 1; min-width: 90px; padding: 16px 18px; border-right: 1px solid rgba(249,115,22,0.15); background: rgba(249,115,22,0.04); }
+    .stat-item:last-child { border-right: none; }
+    .stat-n { font-family: 'Oswald', sans-serif; font-size: 26px; font-weight: 700; color: var(--orange); letter-spacing: -1px; line-height: 1; }
+    .stat-l { font-size: 10px; font-weight: 500; color: var(--dim); text-transform: uppercase; letter-spacing: 1.2px; margin-top: 5px; }
+
+    /* ASISTENTE CARD (hero right) */
+    .chat-card { background: var(--bg3); border: 1px solid rgba(249,115,22,0.25); border-radius: 14px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .chat-head { background: rgba(249,115,22,0.06); border-bottom: 1px solid rgba(249,115,22,0.14); padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
+    .chat-av { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; background: var(--orange); display: flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700; color: #000; }
+    .chat-name { font-size: 14px; font-weight: 700; }
+    .chat-status { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 5px; }
+    .chat-status::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+    .chat-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; max-height: 260px; overflow-y: auto; }
+    .msg { padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.6; max-width: 88%; }
+    .msg-bot { background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.15); border-radius: 4px 12px 12px 12px; }
+    .msg-user { background: rgba(30,41,59,0.9); border: 1px solid var(--border); border-radius: 12px 4px 12px 12px; align-self: flex-end; color: var(--muted); }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 16px 16px; }
+    .chip { background: transparent; border: 1px solid rgba(249,115,22,0.3); color: var(--orange); font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; padding: 6px 12px; border-radius: 2px; cursor: pointer; transition: all 0.18s; }
+    .chip:hover { background: rgba(249,115,22,0.12); transform: translateY(-1px); }
+    .chip.sel { background: var(--orange); color: #000; border-color: var(--orange); }
+
+    /* LOGROS STRIP */
+    #logros { padding: 0; background: var(--orange); }
+    .logros-inner { display: flex; flex-wrap: wrap; }
+    .logro-item { flex: 1; min-width: 200px; padding: 24px 32px; border-right: 1px solid rgba(0,0,0,0.15); }
+    .logro-item:last-child { border-right: none; }
+    .logro-n { font-family: 'Oswald', sans-serif; font-size: 36px; font-weight: 700; color: #000; letter-spacing: -1px; line-height: 1; }
+    .logro-l { font-size: 12px; font-weight: 600; color: rgba(0,0,0,0.6); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    /* NOTICIAS */
+    #noticias { padding: 100px 0; background: var(--bg2); }
+    .noticias-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 640px) { .noticias-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .noticias-grid { grid-template-columns: 2fr 1fr 1fr; } }
+    .noticia-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; transition: border-color 0.2s; }
+    .noticia-card:hover { border-color: rgba(249,115,22,0.35); }
+    .noticia-img { height: 180px; position: relative; overflow: hidden; }
+    .noticia-img.tall { height: 260px; }
+    .noticia-tag { position: absolute; top: 12px; left: 12px; font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; background: var(--orange); color: #000; padding: 4px 10px; border-radius: 2px; }
+    .noticia-body { padding: 18px 20px; }
+    .noticia-fecha { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .noticia-titulo { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 600; line-height: 1.2; margin-bottom: 8px; text-transform: uppercase; }
+    .noticia-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* Gradient bgs for noticias */
+    .nb-1 { background: linear-gradient(135deg, #1a0a00, #2d1500); }
+    .nb-2 { background: linear-gradient(135deg, #020f06, #062010); }
+    .nb-3 { background: linear-gradient(135deg, #100c00, #201800); }
+
+    /* CENTER CIRCLE decorativo */
+    .nb-deco { position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(circle 60px at 50% 50%, transparent 55px, rgba(255,255,255,.7) 56px, rgba(255,255,255,.7) 60px, transparent 61px), linear-gradient(0deg, transparent calc(50% - .5px), rgba(255,255,255,.5) calc(50% - .5px), rgba(255,255,255,.5) calc(50% + .5px), transparent calc(50% + .5px)); }
+    .nb-score { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Oswald', sans-serif; font-size: 64px; font-weight: 700; color: rgba(249,115,22,0.35); letter-spacing: -2px; line-height: 1; }
+    .nb-badge { position: absolute; bottom: 16px; right: 16px; font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+
+    /* CLUB */
+    #club { padding: 110px 0; background: var(--bg); }
+    .club-grid { display: grid; grid-template-columns: 1fr; gap: 32px; margin-bottom: 56px; }
+    @media (min-width: 900px) { .club-grid { grid-template-columns: 1fr 1fr; } }
+
+    .historia-wrap { background: rgba(30,41,59,0.25); border: 1px solid var(--border); border-radius: 5px; padding: 24px; }
+    .historia-hd { font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: var(--dim); margin-bottom: 18px; }
+    .historia-item { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid rgba(51,65,85,0.4); }
+    .historia-item:first-child { padding-top: 0; }
+    .historia-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .historia-year { font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 700; color: var(--orange); flex-shrink: 0; width: 40px; padding-top: 1px; }
+    .historia-text { font-size: 13px; color: var(--muted); line-height: 1.65; }
+    .historia-text strong { color: var(--text); }
+
+    .valores-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .valor-item { background: rgba(249,115,22,0.04); border: 1px solid rgba(249,115,22,0.15); border-radius: 4px; padding: 18px; position: relative; overflow: hidden; }
+    .valor-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--orange); }
+    .valor-n { font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 600; text-transform: uppercase; margin-bottom: 5px; }
+    .valor-d { font-size: 12px; color: var(--dim); line-height: 1.55; }
+
+    .info-card { background: rgba(30,41,59,0.35); border: 1px solid var(--border); border-radius: 5px; padding: 20px; display: flex; align-items: flex-start; gap: 16px; margin-bottom: 12px; transition: border-color 0.2s; position: relative; }
+    .info-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--orange); opacity: 0; transition: opacity 0.2s; border-radius: 2px 0 0 2px; }
+    .info-card:hover::before { opacity: 1; }
+    .info-card:hover { border-color: rgba(249,115,22,0.25); }
+    .ic-icon { width: 42px; height: 42px; border-radius: 5px; flex-shrink: 0; background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.18); display: flex; align-items: center; justify-content: center; }
+    .ic-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+    .ic-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* CATEGORÍAS */
+    #categorias { padding: 100px 0; background: var(--bg2); }
+    .cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 8px; }
+    .cat-item { background: rgba(249,115,22,0.03); border: 1px solid rgba(249,115,22,0.14); border-radius: 3px; padding: 16px; transition: all 0.2s; cursor: default; position: relative; overflow: hidden; }
+    .cat-item::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--orange); transform: scaleX(0); transition: transform 0.2s; transform-origin: left; }
+    .cat-item:hover::before { transform: scaleX(1); }
+    .cat-item:hover { background: rgba(249,115,22,0.08); }
+    .cat-num { font-family: 'Oswald', sans-serif; font-size: 32px; font-weight: 700; color: rgba(249,115,22,0.15); letter-spacing: -1px; line-height: 1; margin-bottom: 8px; }
+    .cat-name { font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 600; text-transform: uppercase; color: var(--text); }
+    .cat-detail { font-size: 10px; color: var(--dim); margin-top: 4px; }
+    .cat-item.champion { background: rgba(249,115,22,0.1); border-color: rgba(249,115,22,0.4); }
+    .cat-item.champion .cat-name { color: var(--orange); }
+    .cat-item.champion .cat-num { color: rgba(249,115,22,0.3); }
+
+    /* GALERÍA */
+    #galeria { padding: 110px 0; background: var(--bg); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+    @media (max-width: 640px) { .gallery-grid { grid-template-columns: 1fr 1fr; } }
+    .gal-item { position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; aspect-ratio: 1; background: #0d1220; }
+    .gal-item.tall { grid-row: span 2; aspect-ratio: unset; min-height: 300px; }
+    .gal-item.wide { grid-column: span 2; aspect-ratio: unset; min-height: 175px; }
+    .gal-bg { position: absolute; inset: 0; transition: transform 0.45s cubic-bezier(.25,.46,.45,.94); }
+    .gal-item:hover .gal-bg { transform: scale(1.07); }
+    .gal-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,13,24,0.92) 0%, rgba(9,13,24,0.15) 50%, transparent 100%); opacity: 0.35; transition: opacity 0.35s; }
+    .gal-item:hover .gal-overlay { opacity: 1; }
+    .gal-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--orange); opacity: 0.6; transition: opacity 0.3s; }
+    .gal-item:hover .gal-bar { opacity: 1; }
+    .gal-bg-txt { position: absolute; right: 10px; top: 10px; font-family: 'Oswald', sans-serif; font-size: 64px; font-weight: 700; color: rgba(255,255,255,0.04); line-height: 1; letter-spacing: -2px; user-select: none; pointer-events: none; transition: color 0.35s; }
+    .gal-item:hover .gal-bg-txt { color: rgba(249,115,22,0.09); }
+    .gal-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 16px; transform: translateY(6px); opacity: 0; transition: all 0.32s; }
+    .gal-item:hover .gal-content { transform: none; opacity: 1; }
+    .gal-cat { font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 1.8px; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
+    .gal-title { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.35; }
+    .gal-field { position: absolute; inset: 0; opacity: 0.055; background-image: radial-gradient(circle 50px at 50% 50%, transparent 46px, rgba(255,255,255,.7) 47px, rgba(255,255,255,.7) 50px, transparent 51px), linear-gradient(0deg, transparent calc(50% - .5px), rgba(255,255,255,.5) calc(50% - .5px), rgba(255,255,255,.5) calc(50% + .5px), transparent calc(50% + .5px)); }
+    .gb-1 { background: linear-gradient(155deg,#1f0d02 0%,#2d1408 50%,#150a00 100%); }
+    .gb-2 { background: linear-gradient(155deg,#020f06 0%,#062010 50%,#011208 100%); }
+    .gb-3 { background: linear-gradient(155deg,#020510 0%,#08102a 50%,#020820 100%); }
+    .gb-4 { background: linear-gradient(155deg,#1a0a00 0%,#2e1500 50%,#190900 100%); }
+    .gb-5 { background: linear-gradient(155deg,#080810 0%,#12102a 50%,#06060f 100%); }
+    .gb-6 { background: linear-gradient(155deg,#001408 0%,#002910 50%,#000c05 100%); }
+    .gb-7 { background: linear-gradient(155deg,#100c00 0%,#201800 50%,#0f0b00 100%); }
+    .gb-8 { background: linear-gradient(155deg,#080814 0%,#131328 50%,#050510 100%); }
+    .gb-9 { background: linear-gradient(155deg,#180600 0%,#2c0f00 50%,#160500 100%); }
+
+    /* CONTACTO */
+    #contacto { padding: 110px 0; background: var(--bg2); }
+    .channel-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 48px; }
+    @media (max-width: 640px) { .channel-grid { grid-template-columns: 1fr; } }
+    .channel-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 26px 22px; text-align: center; text-decoration: none; display: block; transition: all 0.25s; position: relative; overflow: hidden; }
+    .channel-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--orange); transform: scaleX(0); transition: transform 0.3s; transform-origin: left; }
+    .channel-card:hover::after { transform: scaleX(1); }
+    .channel-card:hover { border-color: rgba(249,115,22,0.3); transform: translateY(-3px); }
+    .channel-icon { width: 50px; height: 50px; border-radius: 50%; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; }
+    .channel-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .channel-detail { font-size: 12px; color: var(--dim); line-height: 1.6; }
+
+    .contact-grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
+    @media (min-width: 768px) { .contact-grid { grid-template-columns: 1fr 1fr; } }
+    .map-frame { border-radius: 4px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 12px; }
+    .location-card { background: rgba(249,115,22,0.04); border: 1px solid rgba(249,115,22,0.15); border-radius: 4px; padding: 18px; }
+    .location-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+    .location-addr { font-size: 13px; color: var(--muted); line-height: 1.65; }
+    .location-hours { font-size: 11px; color: var(--dim); margin-top: 8px; }
+
+    .wa-form-card { background: var(--bg3); border: 1px solid rgba(249,115,22,0.2); border-radius: 4px; padding: 28px; }
+    .form-title { font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 22px; }
+    .wa-form input, .wa-form select, .wa-form textarea { width: 100%; background: rgba(30,41,59,0.6); border: 1px solid var(--border); border-radius: 3px; padding: 12px 14px; font-size: 14px; color: var(--text); font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; margin-bottom: 10px; }
+    .wa-form input:focus, .wa-form select:focus, .wa-form textarea:focus { border-color: var(--orange); }
+    .wa-form select option { background: #1e293b; }
+    .wa-form textarea { min-height: 80px; resize: vertical; }
+    .btn-wa { width: 100%; background: var(--orange); color: #000; font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 15px; border-radius: 3px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; }
+    .btn-wa:hover { background: var(--orange-l); transform: translateY(-1px); }
+    .form-note { font-size: 11px; color: var(--dim); text-align: center; margin-top: 10px; }
+
+    /* CTA FINAL */
+    #inscripcion { padding: 100px 0; text-align: center; background: linear-gradient(135deg, #0e0700 0%, var(--bg) 40%, #0e0700 100%); border-top: 1px solid rgba(249,115,22,0.15); }
+    .cta-big { font-family: 'Oswald', sans-serif; font-size: clamp(48px, 8vw, 96px); font-weight: 700; text-transform: uppercase; line-height: 0.93; letter-spacing: -2px; margin-bottom: 28px; }
+    .cta-big .accent { color: var(--orange); display: block; }
+
+    /* FOOTER */
+    footer { background: #040609; border-top: 1px solid rgba(51,65,85,0.5); padding: 28px 24px; }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; }
+    .footer-brand { font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600; color: var(--text); }
+    footer p { font-size: 12px; color: var(--dim); }
+
+    /* WA WIDGET */
+    .wa-widget { position: fixed; bottom: 28px; right: 28px; z-index: 9999; background: #25D366; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 24px rgba(37,211,102,0.4); text-decoration: none; transition: transform 0.2s; }
+    .wa-widget:hover { transform: scale(1.1); }
+    .wa-pulse { position: absolute; inset: -5px; border-radius: 50%; border: 2px solid #25D366; animation: wapulse 2.2s infinite; }
+    @keyframes wapulse { 0%,100%{opacity:1;transform:scale(1)} 60%{opacity:0;transform:scale(1.4)} }
+
+    .text-orange { color: var(--orange); }
+  </style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">TEMPORADA 25/26</div>
+  <div class="ticker-track">
+    <div class="ticker-inner">
+      <span>VAMOS ROCAFORT</span><span class="t-sep">·</span>
+      <span>INFANTIL D — CAMPEONES INVICTOS 24/25</span><span class="t-sep">·</span>
+      <span>SENIOR — 2ª FFCV GRUPO 3</span><span class="t-sep">·</span>
+      <span>20 EQUIPOS ACTIVOS</span><span class="t-sep">·</span>
+      <span>INSCRIPCIONES ABIERTAS</span><span class="t-sep">·</span>
+      <span>TODAS LAS CATEGORÍAS</span><span class="t-sep">·</span>
+      <span>POLIDEPORTIVO MUNICIPAL ROCAFORT</span><span class="t-sep">·</span>
+      <span>#UDROCAFORTCF</span><span class="t-sep">·</span>
+      <span>VAMOS ROCAFORT</span><span class="t-sep">·</span>
+      <span>INFANTIL D — CAMPEONES INVICTOS 24/25</span><span class="t-sep">·</span>
+      <span>SENIOR — 2ª FFCV GRUPO 3</span><span class="t-sep">·</span>
+      <span>20 EQUIPOS ACTIVOS</span><span class="t-sep">·</span>
+      <span>INSCRIPCIONES ABIERTAS</span><span class="t-sep">·</span>
+      <span>TODAS LAS CATEGORÍAS</span><span class="t-sep">·</span>
+      <span>POLIDEPORTIVO MUNICIPAL ROCAFORT</span><span class="t-sep">·</span>
+      <span>#UDROCAFORTCF</span><span class="t-sep">·</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#inicio" class="nav-logo">
+    <div class="nav-shield"><span class="nav-shield-txt">UD</span></div>
+    <div>
+      <div class="nav-brand">UD Rocafort CF</div>
+      <div class="nav-sub">Fútbol Formativo · Rocafort, Valencia</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#inicio"     class="nav-link active">Inicio</a>
+    <a href="#club"       class="nav-link">Club</a>
+    <a href="#categorias" class="nav-link">Categorías</a>
+    <a href="#galeria"    class="nav-link">Galería</a>
+    <a href="#contacto"   class="nav-link">Contacto</a>
+  </div>
+  <a href="https://wa.me/34961310913?text=Hola%2C%20quiero%20información%20sobre%20inscripciones%20en%20UD%20Rocafort%20CF" target="_blank" class="nav-cta">Inscribirme</a>
+</nav>
+
+<!-- ════════ INICIO ════════ -->
+<section id="inicio">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-season reveal">
+          <span class="live-dot"></span>
+          Inscripciones abiertas · Temporada 2025/26
+        </div>
+        <h1 class="hero-h reveal reveal-d1">
+          Fútbol<br>formativo<br><span class="accent">en Rocafort.</span>
+        </h1>
+        <p class="hero-sub reveal reveal-d2">
+          20 equipos, todas las edades desde Querubines hasta Senior. Tu hijo tiene un sitio en el campo esta semana.
+        </p>
+        <div class="cta-row reveal reveal-d3">
+          <a href="https://wa.me/34961310913?text=Hola%2C%20quiero%20inscribir%20a%20mi%20hijo%20en%20UD%20Rocafort%20CF" target="_blank" class="btn-main">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.127.558 4.12 1.531 5.845L.057 23.487a.5.5 0 0 0 .609.61l5.718-1.49A11.948 11.948 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.018-1.381l-.36-.213-3.733.972.994-3.633-.234-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.571 6.571 2.182 12 2.182S21.818 6.571 21.818 12 17.43 21.818 12 21.818z"/></svg>
+            Inscribir por WhatsApp
+          </a>
+          <a href="#categorias" class="btn-out">Ver categorías</a>
+        </div>
+        <div class="stats-strip reveal reveal-d4">
+          <div class="stat-item"><div class="stat-n" data-target="20">0</div><div class="stat-l">Equipos</div></div>
+          <div class="stat-item"><div class="stat-n" data-target="2650">0</div><div class="stat-l">Seguidores</div></div>
+          <div class="stat-item"><div class="stat-n" style="font-size:20px;">2020</div><div class="stat-l">Fundación</div></div>
+          <div class="stat-item"><div class="stat-n" style="font-size:18px;">24h</div><div class="stat-l">Respuesta</div></div>
+        </div>
+      </div>
+
+      <!-- ASISTENTE — acceso rápido, no protagonista -->
+      <div class="reveal reveal-d2">
+        <div class="chat-card">
+          <div class="chat-head">
+            <div class="chat-av">RC</div>
+            <div>
+              <div class="chat-name">Asistente UD Rocafort CF</div>
+              <div class="chat-status">En línea · responde en segundos</div>
+            </div>
+          </div>
+          <div class="chat-body" id="chat-body">
+            <div class="msg msg-bot">Hola, soy el asistente del Rocafort. ¿En qué te puedo ayudar?</div>
+            <div class="msg msg-user">Quiero apuntar a mi hijo, tiene 7 años</div>
+            <div class="msg msg-bot">Para 7 años tenemos <strong>Prebenjamín</strong>. Entrenamos martes y jueves en el Polideportivo. ¿Te envío la ficha ahora?</div>
+          </div>
+          <div class="chip-row">
+            <div class="chip" data-resp="Tenemos <strong>Querubines</strong> para los más pequeños, hasta 5 años. Fútbol muy adaptado y sin presión. ¿Cuántos años tiene tu hijo?">Querubines</div>
+            <div class="chip" data-resp="<strong>Prebenjamín</strong> para 6-7 años — 3 equipos esta temporada. Inscripción: 50€ + 10€ de socio. ¿Te envío la ficha?">Prebenjamín</div>
+            <div class="chip" data-resp="En <strong>Alevín</strong> tenemos 6 equipos, el bloque más grande del club. Incluyendo equipo femenino. ¿Qué edad tiene?">Alevín</div>
+            <div class="chip" data-resp="Inscripción: <strong>50€ + 10€ de cuota de socio</strong>. Ropa del club: 30€ aparte. Cuotas mensuales domiciliadas de septiembre a diciembre.">Cuotas</div>
+            <div class="chip" data-resp="Entrenos <strong>martes y jueves</strong> por la tarde en el Polideportivo Municipal (Av. Dr. Eugenio López Trigo). Partidos los sábados.">Horarios</div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--dim);text-align:center;margin-top:10px;letter-spacing:0.3px;">Pregunta lo que quieras — responde al instante</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGROS STRIP -->
+<section id="logros">
+  <div class="container">
+    <div class="logros-inner">
+      <div class="logro-item">
+        <div class="logro-n">Campeones</div>
+        <div class="logro-l">Infantil D · Segunda Infantil Grupo 8 · 24/25</div>
+      </div>
+      <div class="logro-item">
+        <div class="logro-n">20-0-0</div>
+        <div class="logro-l">Invictos — 144 goles a favor · 13 en contra</div>
+      </div>
+      <div class="logro-item">
+        <div class="logro-n">2ª FFCV</div>
+        <div class="logro-l">Senior · Grupo 3 · Temporada 2025/26</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTICIAS -->
+<section id="noticias">
+  <div class="container">
+    <div class="s-label reveal">Actualidad</div>
+    <h2 class="sh reveal reveal-d1">Lo último<br><span class="text-orange">del Rocafort</span></h2>
+    <div class="noticias-grid">
+      <div class="noticia-card reveal">
+        <div class="noticia-img tall nb-1">
+          <div class="nb-deco"></div>
+          <div class="nb-score">20-0</div>
+          <div class="nb-badge">INFANTIL D</div>
+          <div class="noticia-tag">Campeones</div>
+        </div>
+        <div class="noticia-body">
+          <div class="noticia-fecha">Temporada 2024/25</div>
+          <div class="noticia-titulo">Infantil D, campeones invictos de Segunda Infantil</div>
+          <div class="noticia-desc">20 victorias, 0 empates, 0 derrotas. 144 goles a favor y solo 13 en contra. El mejor Infantil de la historia del club asciende a Primera Infantil.</div>
+        </div>
+      </div>
+      <div class="noticia-card reveal reveal-d1">
+        <div class="noticia-img nb-2">
+          <div class="nb-deco"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><div style="font-family:'Oswald',sans-serif;font-size:38px;font-weight:700;color:rgba(255,255,255,0.07);text-transform:uppercase;">CAMPUS</div></div>
+          <div class="noticia-tag">Campus</div>
+        </div>
+        <div class="noticia-body">
+          <div class="noticia-fecha">Verano 2025</div>
+          <div class="noticia-titulo">Campus de verano 2025 en el Polideportivo</div>
+          <div class="noticia-desc">Tecnificación, juego y mucho fútbol. Abierto a todos los jugadores del club y a jugadores externos.</div>
+        </div>
+      </div>
+      <div class="noticia-card reveal reveal-d2">
+        <div class="noticia-img nb-3">
+          <div class="nb-deco"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><div style="font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:rgba(255,255,255,0.07);text-transform:uppercase;">VCF</div></div>
+          <div class="noticia-tag">Amistoso</div>
+        </div>
+        <div class="noticia-body">
+          <div class="noticia-fecha">Marzo 2025</div>
+          <div class="noticia-titulo">Amistoso formativo frente al Valencia CF Academia</div>
+          <div class="noticia-desc">Benjamín A y Alevín Femenino se midieron a las categorías del Valencia CF. Una experiencia que marca.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CLUB ════════ -->
+<section id="club">
+  <div class="container">
+    <div class="s-label reveal">Quiénes somos</div>
+    <h2 class="sh reveal reveal-d1">Más que un club.<br><span class="text-orange">Una familia.</span></h2>
+    <p class="ss reveal reveal-d2">Nacemos en 2020 de la fusión de dos clubs históricos de Rocafort. Hoy somos el referente del fútbol base del municipio.</p>
+
+    <div class="club-grid">
+      <div>
+        <div class="historia-wrap reveal">
+          <div class="historia-hd">Historia</div>
+          <div class="historia-item">
+            <div class="historia-year">2014</div>
+            <div class="historia-text">Nace UE Rocafort, semilla del fútbol base del municipio</div>
+          </div>
+          <div class="historia-item">
+            <div class="historia-year">2020</div>
+            <div class="historia-text">Fusión histórica: <strong>Rocafort CF + UE Rocafort</strong>. Nace UD Rocafort CF</div>
+          </div>
+          <div class="historia-item">
+            <div class="historia-year">2024</div>
+            <div class="historia-text">Amistosos formativos contra <strong>Valencia CF Academia</strong> en benjamín y alevín femenino</div>
+          </div>
+          <div class="historia-item">
+            <div class="historia-year">2025</div>
+            <div class="historia-text"><strong>Infantil D campeones invictos</strong>. 20 equipos activos. Senior en 2ª FFCV Grupo 3</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;" class="reveal reveal-d1">
+          <div class="valor-item">
+            <div class="valor-n">Formación</div>
+            <div class="valor-d">El jugador primero. Ganar es el resultado, no el objetivo.</div>
+          </div>
+          <div class="valor-item">
+            <div class="valor-n">Familia</div>
+            <div class="valor-d">El club es de todos. Jugadores, familias y técnicos.</div>
+          </div>
+          <div class="valor-item">
+            <div class="valor-n">Municipio</div>
+            <div class="valor-d">Arraigados en Rocafort. El deporte como motor del pueblo.</div>
+          </div>
+          <div class="valor-item">
+            <div class="valor-n">Excelencia</div>
+            <div class="valor-d">Campeones invictos. Los resultados avalan el método.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="info-card reveal" style="background:rgba(249,115,22,0.04);border-color:rgba(249,115,22,0.18);">
+          <div class="ic-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div>
+            <div class="ic-title">Senior · 2ª FFCV Grupo 3</div>
+            <div class="ic-desc">8.º nivel del fútbol español en la Comunitat Valenciana. Temporada 2025/26 en activo.</div>
+          </div>
+        </div>
+        <div class="info-card reveal reveal-d1">
+          <div class="ic-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <div class="ic-title">Conexión Valencia CF Academia</div>
+            <div class="ic-desc">Amistosos formativos contra las categorías benjamín y femenino alevín del Valencia CF.</div>
+          </div>
+        </div>
+        <div class="info-card reveal reveal-d2" style="background:rgba(249,115,22,0.04);border-color:rgba(249,115,22,0.18);">
+          <div class="ic-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="ic-title">Polideportivo Municipal de Rocafort</div>
+            <div class="ic-desc">Av. Dr. Eugenio López Trigo, s/n · Rocafort, Valencia<br>
+              <a href="https://maps.google.com/?q=Polideportivo+Municipal+Rocafort+Valencia" target="_blank" style="color:var(--orange);font-weight:600;font-size:12px;text-decoration:none;">Ver en Google Maps →</a>
+            </div>
+          </div>
+        </div>
+        <div class="info-card reveal reveal-d3">
+          <div class="ic-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div class="ic-title">Horario de entrenos</div>
+            <div class="ic-desc">Martes y jueves por la tarde · Partidos los sábados<br>
+              <span style="font-size:11px;color:var(--dim);">Horario exacto según categoría — consulta al asistente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CATEGORÍAS ════════ -->
+<section id="categorias">
+  <div class="container" style="padding-top:100px;padding-bottom:100px;">
+    <div class="s-label reveal">Temporada 2025/26</div>
+    <h2 class="sh reveal reveal-d1">20 equipos.<br><span class="text-orange">Una plaza para cada jugador.</span></h2>
+    <p class="ss reveal reveal-d2">Desde los primeros pasos hasta el fútbol senior. Escríbenos y te decimos en qué equipo encaja tu hijo.</p>
+    <div class="cats-grid reveal reveal-d2">
+      <div class="cat-item">
+        <div class="cat-num">01</div>
+        <div class="cat-name">Querubines</div>
+        <div class="cat-detail">1 equipo · hasta 5 años</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-num">03</div>
+        <div class="cat-name">Prebenjamín</div>
+        <div class="cat-detail">3 equipos · 6-7 años</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-num">02</div>
+        <div class="cat-name">Benjamín</div>
+        <div class="cat-detail">2 equipos · 8-9 años</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-num">06</div>
+        <div class="cat-name">Alevín</div>
+        <div class="cat-detail">6 equipos · 10-11 años</div>
+      </div>
+      <div class="cat-item champion">
+        <div class="cat-num">02</div>
+        <div class="cat-name">Infantil</div>
+        <div class="cat-detail">2 equipos · 12-13 años · Campeones 24/25</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-num">02</div>
+        <div class="cat-name">Cadete</div>
+        <div class="cat-detail">2 equipos · 14-15 años</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-num">03</div>
+        <div class="cat-name">Juvenil</div>
+        <div class="cat-detail">3 equipos · 16-18 años</div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-num">01</div>
+        <div class="cat-name">Femenino</div>
+        <div class="cat-detail">1 equipo · todas las edades</div>
+      </div>
+      <div class="cat-item champion">
+        <div class="cat-num">2ª</div>
+        <div class="cat-name">Senior</div>
+        <div class="cat-detail">FFCV Grupo 3 · Temporada 25/26</div>
+      </div>
+    </div>
+    <div style="margin-top:36px;text-align:center;" class="reveal">
+      <a href="https://wa.me/34961310913?text=Hola%2C%20quiero%20saber%20en%20qué%20categoría%20entra%20mi%20hijo" target="_blank" class="btn-main" style="display:inline-flex;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.127.558 4.12 1.531 5.845L.057 23.487a.5.5 0 0 0 .609.61l5.718-1.49A11.948 11.948 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.018-1.381l-.36-.213-3.733.972.994-3.633-.234-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.571 6.571 2.182 12 2.182S21.818 6.571 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        ¿Qué categoría es la mía?
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ GALERÍA ════════ -->
+<section id="galeria">
+  <div class="container" style="padding-top:110px;padding-bottom:110px;">
+    <div class="s-label reveal">Galería</div>
+    <h2 class="sh reveal reveal-d1">El Rocafort<br><span class="text-orange">en imágenes</span></h2>
+    <p class="ss reveal reveal-d2">Partidos, entrenos, campus y los momentos que hacen grande a este club.<br>Síguenos en <a href="https://instagram.com/udrocafortcf" target="_blank" style="color:var(--orange);text-decoration:none;font-weight:700;">@udrocafortcf</a></p>
+
+    <div class="gallery-grid reveal">
+      <div class="gal-item tall">
+        <div class="gal-bg gb-1"><div class="gal-field"></div></div>
+        <div class="gal-bar"></div><div class="gal-overlay"></div>
+        <div class="gal-bg-txt">A</div>
+        <div class="gal-content"><div class="gal-cat">Benjamín A</div><div class="gal-title">UD Rocafort vs Valencia CF Academia · Marzo 2025</div></div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-bg gb-2" style="height:100%;">
+          <div class="gal-field"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;">
+            <div style="font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;color:rgba(249,115,22,0.45);letter-spacing:-2px;line-height:1;">20-0</div>
+            <div style="font-family:'Oswald',sans-serif;font-size:10px;color:rgba(255,255,255,0.18);letter-spacing:3px;text-transform:uppercase;">temporada perfecta</div>
+          </div>
+        </div>
+        <div class="gal-bar"></div><div class="gal-overlay"></div>
+        <div class="gal-content"><div class="gal-cat">Campeones 24/25</div><div class="gal-title">Infantil D · Invictos toda la temporada</div></div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-bg gb-3" style="height:100%;">
+          <div class="gal-field"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><div style="font-family:'Oswald',sans-serif;font-size:40px;font-weight:700;color:rgba(255,255,255,0.05);text-transform:uppercase;">CAMPUS</div></div>
+        </div>
+        <div class="gal-bar"></div><div class="gal-overlay"></div>
+        <div class="gal-content"><div class="gal-cat">Campus de Verano</div><div class="gal-title">Campus 2025 · Polideportivo Municipal</div></div>
+      </div>
+      <div class="gal-item wide">
+        <div class="gal-bg gb-4" style="height:100%;min-height:175px;">
+          <div class="gal-field"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;padding:0 32px;"><div style="font-family:'Oswald',sans-serif;font-size:76px;font-weight:700;color:rgba(249,115,22,0.07);text-transform:uppercase;line-height:1;letter-spacing:-3px;">SENIOR</div></div>
+        </div>
+        <div class="gal-bar"></div><div class="gal-overlay"></div>
+        <div class="gal-content"><div class="gal-cat">Equipo Senior</div><div class="gal-title">2ª FFCV Grupo 3 · Temporada 2025/26</div></div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-bg gb-5" style="height:100%;"><div class="gal-field"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><div style="font-family:'Oswald',sans-serif;font-size:38px;font-weight:700;color:rgba(255,255,255,0.05);text-transform:uppercase;">ALEVÍN</div></div></div>
+        <div class="gal-bar"></div><div class="gal-overlay"></div>
+        <div class="gal-content"><div class="gal-cat">Alevín</div><div class="gal-title">Entrenamiento · Martes tarde</div></div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-bg gb-6" style="height:100%;"><div class="gal-field"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><div style="font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:rgba(132,204,22,0.1);text-transform:uppercase;">FEM</div></div></div>
+        <div class="gal-bar" style="background:var(--green);"></div><div class="gal-overlay"></div>
+        <div class="gal-content"><div class="gal-cat">Femenino</div><div class="gal-title">Equipo femenino · #VamosRocafort</div></div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-bg gb-7" style="height:100%;"><div class="gal-field"></div></div>
+        <div class="gal-bar"></div><div class="gal-overlay"></div>
+        <div class="gal-content"><div class="gal-cat">Prebenjamín</div><div class="gal-title">Primer partido de la temporada</div></div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-bg gb-8" style="height:100%;"><div class="gal-field"></div></div>
+        <div class="gal-bar"></div><div class="gal-overlay"></div>
+        <div class="gal-content"><div class="gal-cat">Día del Club</div><div class="gal-title">Día del Club 2025 · Toda la familia Rocafort</div></div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-bg gb-9" style="height:100%;"><div class="gal-field"></div></div>
+        <div class="gal-bar"></div><div class="gal-overlay"></div>
+        <div class="gal-content"><div class="gal-cat">Torneo Navideño</div><div class="gal-title">Polideportivo Municipal · Diciembre 2024</div></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:28px;" class="reveal">
+      <a href="https://instagram.com/udrocafortcf" target="_blank" class="btn-out" style="display:inline-flex;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="var(--orange)" stroke="none"/></svg>
+        Ver más en @udrocafortcf
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CONTACTO ════════ -->
+<section id="contacto">
+  <div class="container" style="padding-top:110px;padding-bottom:110px;">
+    <div class="s-label reveal">Contacto e inscripciones</div>
+    <h2 class="sh reveal reveal-d1">Habla con nosotros.<br><span class="text-orange">Respondemos siempre.</span></h2>
+    <p class="ss reveal reveal-d2">Por WhatsApp, Instagram o email. El asistente responde al instante las 24 horas — el equipo humano de lunes a sábado.</p>
+
+    <div class="channel-grid">
+      <a href="https://wa.me/34961310913?text=Hola%2C%20quiero%20información%20sobre%20UD%20Rocafort%20CF" target="_blank" class="channel-card reveal">
+        <div class="channel-icon" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.2);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.127.558 4.12 1.531 5.845L.057 23.487a.5.5 0 0 0 .609.61l5.718-1.49A11.948 11.948 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.018-1.381l-.36-.213-3.733.972.994-3.633-.234-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.571 6.571 2.182 12 2.182S21.818 6.571 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        </div>
+        <div class="channel-name">WhatsApp</div>
+        <div class="channel-detail">+34 961 310 913<br>Respuesta inmediata 24h</div>
+      </a>
+      <a href="https://instagram.com/udrocafortcf" target="_blank" class="channel-card reveal reveal-d1">
+        <div class="channel-icon" style="background:rgba(217,70,239,0.08);border:1px solid rgba(217,70,239,0.2);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e879f9" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#e879f9" stroke="none"/></svg>
+        </div>
+        <div class="channel-name">Instagram</div>
+        <div class="channel-detail">@udrocafortcf<br>2.650 seguidores</div>
+      </a>
+      <a href="mailto:uniondeportivarocafort@gmail.com" class="channel-card reveal reveal-d2">
+        <div class="channel-icon" style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.2);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        </div>
+        <div class="channel-name">Email</div>
+        <div class="channel-detail">uniondeportivarocafort<br>@gmail.com</div>
+      </a>
+    </div>
+
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="map-frame">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3077.5!2d-0.4!3d39.53!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDMxJzQ4LjAiTiAwwrAyNCcwMC4wIlc!5e0!3m2!1ses!2ses!4v1693000000000!5m2!1ses!2ses"
+            width="100%" height="240" style="border:0;display:block;" allowfullscreen loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+        <div class="location-card">
+          <div class="location-title">Polideportivo Municipal de Rocafort</div>
+          <div class="location-addr">Av. Dr. Eugenio López Trigo, s/n<br>Rocafort, 46111 Valencia</div>
+          <div class="location-hours">Entrenos: martes y jueves tarde · Partidos: sábados</div>
+        </div>
+      </div>
+      <div class="reveal reveal-d1">
+        <div class="wa-form-card">
+          <div class="form-title">Solicitar información</div>
+          <div class="wa-form">
+            <input type="text" id="f-nombre" placeholder="Tu nombre"/>
+            <input type="text" id="f-edad" placeholder="Edad de tu hijo/a"/>
+            <select id="f-cat">
+              <option value="">Categoría de interés</option>
+              <option>Querubines (hasta 5 años)</option>
+              <option>Prebenjamín (6-7 años)</option>
+              <option>Benjamín (8-9 años)</option>
+              <option>Alevín (10-11 años)</option>
+              <option>Infantil (12-13 años)</option>
+              <option>Cadete (14-15 años)</option>
+              <option>Juvenil (16-18 años)</option>
+              <option>Femenino</option>
+              <option>Senior</option>
+            </select>
+            <textarea id="f-msg" placeholder="¿Alguna pregunta? (opcional)"></textarea>
+            <button class="btn-wa" onclick="enviarWA()">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.127.558 4.12 1.531 5.845L.057 23.487a.5.5 0 0 0 .609.61l5.718-1.49A11.948 11.948 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.018-1.381l-.36-.213-3.733.972.994-3.633-.234-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.571 6.571 2.182 12 2.182S21.818 6.571 21.818 12 17.43 21.818 12 21.818z"/></svg>
+              Enviar por WhatsApp
+            </button>
+            <p class="form-note">Se abrirá WhatsApp con tu mensaje pre-rellenado</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA INSCRIPCIÓN -->
+<section id="inscripcion">
+  <div class="container">
+    <div class="s-label reveal" style="justify-content:center;">Temporada 2025/26</div>
+    <div class="cta-big reveal reveal-d1">
+      Tu sitio<br><span class="accent">está aquí.</span>
+    </div>
+    <p style="font-size:17px;color:var(--muted);line-height:1.75;margin:0 auto 44px;max-width:440px;" class="reveal reveal-d2">
+      Inscripciones abiertas para todas las categorías. Escríbenos y tu hijo empieza esta semana.
+    </p>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;" class="reveal reveal-d3">
+      <a href="https://wa.me/34961310913?text=Hola%2C%20quiero%20inscribir%20a%20mi%20hijo%20en%20UD%20Rocafort%20CF" target="_blank" class="btn-main" style="font-size:16px;padding:16px 44px;">Inscribirse ahora</a>
+      <a href="#categorias" class="btn-out" style="padding:16px 30px;">Ver categorías</a>
+    </div>
+    <p style="font-size:12px;color:var(--dim);margin-top:36px;letter-spacing:0.5px;" class="reveal reveal-d4">
+      uniondeportivarocafort@gmail.com · +34 961 310 913 · @udrocafortcf
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:30px;height:30px;background:var(--orange);clip-path:polygon(50% 0%,100% 18%,100% 62%,50% 100%,0% 62%,0% 18%);"></div>
+      <div>
+        <div class="footer-brand">UD Rocafort CF</div>
+        <p>Polideportivo Municipal · Rocafort, Valencia · Temporada 2025/26</p>
+      </div>
+    </div>
+    <p style="color:var(--dim);">© 2025 UD Rocafort CF · <a href="https://instagram.com/udrocafortcf" target="_blank" style="color:var(--dim);text-decoration:none;">@udrocafortcf</a></p>
+  </div>
+</footer>
+
+<a href="https://wa.me/34961310913?text=Hola%2C%20quiero%20información%20sobre%20UD%20Rocafort%20CF" target="_blank" class="wa-widget" aria-label="WhatsApp">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 0C5.373 0 0 5.373 0 12c0 2.127.558 4.12 1.531 5.845L.057 23.487a.5.5 0 0 0 .609.61l5.718-1.49A11.948 11.948 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.018-1.381l-.36-.213-3.733.972.994-3.633-.234-.374A9.818 9.818 0 0 1 2.182 12C2.182 6.571 6.571 2.182 12 2.182S21.818 6.571 21.818 12 17.43 21.818 12 21.818z"/></svg>
+  <span class="wa-pulse"></span>
+</a>
+
+<script>
+// SCROLL REVEAL
+var observer = new IntersectionObserver(function(e) {
+  e.forEach(function(entry) {
+    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+
+// COUNTERS
+var counted = false;
+var cObs = new IntersectionObserver(function(e) {
+  if (e[0].isIntersecting && !counted) {
+    counted = true;
+    document.querySelectorAll('[data-target]').forEach(function(el) {
+      var target = parseInt(el.getAttribute('data-target'));
+      var start = performance.now();
+      var dur = 1800;
+      (function update(now) {
+        var p = Math.min((now - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target).toLocaleString('es-ES');
+        if (p < 1) requestAnimationFrame(update);
+      })(start);
+    });
+  }
+}, { threshold: 0.5 });
+var strip = document.querySelector('.stats-strip');
+if (strip) cObs.observe(strip);
+
+// NAV ACTIVE
+var navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', function() {
+  var scrollY = window.scrollY + 140;
+  var active = null;
+  navLinks.forEach(function(a) {
+    var t = document.querySelector(a.getAttribute('href'));
+    if (t && t.offsetTop <= scrollY) active = a;
+  });
+  navLinks.forEach(function(a) { a.classList.remove('active'); });
+  if (active) active.classList.add('active');
+}, { passive: true });
+
+// CHAT CHIPS
+document.querySelectorAll('.chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('sel'); });
+    chip.classList.add('sel');
+    var body = document.getElementById('chat-body');
+    var u = document.createElement('div');
+    u.className = 'msg msg-user'; u.textContent = chip.textContent.trim();
+    body.appendChild(u); body.scrollTop = body.scrollHeight;
+    setTimeout(function() {
+      var b = document.createElement('div');
+      b.className = 'msg msg-bot';
+      b.innerHTML = chip.getAttribute('data-resp') || 'Dame un momento y te respondo ahora mismo.';
+      body.appendChild(b); body.scrollTop = body.scrollHeight;
+    }, 600);
+  });
+});
+
+// WA FORM
+function enviarWA() {
+  var nombre = document.getElementById('f-nombre').value.trim();
+  var edad   = document.getElementById('f-edad').value.trim();
+  var cat    = document.getElementById('f-cat').value;
+  var msg    = document.getElementById('f-msg').value.trim();
+  if (!nombre) { alert('Por favor, escribe tu nombre'); return; }
+  var t = 'Hola UD Rocafort CF\n\nMe llamo *' + nombre + '*';
+  if (edad) t += ' y mi hijo/a tiene *' + edad + '*';
+  if (cat)  t += '.\n\nMe interesa la categoría: *' + cat + '*';
+  if (msg)  t += '.\n\n' + msg;
+  t += '\n\n¿Me podéis dar información?';
+  window.open('https://wa.me/34961310913?text=' + encodeURIComponent(t), '_blank');
+}
+</script>
+</body>
+</html>

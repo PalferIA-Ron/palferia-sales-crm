@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UD Rocafort CF × PalferIA — Propuesta ME-SportCenter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --orange:   #f97316;
+      --orange-d: #ea580c;
+      --orange-l: #fdba74;
+      --green:    #84cc16;
+      --bg:       #080c14;
+      --bg2:      #0d1220;
+      --bg3:      #111827;
+      --card:     #141b2d;
+      --border:   rgba(71,85,105,0.35);
+      --text:     #f1f5f9;
+      --muted:    #94a3b8;
+      --dim:      #64748b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      overflow-x: hidden; line-height: 1.6;
+    }
+
+    /* ── PROGRESS BAR ── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: var(--orange); z-index: 9999;
+      width: 0%; transition: width 0.2s ease;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 3px; left: 0; right: 0; z-index: 200;
+      height: 56px; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(8,12,20,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo {
+      width: 32px; height: 32px;
+      background: var(--orange);
+      clip-path: polygon(50% 0%, 100% 20%, 100% 70%, 50% 100%, 0% 70%, 0% 20%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
+      color: #000;
+    }
+    .nav-text {
+      font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600;
+      letter-spacing: 0.5px; color: var(--text);
+    }
+    .nav-text span { color: var(--orange); }
+    .nav-badge {
+      font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--muted);
+      background: rgba(71,85,105,0.2); border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    /* ── SLIDE BASE ── */
+    .slide {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 24px 60px;
+      position: relative; overflow: hidden;
+    }
+    .slide-inner { width: 100%; max-width: 860px; margin: 0 auto; }
+
+    /* ── SLIDE COUNTER ── */
+    .slide-count {
+      font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 500;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 20px;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h1 { font-family: 'Oswald', sans-serif; font-size: clamp(2.4rem, 7vw, 4.8rem); font-weight: 700; line-height: 1.05; letter-spacing: -1px; }
+    h2 { font-family: 'Oswald', sans-serif; font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 700; line-height: 1.1; }
+    h3 { font-family: 'Oswald', sans-serif; font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 600; }
+    p { font-size: 1rem; color: var(--muted); }
+    .accent { color: var(--orange); }
+    .accent-g { color: var(--green); }
+    .big { font-size: clamp(1rem, 2.5vw, 1.15rem); color: var(--text); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 48px; height: 4px; background: var(--orange);
+      border-radius: 2px; margin: 20px 0;
+    }
+
+    /* ── GRID HELPERS ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+    }
+    .card-orange { border-color: rgba(249,115,22,0.4); background: rgba(249,115,22,0.05); }
+    .card-green  { border-color: rgba(132,204,22,0.4); background: rgba(132,204,22,0.05); }
+
+    /* ── ICON CIRCLE ── */
+    .icon-circle {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 14px; flex-shrink: 0;
+    }
+    .icon-circle-g {
+      background: rgba(132,204,22,0.12); border-color: rgba(132,204,22,0.3);
+    }
+
+    /* ── CHECK LIST ── */
+    .check-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .check-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 0.95rem; color: var(--text);
+    }
+    .check-list li::before {
+      content: '✓'; color: var(--orange); font-weight: 700;
+      font-size: 14px; margin-top: 2px; flex-shrink: 0;
+    }
+    .check-list.g li::before { color: var(--green); }
+
+    /* ── PAIN LIST ── */
+    .pain-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .pain-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 0.95rem; color: var(--text);
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+    }
+    .pain-icon { font-size: 18px; flex-shrink: 0; }
+
+    /* ── STEP ── */
+    .steps { display: flex; flex-direction: column; gap: 20px; }
+    .step { display: flex; gap: 20px; align-items: flex-start; }
+    .step-num {
+      font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 700;
+      color: var(--orange); opacity: 0.5; line-height: 1; flex-shrink: 0; min-width: 40px;
+    }
+    .step-body h3 { margin-bottom: 6px; }
+    .step-body p { font-size: 0.9rem; }
+
+    /* ── STAT BOX ── */
+    .stat-box { text-align: center; padding: 28px 20px; }
+    .stat-num {
+      font-family: 'Oswald', sans-serif; font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 700; color: var(--orange); line-height: 1;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 6px; letter-spacing: 0.5px; }
+
+    /* ── QUOTE ── */
+    .quote-block {
+      border-left: 3px solid var(--orange);
+      padding: 16px 20px; background: var(--card);
+      border-radius: 0 12px 12px 0; margin: 20px 0;
+    }
+    .quote-block p { font-size: 1.05rem; color: var(--text); font-style: italic; }
+    .quote-source { font-size: 0.8rem; color: var(--dim); margin-top: 8px; }
+
+    /* ── BEFORE / AFTER ── */
+    .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 540px) { .ba-grid { grid-template-columns: 1fr; } }
+    .ba-card { border-radius: 16px; padding: 24px; }
+    .ba-before { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); }
+    .ba-after  { background: rgba(132,204,22,0.08); border: 1px solid rgba(132,204,22,0.25); }
+    .ba-label {
+      font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .ba-before .ba-label { color: #f87171; }
+    .ba-after  .ba-label { color: var(--green); }
+    .ba-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .ba-list li { font-size: 0.9rem; display: flex; gap: 10px; align-items: flex-start; }
+    .ba-before .ba-list li::before { content: '✗'; color: #f87171; }
+    .ba-after  .ba-list li::before { content: '✓'; color: var(--green); }
+
+    /* ── PRICING ── */
+    .price-setup {
+      text-align: center; padding: 36px 28px;
+      background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(249,115,22,0.05));
+      border: 2px solid rgba(249,115,22,0.5);
+      border-radius: 20px; margin-bottom: 20px;
+    }
+    .price-tag {
+      font-family: 'Oswald', sans-serif; font-size: clamp(2.8rem, 8vw, 4.2rem);
+      font-weight: 700; color: var(--orange); line-height: 1;
+    }
+    .price-tag span { font-size: 0.45em; font-weight: 500; color: var(--muted); vertical-align: top; margin-top: 8px; display: inline-block; }
+    .price-plan-name {
+      font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 600;
+      color: var(--text); letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .price-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
+
+    .maint-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    @media (max-width: 640px) { .maint-grid { grid-template-columns: 1fr; } }
+    .maint-card {
+      border-radius: 14px; padding: 20px; text-align: center;
+      background: var(--card); border: 1px solid var(--border);
+      position: relative; transition: border-color 0.2s;
+    }
+    .maint-card.recommended {
+      border-color: rgba(249,115,22,0.6);
+      background: rgba(249,115,22,0.07);
+    }
+    .maint-badge {
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      background: var(--orange); color: #000; font-size: 9px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+      white-space: nowrap;
+    }
+    .maint-name { font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .maint-price { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .maint-price span { font-size: 0.55em; font-weight: 400; color: var(--muted); }
+    .maint-features { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+    .maint-features li { font-size: 0.78rem; color: var(--muted); }
+    .maint-features li::before { content: '· '; }
+
+    /* ── CTA ── */
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--orange); color: #000; font-weight: 700; font-size: 1rem;
+      padding: 16px 32px; border-radius: 50px; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      border: none; cursor: pointer;
+    }
+    .cta-btn:hover { background: var(--orange-d); transform: translateY(-1px); }
+    .cta-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--text); font-weight: 600; font-size: 0.95rem;
+      padding: 14px 28px; border-radius: 50px; text-decoration: none;
+      border: 1px solid var(--border); transition: border-color 0.2s;
+    }
+    .cta-ghost:hover { border-color: rgba(249,115,22,0.5); }
+
+    /* ── HERO DECORATION ── */
+    .hero-deco {
+      position: absolute; right: -120px; top: 50%; transform: translateY(-50%);
+      font-family: 'Oswald', sans-serif; font-size: 22vw; font-weight: 700;
+      color: rgba(249,115,22,0.04); line-height: 1; user-select: none; pointer-events: none;
+      white-space: nowrap;
+    }
+    @media (max-width: 768px) { .hero-deco { display: none; } }
+
+    /* ── BG PATTERNS ── */
+    .bg-stripe {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: repeating-linear-gradient(
+        -60deg,
+        transparent, transparent 60px,
+        rgba(249,115,22,0.015) 60px, rgba(249,115,22,0.015) 61px
+      );
+    }
+    .bg-radial {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(249,115,22,0.06), transparent);
+    }
+
+    /* ── FOOTER NAV ── */
+    .slide-nav {
+      display: flex; justify-content: center; gap: 8px;
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 100;
+    }
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); transition: all 0.3s;
+      cursor: pointer;
+    }
+    .dot.active { background: var(--orange); width: 22px; border-radius: 4px; }
+
+    /* ── CHANNEL TAGS ── */
+    .channel-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tag {
+      font-size: 0.8rem; font-weight: 600; padding: 5px 12px; border-radius: 20px;
+      background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.3);
+      color: var(--orange-l);
+    }
+    .tag-green {
+      background: rgba(132,204,22,0.1); border-color: rgba(132,204,22,0.3);
+      color: var(--green);
+    }
+
+    /* ── LOGO STRIP ── */
+    .logo-strip {
+      display: flex; align-items: center; gap: 8px; padding: 16px 20px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      margin-bottom: 28px;
+    }
+    .logo-shield {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--orange); display: flex; align-items: center; justify-content: center;
+      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; color: #000;
+      flex-shrink: 0;
+    }
+    .logo-strip-text { font-family: 'Oswald', sans-serif; font-size: 0.95rem; line-height: 1.3; }
+    .logo-strip-text strong { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .logo-strip-text small { color: var(--muted); font-size: 0.78rem; }
+
+    /* ── CONTACT INFO ── */
+    .contact-row { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 0.9rem; }
+    .contact-row a { color: var(--orange); text-decoration: none; }
+
+    /* ── SLIDE SECTIONS ── */
+    #s1  { background: var(--bg); }
+    #s2  { background: var(--bg2); }
+    #s3  { background: var(--bg); }
+    #s4  { background: var(--bg2); }
+    #s5  { background: var(--bg); }
+    #s6  { background: var(--bg2); }
+    #s7  { background: var(--bg); }
+    #s8  { background: var(--bg2); }
+    #s9  { background: var(--bg); }
+    #s10 { background: var(--bg2); }
+
+    /* ── UTILS ── */
+    .mt-8  { margin-top: 8px; }
+    .mt-16 { margin-top: 16px; }
+    .mt-24 { margin-top: 24px; }
+    .mt-32 { margin-top: 32px; }
+    .mt-40 { margin-top: 40px; }
+    .mb-8  { margin-bottom: 8px; }
+    .mb-16 { margin-bottom: 16px; }
+    .text-center { text-align: center; }
+    .text-sm { font-size: 0.85rem; color: var(--muted); }
+    .inline-flex { display: inline-flex; align-items: center; gap: 8px; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg2); }
+    ::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.4); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div id="progress-bar"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">ME</div>
+    <div class="nav-text">PalferIA <span>ME-sport</span></div>
+  </div>
+  <div class="nav-badge">Propuesta · UD Rocafort CF</div>
+</nav>
+
+<!-- Slide dots -->
+<div class="slide-nav" id="slide-nav">
+  <div class="dot active" onclick="scrollTo(0)"></div>
+  <div class="dot" onclick="gotoSlide(1)"></div>
+  <div class="dot" onclick="gotoSlide(2)"></div>
+  <div class="dot" onclick="gotoSlide(3)"></div>
+  <div class="dot" onclick="gotoSlide(4)"></div>
+  <div class="dot" onclick="gotoSlide(5)"></div>
+  <div class="dot" onclick="gotoSlide(6)"></div>
+  <div class="dot" onclick="gotoSlide(7)"></div>
+  <div class="dot" onclick="gotoSlide(8)"></div>
+  <div class="dot" onclick="gotoSlide(9)"></div>
+</div>
+
+<!-- ═══════════════════════════════════ S1 — PORTADA ═══════════════════════════════════ -->
+<section class="slide" id="s1">
+  <div class="bg-stripe"></div>
+  <div class="bg-radial"></div>
+  <div class="hero-deco">ME</div>
+  <div class="slide-inner" style="position:relative;z-index:1">
+    <div class="logo-strip">
+      <div class="logo-shield">UD</div>
+      <div class="logo-strip-text">
+        <strong>UD Rocafort CF</strong>
+        <br><small>Fútbol formativo · Rocafort, Valencia · Desde 1974</small>
+      </div>
+    </div>
+
+    <div class="slide-count">01 / 10 — Propuesta Comercial</div>
+    <h1>UD Rocafort CF<br><span class="accent">en piloto</span><br>automático</h1>
+    <div class="divider"></div>
+    <p class="big mt-16">
+      Sistema de atención IA multicanal + web profesional para tu club.<br>
+      Menos tareas manuales. Más socios. Más tiempo para el deporte.
+    </p>
+
+    <div class="channel-tags mt-24">
+      <span class="tag">WhatsApp IA</span>
+      <span class="tag">Mensajes de voz</span>
+      <span class="tag">Email automático</span>
+      <span class="tag">Formulario web</span>
+      <span class="tag">Web profesional</span>
+    </div>
+
+    <div class="mt-40" style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+      <a href="#s10" class="cta-btn">Ver propuesta completa →</a>
+      <a href="https://wa.me/34XXXXXXXXX" class="cta-ghost">Hablar con Ronald</a>
+    </div>
+
+    <p class="text-sm mt-24">Preparado por <strong style="color:var(--text)">Ronald Palma</strong> · ronald@palferia.me · Powered by <span style="color:var(--green)">ME-SportCenter · PalferIA</span></p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S2 — QUIÉN SOMOS ═══════════════════════════════════ -->
+<section class="slide" id="s2">
+  <div class="slide-inner">
+    <div class="slide-count">02 / 10 — Autoridad</div>
+    <h2>¿Por qué<br><span class="accent">PalferIA?</span></h2>
+    <div class="divider"></div>
+    <p class="big mt-16">
+      Somos la primera agencia en Valencia especializada en automatización IA para el deporte.
+      No vendemos software genérico — construimos sistemas a medida para clubes como el tuyo.
+    </p>
+
+    <div class="grid-3 mt-32">
+      <div class="card">
+        <div class="icon-circle">🏆</div>
+        <h3 class="mb-8">Especializados en deporte</h3>
+        <p class="text-sm">Entendemos el negocio del club: socios, cuotas, categorías, eventos. No hay que explicarte nada.</p>
+      </div>
+      <div class="card">
+        <div class="icon-circle">⚡</div>
+        <h3 class="mb-8">Implementación en 3 semanas</h3>
+        <p class="text-sm">Sprint de arranque rápido. En 21 días tienes el sistema funcionando en todos tus canales.</p>
+      </div>
+      <div class="card">
+        <div class="icon-circle">🤝</div>
+        <h3 class="mb-8">No sustituye — complementa</h3>
+        <p class="text-sm">Trabajamos junto a Clupik, WodBuster o cualquier plataforma que ya uses. Sin migraciones.</p>
+      </div>
+    </div>
+
+    <div class="card card-orange mt-24">
+      <div style="display:flex;align-items:flex-start;gap:16px">
+        <div class="icon-circle" style="margin-bottom:0;flex-shrink:0">🌐</div>
+        <div>
+          <h3 class="mb-8">Primeros en España con anuncios en ChatGPT</h3>
+          <p class="text-sm">Desde agosto 2026 gestionamos anuncios en ChatGPT para nuestros clientes. Somos de las pocas agencias en España con esta capacidad.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block mt-24">
+      <p>"No competimos con tu app de gestión. Automatizamos lo que la app no cubre: la comunicación con familias, las respuestas fuera de horario y la captación de nuevos socios."</p>
+      <div class="quote-source">Ronald Palma · Fundador PalferIA · ME-SportCenter</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S3 — EL PROBLEMA ═══════════════════════════════════ -->
+<section class="slide" id="s3">
+  <div class="slide-inner">
+    <div class="slide-count">03 / 10 — El Problema</div>
+    <h2>Lo que te <span class="accent">cuesta</span><br>sin que lo veas</h2>
+    <div class="divider"></div>
+    <p class="big mt-16">
+      El club va bien. Pero hay trabajo invisible que ocupa horas cada semana — y esas horas tienen precio.
+    </p>
+
+    <ul class="pain-list mt-24">
+      <li>
+        <span class="pain-icon">📱</span>
+        <div>
+          <strong>Las consultas llegan por WhatsApp, email e Instagram a la vez.</strong>
+          <br><span class="text-sm">Y la respuesta depende de que alguien esté libre. Las familias esperan. Algunos no inscriben.</span>
+        </div>
+      </li>
+      <li>
+        <span class="pain-icon">📋</span>
+        <div>
+          <strong>Las altas nuevas se gestionan a mano: formularios, llamadas, mensajes de WhatsApp.</strong>
+          <br><span class="text-sm">Cada inscripción son 15–30 min de trabajo administrativo. Con 20 altas, son 10 horas perdidas.</span>
+        </div>
+      </li>
+      <li>
+        <span class="pain-icon">💸</span>
+        <div>
+          <strong>Las bajas silenciosas no se detectan hasta que ya se han ido.</strong>
+          <br><span class="text-sm">Sin recordatorio proactivo, un socio inactivo 3 semanas se pierde sin que nadie lo reactivara.</span>
+        </div>
+      </li>
+      <li>
+        <span class="pain-icon">🌐</span>
+        <div>
+          <strong>La web actual no capta socios ni responde preguntas fuera de horario.</strong>
+          <br><span class="text-sm">Las familias buscan el club en Google, entran a la web y no encuentran respuesta. Se van al siguiente resultado.</span>
+        </div>
+      </li>
+    </ul>
+
+    <div class="grid-2 mt-32">
+      <div class="card" style="text-align:center">
+        <div class="stat-num">~8–15</div>
+        <div class="stat-label">leads/mes perdidos por falta de respuesta rápida</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="stat-num">+10h</div>
+        <div class="stat-label">horas/mes en gestión administrativa manual</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S4 — PARA QUIÉN ES ═══════════════════════════════════ -->
+<section class="slide" id="s4">
+  <div class="slide-inner">
+    <div class="slide-count">04 / 10 — Para Quién Es</div>
+    <h2>Esta propuesta<br>es <span class="accent">para ti si…</span></h2>
+    <div class="divider"></div>
+
+    <div class="grid-2 mt-32">
+      <div>
+        <ul class="check-list">
+          <li>Gestionas entre 50 y 500 socios activos con varias categorías</li>
+          <li>Recibes consultas de altas por WhatsApp, email o llamadas y las gestionas manualmente</li>
+          <li>Quieres una web profesional que represente al club y capte nuevos socios</li>
+          <li>Pierdes socios sin saber por qué — sin sistema de reactivación automática</li>
+          <li>Quieres crecer en número de inscritos sin contratar más personal administrativo</li>
+          <li>Las familias te preguntan lo mismo una y otra vez: horarios, cuotas, categorías</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card card-orange">
+          <h3 class="mb-16 accent">UD Rocafort CF — tu perfil</h3>
+          <ul class="check-list">
+            <li>Club formativo con múltiples equipos (Prebenjamín a Senior)</li>
+            <li>Base de socios activa — Campeones 24/25 en varias categorías</li>
+            <li>Alta actividad en redes y comunicación por WhatsApp</li>
+            <li>Sin sistema automatizado de atención ni captación digital</li>
+            <li>Oportunidad real: familias buscando fútbol formativo en Rocafort</li>
+          </ul>
+        </div>
+        <div class="card mt-16" style="background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.2)">
+          <p class="text-sm"><strong style="color:#f87171;">No es para ti si…</strong><br>Ya tienes un sistema completo de CRM deportivo cubriendo altas, comunicación y captación. En ese caso, hablamos de complementar, no de sustituir.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S5 — LA SOLUCIÓN ═══════════════════════════════════ -->
+<section class="slide" id="s5">
+  <div class="slide-inner">
+    <div class="slide-count">05 / 10 — La Solución</div>
+    <h2>El método<br><span class="accent">Sprint IA</span></h2>
+    <div class="divider"></div>
+    <p class="big mt-16">Tres pasos. Tres semanas. Sistema funcionando en producción.</p>
+
+    <div class="steps mt-32">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Diagnóstico de operaciones — Semana 1</h3>
+          <p class="text-sm mt-8">Mapeamos cómo gestionas hoy: altas, comunicación, preguntas frecuentes, canales activos. Identificamos qué automatizamos primero para el mayor impacto inmediato.</p>
+          <div class="channel-tags mt-12">
+            <span class="tag">Entrevista de procesos</span>
+            <span class="tag">Análisis canales</span>
+            <span class="tag">FAQ del club</span>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Implementación — Semanas 2 y 3</h3>
+          <p class="text-sm mt-8">Desplegamos el agente IA en todos tus canales y construimos tu web profesional. Sin código de tu parte, sin fricción.</p>
+          <div class="channel-tags mt-12">
+            <span class="tag">WhatsApp IA activo</span>
+            <span class="tag">Web publicada</span>
+            <span class="tag">Flujos configurados</span>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Entrega + soporte — Desde semana 3</h3>
+          <p class="text-sm mt-8">Te entregamos el sistema funcionando. Formación breve para el equipo. Ajustes incluidos en el plan de mantenimiento elegido.</p>
+          <div class="channel-tags mt-12">
+            <span class="tag">Formación incluida</span>
+            <span class="tag">Soporte mensual</span>
+            <span class="tag">Ajustes por plan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-orange mt-32">
+      <h3 class="mb-12">El agente IA multicanal atiende en:</h3>
+      <div class="channel-tags">
+        <span class="tag">WhatsApp texto — respuestas instantáneas 24/7</span>
+        <span class="tag">WhatsApp audio — el agente entiende mensajes de voz</span>
+        <span class="tag">Email — gestión automática de consultas</span>
+        <span class="tag">Formulario web — captación desde tu nueva web</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S6 — ENTREGABLES ═══════════════════════════════════ -->
+<section class="slide" id="s6">
+  <div class="slide-inner">
+    <div class="slide-count">06 / 10 — Entregables</div>
+    <h2>Lo que recibes<br><span class="accent">exactamente</span></h2>
+    <div class="divider"></div>
+
+    <div class="grid-2 mt-28">
+      <div class="card card-orange">
+        <div class="icon-circle" style="margin-bottom:12px">🤖</div>
+        <h3 class="mb-16 accent">Agente IA Multicanal</h3>
+        <ul class="check-list">
+          <li>Responde preguntas frecuentes del club 24/7 (horarios, cuotas, categorías, pruebas)</li>
+          <li>Gestiona consultas de altas e inscripciones — cualifica el lead y avisa al club</li>
+          <li>Entiende mensajes de voz de WhatsApp (transcribe y responde)</li>
+          <li>Envía bienvenida automática a nuevos socios</li>
+          <li>Recordatorio de pago de cuota antes del vencimiento</li>
+          <li>Detección de inactividad — alerta al equipo antes de que el socio se dé de baja</li>
+          <li>Confirmación de convocatoria para partidos y entrenamientos</li>
+          <li>Integración con tu email oficial del club</li>
+          <li>Widget de chat en la web del club</li>
+        </ul>
+      </div>
+      <div>
+        <div class="card card-green">
+          <div class="icon-circle icon-circle-g" style="margin-bottom:12px">🌐</div>
+          <h3 class="mb-16 accent-g">Web Profesional del Club</h3>
+          <ul class="check-list g">
+            <li>Diseño profesional a medida para UD Rocafort CF</li>
+            <li>Secciones: Inicio, Club, Categorías, Galería, Contacto</li>
+            <li>Optimizada para móvil (familias que buscan en el teléfono)</li>
+            <li>Formulario de contacto conectado al agente IA</li>
+            <li>Widget de chat integrado</li>
+            <li>SEO local básico (aparecer en Google Rocafort fútbol)</li>
+            <li>Dominio propio incluido (1 año)</li>
+            <li>Hosting incluido (alojamiento VPS PalferIA)</li>
+          </ul>
+        </div>
+        <div class="card mt-16">
+          <h3 class="mb-12">Formación y documentación</h3>
+          <ul class="check-list" style="list-style:none">
+            <li>Sesión de formación de 1 hora con el equipo del club</li>
+            <li>Guía de uso del agente en PDF</li>
+            <li>Panel de acceso para ver conversaciones (si aplica)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S7 — CASO REAL ═══════════════════════════════════ -->
+<section class="slide" id="s7">
+  <div class="slide-inner">
+    <div class="slide-count">07 / 10 — Caso Real</div>
+    <h2>Ya funciona.<br><span class="accent">Aquí el ejemplo.</span></h2>
+    <div class="divider"></div>
+
+    <div class="card card-orange mt-28">
+      <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <h3 class="accent mb-8">Tecniluispa · Empresa local B2B · Valencia</h3>
+          <p class="text-sm mb-16">Sector técnico / servicios. Perfil similar al de un club: muchas consultas repetitivas, respuesta lenta fuera de horario, leads perdidos sin seguimiento.</p>
+          <ul class="check-list">
+            <li>Agente IA multicanal desplegado en WhatsApp + web</li>
+            <li>Respuesta automática en segundos — antes tardaban horas</li>
+            <li>Leads capturados y cualificados sin intervención humana</li>
+            <li>El equipo recuperó +8 horas semanales de gestión</li>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:160px">
+          <div class="card" style="text-align:center;padding:20px">
+            <div class="stat-num" style="font-size:2.2rem">-90%</div>
+            <div class="stat-label">tiempo de respuesta inicial</div>
+          </div>
+          <div class="card" style="text-align:center;padding:20px">
+            <div class="stat-num" style="font-size:2.2rem">+8h</div>
+            <div class="stat-label">semanales recuperadas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block mt-24">
+      <p>"Antes tardábamos horas en responder las mismas preguntas. Ahora el agente las responde en segundos y nosotros nos centramos en lo que genera valor."</p>
+      <div class="quote-source">Cliente PalferIA · Tecniluispa · Valencia</div>
+    </div>
+
+    <div class="card mt-24">
+      <h3 class="mb-12">Aplicado a UD Rocafort CF — estimación</h3>
+      <div class="grid-3">
+        <div class="stat-box">
+          <div class="stat-num" style="font-size:1.8rem">8–15</div>
+          <div class="stat-label">consultas de altas/mes capturadas automáticamente</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="font-size:1.8rem">+10h</div>
+          <div class="stat-label">horas/mes libres de gestión administrativa</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" style="font-size:1.8rem">24/7</div>
+          <div class="stat-label">atención a familias sin que nadie esté físicamente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S8 — POR QUÉ NOSOTROS ═══════════════════════════════════ -->
+<section class="slide" id="s8">
+  <div class="slide-inner">
+    <div class="slide-count">08 / 10 — Por Qué Nosotros</div>
+    <h2>¿Por qué <span class="accent">no</span><br>hacerlo solo?</h2>
+    <div class="divider"></div>
+    <p class="big mt-16">Comparación honesta: lo que cuesta hacer esto sin PalferIA.</p>
+
+    <div class="grid-2 mt-28">
+      <div class="card" style="background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.2)">
+        <h3 class="mb-16" style="color:#f87171">Hacerlo solo / agencia genérica</h3>
+        <ul class="pain-list" style="gap:10px">
+          <li style="background:transparent;padding:8px 0;border:none">
+            <span class="pain-icon">❌</span>
+            <span class="text-sm">Agencia web que no entiende el deporte — web bonita pero sin lógica de club</span>
+          </li>
+          <li style="background:transparent;padding:8px 0;border:none">
+            <span class="pain-icon">❌</span>
+            <span class="text-sm">Chatbot genérico que no sabe nada de altas, cuotas ni categorías</span>
+          </li>
+          <li style="background:transparent;padding:8px 0;border:none">
+            <span class="pain-icon">❌</span>
+            <span class="text-sm">Meses de implementación — y tú tienes que gestionar a 3 proveedores distintos</span>
+          </li>
+          <li style="background:transparent;padding:8px 0;border:none">
+            <span class="pain-icon">❌</span>
+            <span class="text-sm">Sin soporte continuo — si algo falla, esperas días</span>
+          </li>
+        </ul>
+      </div>
+      <div class="card card-orange">
+        <h3 class="mb-16 accent">Con PalferIA ME-SportCenter</h3>
+        <ul class="check-list">
+          <li>Especialistas en deporte — entendemos cómo funciona un club por dentro</li>
+          <li>Un solo interlocutor — web + agente + soporte todo en uno</li>
+          <li>Sistema funcionando en 3 semanas — no 3 meses</li>
+          <li>Soporte mensual incluido — ajustamos, mejoramos, no desaparecemos</li>
+          <li>Agente entrenado con el vocabulario y procesos de UD Rocafort CF</li>
+          <li style="margin-top:4px"><span class="tag-green" style="font-size:0.78rem;padding:3px 10px;border-radius:10px;background:rgba(132,204,22,0.1);border:1px solid rgba(132,204,22,0.3);color:var(--green)">Bonus: anuncios en ChatGPT disponibles desde ago-2026</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S9 — ANTES vs DESPUÉS ═══════════════════════════════════ -->
+<section class="slide" id="s9">
+  <div class="slide-inner">
+    <div class="slide-count">09 / 10 — Resultado</div>
+    <h2>Antes y después<br><span class="accent">en 3 semanas</span></h2>
+    <div class="divider"></div>
+
+    <div class="ba-grid mt-32">
+      <div class="ba-card ba-before">
+        <div class="ba-label">HOY — Sin el sistema</div>
+        <ul class="ba-list">
+          <li>Las familias esperan respuesta horas o días</li>
+          <li>Las altas nuevas requieren intervención manual</li>
+          <li>Las bajas silenciosas no se detectan</li>
+          <li>La web no capta ni informa fuera de horario</li>
+          <li>Los pagos se recuerdan tarde — ya hay impago</li>
+          <li>10+ horas/mes en gestión repetitiva</li>
+          <li>Familia sin respuesta = familia en otro club</li>
+        </ul>
+      </div>
+      <div class="ba-card ba-after">
+        <div class="ba-label">CON ME-SPORT — 3 semanas después</div>
+        <ul class="ba-list">
+          <li>Respuesta automática en segundos, 24/7</li>
+          <li>Altas cualificadas y notificadas sin tocar nada</li>
+          <li>Alerta de inactividad antes de que el socio se vaya</li>
+          <li>Web profesional que capta e informa siempre</li>
+          <li>Recordatorio de cuota automático — cero impagos olvidados</li>
+          <li>Equipo centrado en el deporte, no en la admin</li>
+          <li>Cada consulta = una oportunidad capturada</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-3 mt-28">
+      <div class="card" style="text-align:center">
+        <div class="stat-num">3</div>
+        <div class="stat-label">semanas hasta sistema activo</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="stat-num">4</div>
+        <div class="stat-label">canales de atención automatizados</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">disponibilidad sin personal adicional</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ S10 — INVERSIÓN ═══════════════════════════════════ -->
+<section class="slide" id="s10">
+  <div class="slide-inner">
+    <div class="slide-count">10 / 10 — Inversión</div>
+    <h2>Tu inversión<br><span class="accent">Sprint IA</span></h2>
+    <div class="divider"></div>
+
+    <!-- SETUP -->
+    <div class="price-setup mt-28">
+      <div class="price-plan-name">Sprint IA · Setup único</div>
+      <div class="price-desc">Agente IA multicanal + Web profesional + Dominio + Hosting</div>
+      <div class="price-tag"><span>€</span>1.800</div>
+      <p class="text-sm mt-16" style="color:var(--muted)">Pago único · Incluye dominio 1 año · Hosting 1 año · Formación · Configuración completa</p>
+
+      <div style="margin-top:20px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto">
+        <ul class="check-list" style="font-size:0.85rem">
+          <li>Agente IA multicanal (WhatsApp texto + voz + email + formulario web)</li>
+          <li>Web profesional UD Rocafort CF (diseño a medida + 5 secciones)</li>
+          <li>Dominio propio incluido — 1 año</li>
+          <li>Hosting en VPS PalferIA — 1 año</li>
+          <li>Configuración completa + formación al equipo</li>
+          <li>Entregado en 3 semanas</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- MANTENIMIENTO -->
+    <h3 class="mt-32 mb-8">Cuota mensual — elige tu plan</h3>
+    <p class="text-sm mb-20">Contratos independientes. Se puede cambiar de plan con 30 días de aviso.</p>
+
+    <div class="maint-grid">
+      <div class="maint-card">
+        <div class="maint-name">Básico</div>
+        <div class="maint-price">250<span>€/mes</span></div>
+        <ul class="maint-features">
+          <li>1h de ajustes al mes</li>
+          <li>Soporte por email</li>
+          <li>Actualizaciones del agente</li>
+          <li>Hosting y dominio renovados</li>
+        </ul>
+      </div>
+      <div class="maint-card recommended">
+        <div class="maint-badge">Recomendado</div>
+        <div class="maint-name">Profesional</div>
+        <div class="maint-price">490<span>€/mes</span></div>
+        <ul class="maint-features">
+          <li>3h de ajustes al mes</li>
+          <li>Soporte prioritario</li>
+          <li>Mejoras proactivas del agente</li>
+          <li>Revisión mensual de rendimiento</li>
+          <li>Hosting y dominio renovados</li>
+        </ul>
+      </div>
+      <div class="maint-card">
+        <div class="maint-name">Avanzado</div>
+        <div class="maint-price">900<span>€/mes</span></div>
+        <ul class="maint-features">
+          <li>6h de ajustes al mes</li>
+          <li>Soporte directo por WhatsApp</li>
+          <li>Revisión quincenal</li>
+          <li>Automatizaciones nuevas incluidas</li>
+          <li>Hosting y dominio renovados</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- COSTES DIRECTOS -->
+    <div class="card mt-24">
+      <h3 class="mb-12">Costes que asume el club directamente</h3>
+      <div class="grid-2" style="gap:12px">
+        <div>
+          <p class="text-sm"><strong style="color:var(--text)">API IA (tokens OpenAI/Claude)</strong><br>~20–60 €/mes — variable según uso. El club paga directamente a OpenAI.</p>
+        </div>
+        <div>
+          <p class="text-sm"><strong style="color:var(--text)">WhatsApp Business API</strong><br>0–30 €/mes — variable según volumen de mensajes. Gestionado por el club.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- COSTE DE NO ACTUAR -->
+    <div class="card mt-20" style="background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.2)">
+      <p class="text-sm"><strong style="color:#f87171;">Lo que cuesta NO actuar:</strong> 8 altas no capturadas/mes × cuota media 80€ = <strong style="color:#f87171;">640€ perdidos/mes</strong> → <strong style="color:#f87171;">7.680€/año</strong>. El sistema se paga solo en menos de 3 meses.</p>
+    </div>
+
+    <!-- CTA FINAL -->
+    <div class="mt-40" style="text-align:center">
+      <h3 class="mb-8">¿Empezamos?</h3>
+      <p class="text-sm mb-24">Una reunión de 30 min para validar el plan y dar el OK. Sin compromiso.</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+        <a href="https://wa.me/34XXXXXXXXX?text=Hola%20Ronald%2C%20quiero%20hablar%20sobre%20la%20propuesta%20ME-sport%20para%20UD%20Rocafort%20CF" class="cta-btn">Reservar reunión por WhatsApp</a>
+        <a href="mailto:ronald@palferia.me?subject=Propuesta%20ME-sport%20UD%20Rocafort%20CF" class="cta-ghost">Escribir por email</a>
+      </div>
+      <div style="margin-top:28px;display:flex;flex-direction:column;gap:8px;align-items:center">
+        <div class="contact-row"><span>Ronald Palma</span><span>·</span><a href="mailto:ronald@palferia.me">ronald@palferia.me</a></div>
+        <div class="contact-row"><span>Powered by</span><span class="accent-g">ME-SportCenter · PalferIA</span></div>
+        <p class="text-sm mt-8" style="opacity:0.5">Esta propuesta es personal y confidencial para UD Rocafort CF · Válida 30 días desde emisión</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Progress bar
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    bar.style.width = pct + '%';
+  });
+
+  // Slide dots
+  const slides = ['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10'];
+  const dots = document.querySelectorAll('.dot');
+
+  function gotoSlide(i) {
+    document.getElementById(slides[i]).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const i = slides.indexOf(e.target.id);
+        dots.forEach((d, j) => d.classList.toggle('active', i === j));
+      }
+    });
+  }, { threshold: 0.4 });
+
+  slides.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+</script>
+</body>
+</html>
