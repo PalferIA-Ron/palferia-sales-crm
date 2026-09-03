@@ -2061,7 +2061,7 @@ function renderWAContacts(contacts) {
 }
 
 // Search
-document.getElementById('wa-search-input').addEventListener('input', (e) => {
+document.getElementById('wa-search-input')?.addEventListener('input', (e) => {
   const q = e.target.value.toLowerCase();
   const filtered = waContacts.filter(c =>
     c.nombre.toLowerCase().includes(q) || (c.telefono || '').includes(q)
