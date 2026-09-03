@@ -8,8 +8,8 @@
 **Fase:** 1 — MVP en producción / Consolidación de arquitectura
 **Última sesión:** 2026-09-03
 **Próxima acción prioritaria:**
-1. Completar integración OpenWA ↔ Chatwoot (ver pasos pendientes abajo)
-2. Orquestador de propuestas — añadir bloque 3C DraftDayES + referenciar deliverables en S7
+1. Completar integración OpenWA ↔ Chatwoot (3 pasos — ver Infraestructura/Técnico)
+2. Generar primera propuesta real con el orquestador actualizado (Hormozi + diseño web)
 3. Seguimiento Tecniluispa y Cortinajes Valls & París
 
 ---
@@ -134,6 +134,48 @@ Deploy:       push main → GitHub Actions → rsync --exclude='config.js'
 ---
 
 ## SESIONES
+
+---
+
+### Sesión 2026-09-03 — Orquestador Hormozi/StoryBrand + Kit Diseño Web
+**Objetivo:** Mejorar estructura del orquestador de propuestas + crear skill de diseño web
+
+**Completado:**
+- [x] Bloque 3C añadido al orquestador (DraftDayES — early adopter SaaS)
+  - Framework Hormozi/StoryBrand: autoridad → dolor → avatar → método → entregables → prueba → diferenciador → antes/después → inversión+CTA
+  - CTA es sesión de diagnóstico gratuita 30 min, no cierre directo
+  - Pricing flexible (en definición) — no bloquea la propuesta
+- [x] Bloques 3A (COM-studio) y 3B (ME-sport) reescritos con mismo framework
+  - Datos de auditoría integrados en el relato como dolor emocional, no como slides técnicos
+  - Slide 2: autoridad de Ronald antes del diagnóstico
+  - Slide 3: gaps reales de auditoría en palabras del cliente
+  - Slide 8: ChatGPT Ads como diferenciador COM-studio / "complementamos WodBuster" ME-sport
+  - Slide 10 ME-sport: cuota mensual como inversión recurrente (ingreso recurrente = prioridad)
+- [x] S7 del setter expandido a 3 bloques independientes:
+  - S7A: entregables del plan setup (leídos desde `_deliverables/`)
+  - S7B: cuota mensual (solo si el cliente eligió mantenimiento)
+  - S7C: servicios adicionales mensuales (ads, RRSS, SEO, ChatGPT Ads) con recordatorio "ads van directo al cliente"
+  - Total mensual consolidado al final de S7
+- [x] Creado `ai/tools/kit-diseno-web/SKILL.md`
+  - Sistema de diseño por proyecto: COM-studio (teal+Playfair), ME-sport (lima+Inter), DraftDayES (indigo+SpaceGrotesk), Setter (ámbar)
+  - Proceso obligatorio de 2 pasos: plan aprobado → construir
+  - Anti-patrones explícitos (3 clusters AI-genéricos) + elementos prohibidos
+  - 3 direcciones de diseño cuando el brief es abierto
+  - Protocolo de marca de cliente (extraer colores reales)
+  - **Eje 1:** webs que convierten — titular sobre dolor, CTA sin scroll, mobile-first
+  - **Eje 2:** el agente multicanal es el caballo de batalla — visible desde el primer segundo, demo en acción, no promesa
+  - Widget WhatsApp flotante estándar incluido en la skill
+  - Estructura de 7 secciones para web cliente con agente integrado
+- [x] Kit-diseno-web integrado en Fase 4 del orquestador
+  - Paso 4.1B: plan de diseño obligatorio antes de generar HTML
+  - Paso 4.2B: landing page con agente como protagonista si el plan la incluye
+- [x] Commits y push de todo a GitHub (3 commits)
+
+**Decisiones tomadas:**
+- Los bloques 3A/3B/3C siguen el mismo framework Hormozi/StoryBrand — coherencia de marca
+- COM-studio y ME-sport son los que generan ingresos recurrentes — sus propuestas priorizan cuota mensual
+- La web del cliente no es entregable secundario — es el escaparate del agente IA
+- El agente se demuestra en la web, no se promete
 
 ---
 
