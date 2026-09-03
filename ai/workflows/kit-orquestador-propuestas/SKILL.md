@@ -636,6 +636,10 @@ Recoger correcciones. Aplicarlas al plan. Confirmar antes de generar.
 
 ## FASE 4 — Generar HTML de la propuesta
 
+> **Skill de diseño activa:** Antes de construir cualquier HTML, leer y aplicar
+> `ai/tools/kit-diseno-web/SKILL.md`. Esa skill define paletas, tipografías,
+> anti-patrones, proceso de dos pasos y el rol del agente en webs de cliente.
+
 ### Paso 4.1 — Generar slug único
 
 ```
@@ -643,16 +647,36 @@ Recoger correcciones. Aplicarlas al plan. Confirmar antes de generar.
 Ejemplo: b7f3c1a9-cortinajes-valls
 ```
 
+### Paso 4.1B — Plan de diseño (proceso de dos pasos del kit-diseno-web)
+
+Antes de escribir HTML, mostrar el plan de diseño según el proyecto:
+
+```
+🎨 PLAN DE DISEÑO — [NOMBRE] · [proyecto]
+══════════════════════════════════════════
+PALETA:     [según sistema PalferIA del proyecto]
+TIPOGRAFÍA: [según proyecto — Playfair+Inter / Inter / Space Grotesk]
+SIGNATURE:  [el elemento memorable de esta propuesta concreta]
+            Ej: animación del dato clave de ROI / contador de leads /
+                color del sector del cliente en el slide de diagnóstico
+QUÉ EVITAMOS: [los 3 clichés más probables para este sector]
+══════════════════════════════════════════
+¿Apruebas el plan o ajustamos algo?
+```
+
+Esperar confirmación antes de generar el HTML.
+
 ### Paso 4.2 — Construir HTML (motor de slides)
 
-**Estilo visual según proyecto:**
-- COM-studio: acento teal `#0d9488` / `#14b8a6`, tipografía Playfair Display
-- ME-sport: acento verde `#84cc16`, tipografía Inter
+**Estilo visual según proyecto** (del kit-diseno-web):
+- COM-studio: `#0d9488`/`#14b8a6`, Playfair Display (display) + Inter (cuerpo)
+- ME-sport: `#84cc16`, Inter 900 en headlines, bold agresivo
+- DraftDayES: `#6366f1`/`#f97316`, Space Grotesk + Inter
 
-**Motor de slides** (igual que Cortinajes y Tecniluispa):
+**Motor de slides:**
 - Position-absolute, `opacity 0→1`, transición suave
 - Navegación: flechas + teclado + swipe táctil
-- Contador automático: `counterTotal.textContent = total` (no hardcodear)
+- Contador automático: `counterTotal.textContent = total` (nunca hardcodear)
 - Responsive: breakpoints 480px y 900px, `100dvh` para iOS Safari
 - Fondo: `#0a0f1a` oscuro
 
@@ -662,6 +686,17 @@ Cada slide tiene:
 - `data-slide="N"` incremental
 - `class="slide"` para el contador automático
 - Contenido basado en los datos reales del prospecto
+- El slide de inversión (slide 10) incluye siempre el widget/CTA del agente
+
+### Paso 4.2B — Si el plan incluye landing page para el cliente
+
+Cuando el plan elegido incluye landing page (Autopilot 30, Socio Digital, Equipo IA, Liga IA),
+generar también la landing usando la estructura del kit-diseno-web:
+
+- Aplicar la estructura de 7 secciones (Hero → Agente → Problema → Método → Sector → Prueba → CTA)
+- El agente IA integrado es el protagonista visual — widget WhatsApp flotante incluido
+- Adaptar conversaciones de ejemplo al sector real del cliente
+- Guardar en: `clientes/[proyecto]/[nombre-slug]/landing/landing-[nombre-slug].html`
 
 ### Paso 4.3 — Guardar archivo
 
