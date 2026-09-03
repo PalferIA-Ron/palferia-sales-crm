@@ -2331,50 +2331,21 @@ async function loadPropuestas() {
   const grid = document.getElementById('propuestas-grid');
   grid.innerHTML = '<div class="empty-state"><p>Cargando...</p></div>';
 
-  try { await _loadPropuestasInner(grid); }
-  catch (ex) {
-    grid.innerHTML = `<div class="empty-state" style="text-align:left;padding:16px">
-      <p style="color:#f87171;font-weight:600">Excepción JS no capturada</p>
-      <p style="font-size:12px;opacity:.8;margin-top:4px">${esc(String(ex))}</p>
-      <button onclick="loadPropuestas()" style="margin-top:10px;padding:6px 14px;background:transparent;border:1px solid #B1F727;border-radius:6px;color:#B1F727;cursor:pointer;font-size:12px">Reintentar</button>
-    </div>`;
-  }
-}
-
-async function _loadPropuestasInner(grid) {
-  // DEBUG — verificar sesión activa
-  const { data: { session: dbgSession } } = await sb.auth.getSession();
-  const dbgUser = dbgSession?.user?.email || 'SIN SESIÓN';
-  const dbgRole = dbgSession ? 'authenticated' : 'anon';
-
   const { data, error } = await sb
     .from('propuestas')
     .select('id, titulo, estado, created_at, url, slug, proyecto, prospecto_id')
     .order('created_at', { ascending: false });
 
   if (error) {
-    grid.innerHTML = `<div class="empty-state" style="text-align:left;padding:16px">
-      <p style="color:#f87171;font-weight:600">Error al cargar propuestas</p>
-      <p style="font-size:12px;opacity:.8;margin-top:4px">Mensaje: ${esc(error.message)}</p>
-      <p style="font-size:12px;opacity:.8">Código: ${esc(String(error.code || '—'))}</p>
-      <p style="font-size:12px;opacity:.8">Sesión: ${esc(dbgUser)} (${dbgRole})</p>
-      <button onclick="loadPropuestas()" style="margin-top:10px;padding:6px 14px;background:transparent;border:1px solid #B1F727;border-radius:6px;color:#B1F727;cursor:pointer;font-size:12px">Reintentar</button>
-    </div>`;
+    grid.innerHTML = `<div class="empty-state"><p>Error: ${esc(error.message)}</p><button onclick="loadPropuestas()" style="margin-top:8px;padding:6px 14px;background:transparent;border:1px solid #B1F727;border-radius:6px;color:#B1F727;cursor:pointer;font-size:12px">Reintentar</button></div>`;
     return;
   }
 
   if (!data || data.length === 0) {
-    grid.innerHTML = `<div class="empty-state" style="text-align:left;padding:16px">
-      <p>No hay propuestas registradas.</p>
-      <p style="font-size:12px;opacity:.7;margin-top:6px">Sesión: ${esc(dbgUser)} (${dbgRole})</p>
-      <p style="font-size:12px;opacity:.7">Si crees que hay datos en Supabase, puede faltar la política RLS. Ejecuta en Supabase SQL Editor:</p>
-      <pre style="font-size:11px;background:rgba(255,255,255,.05);padding:8px;border-radius:4px;margin-top:6px;white-space:pre-wrap">create policy "authenticated_all" on propuestas for all to authenticated using (true) with check (true);</pre>
-      <button onclick="loadPropuestas()" style="margin-top:10px;padding:6px 14px;background:transparent;border:1px solid #B1F727;border-radius:6px;color:#B1F727;cursor:pointer;font-size:12px">Reintentar</button>
-    </div>`;
+    grid.innerHTML = '<div class="empty-state"><p>No hay propuestas. Crea la primera con el botón "+ Nueva propuesta".</p></div>';
     return;
   }
 
-  // Fetch prospecto nombres separately to avoid join RLS issues
   const prospectoIds = [...new Set(data.filter(p => p.prospecto_id).map(p => p.prospecto_id))];
   const prospectoMap = {};
   if (prospectoIds.length > 0) {
