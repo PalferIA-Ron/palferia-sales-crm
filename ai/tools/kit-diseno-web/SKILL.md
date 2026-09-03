@@ -20,21 +20,50 @@ es lo memorable — el resto debe ser quieto y disciplinado.
 
 ---
 
-## LOS DOS EJES DEL TRABAJO
+## LOS DOS ESCENARIOS DE TRABAJO
 
-### Eje 1 — Webs impactantes para clientes
+### Escenario A — Cliente SIN web (construimos desde cero)
 
-La web de un cliente de PalferIA no es un folleto digital. Es una máquina de captura.
-Cada decisión de diseño responde a una sola pregunta: **¿esto acerca al visitante a convertir?**
+Aquí aplican los dos ejes completos:
+
+**Eje 1 — Web impactante:**
+La web no es un folleto digital. Es una máquina de captura.
+Cada decisión responde a una sola pregunta: **¿esto acerca al visitante a convertir?**
 
 Principios que no se negocian:
 - El titular de la hero habla del dolor del cliente, no del nombre del negocio
 - El primer CTA aparece sin necesidad de hacer scroll
 - La velocidad de carga es parte del diseño (sin imágenes pesadas, CSS inline si aplica)
 - La identidad del negocio (colores, tono, sector) impregna cada elemento — no es un template con el logo cambiado
-- Mobile-first siempre — el 80% del tráfico de los clientes de PalferIA viene de móvil
+- Mobile-first siempre — el 80% del tráfico viene de móvil
 
-### Eje 2 — El agente multicanal es el caballo de batalla
+**Eje 2 — El agente multicanal es el caballo de batalla:**
+(ver sección completa abajo)
+
+---
+
+### Escenario B — Cliente CON web existente
+
+No rehacemos su web. Integramos el agente sobre lo que ya tiene.
+
+**Qué entregamos:**
+- Widget de WhatsApp/Chat flotante que se añade con 2 líneas de script
+- Landing page de captación independiente (subdominio o `/agente`) — esta SÍ la construimos nosotros
+- Instrucciones claras para que el cliente o su webmaster pegue el snippet
+
+**La landing page de captación es nuestro lienzo:**
+Aunque el cliente tenga web, siempre creamos una landing page propia donde el agente es protagonista. Es la página que se usa en anuncios, QR, tarjetas y WhatsApp Bio.
+- URL: `[negocio].com/agente` o subdominio dedicado
+- Estructura: las 7 secciones del Escenario A, pero enfocada en una sola acción
+- Sin menú, sin links externos — foco total en activar el agente
+
+**Cuándo sugerir rediseño web completo:**
+Solo si el score de la auditoría < 40 Y la web actual perjudica activamente la conversión.
+No proponer rediseño como primera opción — el agente genera valor independientemente de la web.
+
+---
+
+### El agente multicanal es el caballo de batalla (aplica en ambos escenarios)
 
 El agente IA integrado en la web es el producto principal de PalferIA.
 La web no presenta el negocio — **presenta el agente y lo pone en acción**.
