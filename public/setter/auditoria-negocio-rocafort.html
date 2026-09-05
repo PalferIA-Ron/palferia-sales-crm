@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditoría Digital — UD Rocafort CF</title>
+  <style>
+    :root {
+      --bg: #0a0b14; --card: #111827; --border: rgba(255,255,255,0.08);
+      --text: #f1f5f9; --muted: #94a3b8; --dim: #64748b;
+      --green: #C4F000; --red: #f87171; --amber: #fbbf24;
+      --blue: #60a5fa; --orange: #f97316;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .header { background: #0d0f1c; border-bottom: 1px solid rgba(196,240,0,0.2); padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .header-left h1 { font-size: 1.4rem; font-weight: 700; }
+    .header-left p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+    .badge-fecha { background: rgba(196,240,0,0.1); border: 1px solid rgba(196,240,0,0.3); color: var(--green); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+    .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+
+    /* SCORE GLOBAL */
+    .score-hero { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px; text-align: center; margin-bottom: 32px; }
+    .score-num { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--amber); }
+    .score-label { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+    .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 28px; }
+    .score-item { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 14px 8px; }
+    .score-item-num { font-size: 1.6rem; font-weight: 700; line-height: 1; }
+    .score-item-label { font-size: 10px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .score-red { color: var(--red); }
+    .score-amber { color: var(--amber); }
+    .score-green { color: var(--green); }
+
+    /* CRÍTICOS */
+    .criticos { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.2); border-radius: 16px; padding: 24px; margin-bottom: 32px; }
+    .criticos h2 { color: var(--red); font-size: 1rem; font-weight: 700; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
+    .critico-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(248,113,113,0.1); }
+    .critico-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .critico-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.3); color: var(--red); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .critico-body h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 3px; }
+    .critico-body p { font-size: 0.82rem; color: var(--muted); }
+    .critico-oportunidad { font-size: 0.78rem; color: var(--green); margin-top: 4px; font-weight: 600; }
+
+    /* SECCIONES */
+    .section { margin-bottom: 28px; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .section-header h2 { font-size: 1.05rem; font-weight: 700; }
+    .section-score { font-size: 1.1rem; font-weight: 800; padding: 4px 12px; border-radius: 8px; background: rgba(255,255,255,0.06); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .data-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; gap: 16px; }
+    .data-row:last-child { border-bottom: none; }
+    .data-label { color: var(--muted); flex-shrink: 0; }
+    .data-val { text-align: right; font-weight: 500; }
+    .tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .tag-red { background: rgba(248,113,113,0.15); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+    .tag-amber { background: rgba(251,191,36,0.12); color: var(--amber); border: 1px solid rgba(251,191,36,0.3); }
+    .tag-green { background: rgba(196,240,0,0.1); color: var(--green); border: 1px solid rgba(196,240,0,0.25); }
+    .hallazgo { display: flex; gap: 10px; align-items: flex-start; font-size: 0.85rem; padding: 8px 0; }
+    .hallazgo::before { content: '→'; color: var(--orange); flex-shrink: 0; font-weight: 700; }
+    .hallazgo.ok::before { content: '✓'; color: var(--green); }
+    .hallazgo.warn::before { content: '⚠'; color: var(--amber); }
+    .hallazgo.bad::before { content: '✗'; color: var(--red); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .score-grid { grid-template-columns: repeat(3,1fr); } .grid-2 { grid-template-columns: 1fr; } }
+
+    /* TOP 10 */
+    .acciones { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .accion-item { display: flex; gap: 16px; align-items: flex-start; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .accion-item:last-child { border-bottom: none; }
+    .accion-num { font-size: 1.4rem; font-weight: 800; color: var(--orange); opacity: 0.5; flex-shrink: 0; min-width: 32px; line-height: 1.2; }
+    .accion-body h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; }
+    .accion-body p { font-size: 0.8rem; color: var(--muted); }
+    .accion-tags { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+    .tag-impacto { background: rgba(196,240,0,0.1); color: var(--green); border: 1px solid rgba(196,240,0,0.2); font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 8px; }
+    .tag-esfuerzo-bajo { background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 8px; }
+    .tag-esfuerzo-medio { background: rgba(251,191,36,0.1); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 8px; }
+
+    /* OPORTUNIDAD PALFERIA */
+    .oportunidad-box { background: rgba(196,240,0,0.05); border: 1px solid rgba(196,240,0,0.2); border-radius: 14px; padding: 24px; margin-bottom: 28px; }
+    .oportunidad-box h2 { color: var(--green); font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
+    .oportunidad-item { font-size: 0.88rem; padding: 6px 0; border-bottom: 1px solid rgba(196,240,0,0.08); display: flex; gap: 10px; }
+    .oportunidad-item:last-child { border-bottom: none; }
+    .oportunidad-item::before { content: '💡'; flex-shrink: 0; }
+
+    footer { text-align: center; padding: 32px; color: var(--dim); font-size: 0.78rem; border-top: 1px solid var(--border); margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Auditoría Digital — UD Rocafort CF</h1>
+    <p>ME-sport · PalferIA · Análisis de presencia digital completa</p>
+  </div>
+  <span class="badge-fecha">Septiembre 2026</span>
+</div>
+
+<div class="container">
+
+  <!-- SCORE GLOBAL -->
+  <div class="score-hero">
+    <div class="score-num">24</div>
+    <div class="score-label">Puntuación global de presencia digital (0–100)</div>
+    <div class="score-grid">
+      <div class="score-item">
+        <div class="score-item-num score-red">0</div>
+        <div class="score-item-label">Web</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-num score-amber">52</div>
+        <div class="score-item-label">Redes</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-num score-red">10</div>
+        <div class="score-item-label">Oferta</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-num score-red">15</div>
+        <div class="score-item-label">Embudo</div>
+      </div>
+      <div class="score-item">
+        <div class="score-item-num score-red">20</div>
+        <div class="score-item-label">Reputación</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HALLAZGOS CRÍTICOS -->
+  <div class="criticos">
+    <h2>🔴 Hallazgos Críticos — Arreglar Ya</h2>
+
+    <div class="critico-item">
+      <div class="critico-num">1</div>
+      <div class="critico-body">
+        <h3>No tienen web propia</h3>
+        <p>Usan Linktree (linktr.ee/udrocafortcf) como punto de entrada digital. No indexable en Google, sin SEO, sin formularios, sin branding propio.</p>
+        <div class="critico-oportunidad">→ Oportunidad directa PalferIA: web profesional + SEO local</div>
+      </div>
+    </div>
+
+    <div class="critico-item">
+      <div class="critico-num">2</div>
+      <div class="critico-body">
+        <h3>Sin formulario de inscripción online</h3>
+        <p>Las familias interesadas no tienen cómo inscribir a sus hijos digitalmente. El proceso es presencial (oficina martes y jueves 17:00–18:30). Fricción máxima.</p>
+        <div class="critico-oportunidad">→ Formulario + agente IA que gestione consultas 24/7</div>
+      </div>
+    </div>
+
+    <div class="critico-item">
+      <div class="critico-num">3</div>
+      <div class="critico-body">
+        <h3>Sin precios ni cuotas publicadas en ningún canal</h3>
+        <p>Una familia que busca fútbol formativo en Rocafort no puede saber cuánto cuesta sin llamar o ir en persona. La competencia tampoco los publica, pero eso crea una oportunidad de diferenciación.</p>
+        <div class="critico-oportunidad">→ Landing con precios claros + CTA directo</div>
+      </div>
+    </div>
+
+    <div class="critico-item">
+      <div class="critico-num">4</div>
+      <div class="critico-body">
+        <h3>Google Business Profile no optimizado</h3>
+        <p>Sin reseñas verificadas encontradas. Una escuela de fútbol formativo debería tener mínimo 15–20 reseñas de familias en Google Maps. Ahora mismo son invisibles en búsqueda local.</p>
+        <div class="critico-oportunidad">→ Perfil de Google optimizado + automatización de solicitud de reseñas</div>
+      </div>
+    </div>
+
+    <div class="critico-item">
+      <div class="critico-num">5</div>
+      <div class="critico-body">
+        <h3>Email no corporativo (Gmail)</h3>
+        <p>uniondeportivarocafort@gmail.com. Transmite poca profesionalidad frente a familias que evalúan dónde inscribir a sus hijos. Un dominio propio lo resuelve.</p>
+        <div class="critico-oportunidad">→ Dominio propio + email corporativo incluido en web</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANÁLISIS POR ÁREA -->
+
+  <!-- WEB -->
+  <div class="section">
+    <div class="section-header">
+      <h2>🌐 Web / Presencia online</h2>
+      <span class="section-score score-red">0/100</span>
+    </div>
+    <div class="card">
+      <div class="hallazgo bad">No tienen web propia. Usan Linktree como hub digital desde septiembre 2025.</div>
+      <div class="hallazgo bad">Linktree no es indexable en Google — cero visibilidad SEO para "fútbol formativo Rocafort" o "escuela fútbol Rocafort Valencia".</div>
+      <div class="hallazgo bad">Linktree solo tiene 3 links: Lotería de Navidad, Canal WhatsApp y redes sociales. Sin información del club, categorías, ni cómo apuntarse.</div>
+      <div class="hallazgo warn">El Linktree lleva operativo solo 11 meses — antes de eso ni siquiera existía ese hub.</div>
+      <div class="hallazgo ok">El municipio tiene <strong>6.000 habitantes</strong> — un municipio pequeño donde ser el primero en posicionarse en Google con "fútbol Rocafort" es alcanzable con poco esfuerzo de SEO.</div>
+    </div>
+  </div>
+
+  <!-- REDES SOCIALES -->
+  <div class="section">
+    <div class="section-header">
+      <h2>📱 Redes Sociales</h2>
+      <span class="section-score score-amber">52/100</span>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Instagram @udrocafortcf</div>
+        <div class="data-row"><span class="data-label">Seguidores</span><span class="data-val">2.650</span></div>
+        <div class="data-row"><span class="data-label">Posts publicados</span><span class="data-val">1.115</span></div>
+        <div class="data-row"><span class="data-label">Siguiendo</span><span class="data-val">323</span></div>
+        <div class="data-row"><span class="data-label">Bio</span><span class="data-val">"⚽️ Escuela fútbol formativo #VamosRocafort 🧡"</span></div>
+        <div class="data-row"><span class="data-label">Link en bio</span><span class="data-val"><span class="tag tag-amber">Linktree</span></span></div>
+        <div class="data-row"><span class="data-label">CTA en bio</span><span class="data-val"><span class="tag tag-red">Ninguno</span></span></div>
+        <div class="data-row"><span class="data-label">Frecuencia posts</span><span class="data-val"><span class="tag tag-green">Alta</span></span></div>
+        <div style="margin-top:12px;">
+          <div class="hallazgo ok">Cuenta activa con 1.115 posts — alta frecuencia de publicación.</div>
+          <div class="hallazgo bad">Bio sin CTA claro. No dice cómo apuntarse ni precio ni categorías.</div>
+          <div class="hallazgo bad">2.650 seguidores para un club de municipio de 6.000 hab. — muchos serán familias ya captadas, no nuevas.</div>
+          <div class="hallazgo warn">No se detectó enlace directo a formulario de inscripción ni WhatsApp de contacto en bio.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Otros canales</div>
+        <div class="data-row"><span class="data-label">Facebook</span><span class="data-val"><span class="tag tag-amber">Presente</span></span></div>
+        <div class="data-row"><span class="data-label">Twitter / X</span><span class="data-val"><span class="tag tag-amber">Presente</span></span></div>
+        <div class="data-row"><span class="data-label">WhatsApp Canal</span><span class="data-val">248 seguidores</span></div>
+        <div class="data-row"><span class="data-label">TikTok</span><span class="data-val"><span class="tag tag-red">No detectado</span></span></div>
+        <div class="data-row"><span class="data-label">YouTube</span><span class="data-val"><span class="tag tag-red">No detectado</span></span></div>
+        <div style="margin-top:12px;">
+          <div class="hallazgo warn">Canal WhatsApp solo 248 seguidores — muy baja penetración si tienen varias categorías y decenas de familias.</div>
+          <div class="hallazgo bad">Facebook y X sin datos de engagement — probablemente secundarios y poco activos.</div>
+          <div class="hallazgo ok">Tienen canal oficial de WA — buena base para automatizar comunicaciones.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFERTA Y PRECIOS -->
+  <div class="section">
+    <div class="section-header">
+      <h2>💶 Oferta y Precios</h2>
+      <span class="section-score score-red">10/100</span>
+    </div>
+    <div class="card">
+      <div class="hallazgo bad">Cero transparencia de precios en ningún canal digital. Una familia que busca fútbol formativo en Rocafort no puede saber cuánto cuesta sin llamar.</div>
+      <div class="hallazgo bad">Sin descripción clara de categorías (benjamín, infantil, cadete, juvenil) en canales digitales propios.</div>
+      <div class="hallazgo warn">Referencia indirecta de precios de un club homólogo del municipio: ~10€ inscripción + 50€/jugador + 30–100€ ropa según categoría. UD Rocafort CF no publica nada equivalente.</div>
+      <div class="hallazgo ok">Tienen campus de verano activo con inscripciones (publicado en Facebook).</div>
+      <div class="hallazgo ok">Han jugado contra Valencia CF en categoría benjamín — credencial deportivo de alto valor que no explotan en su comunicación.</div>
+      <div class="hallazgo bad">Sin mención a servicios adicionales: transporte, equipación, seguros, actividades extradeportivas.</div>
+    </div>
+  </div>
+
+  <!-- EMBUDO DE VENTAS -->
+  <div class="section">
+    <div class="section-header">
+      <h2>🔻 Embudo de ventas</h2>
+      <span class="section-score score-red">15/100</span>
+    </div>
+    <div class="card">
+      <div class="hallazgo bad">Embudo roto desde el inicio: una familia que busca en Google "escuela fútbol Rocafort" no encuentra nada del club — ni web, ni ficha de Google Maps optimizada.</div>
+      <div class="hallazgo bad">El único camino de captación detectado es Instagram orgánico + boca a boca. Sin paid, sin SEO, sin lead magnet.</div>
+      <div class="hallazgo bad">Para contactar hay que ir en persona (oficina ma/ju 17-18:30) o llamar. Fricción altísima para una familia con poco tiempo.</div>
+      <div class="hallazgo bad">Sin seguimiento post-contacto automatizado. Si alguien escribe por Instagram y no contestan en el momento, el lead se enfría.</div>
+      <div class="hallazgo warn">Canal de WhatsApp activo (248 seg.) pero usado como broadcast, no como canal de captación bidireccional.</div>
+      <div class="hallazgo ok">Campeones 24/25 en varias categorías — social proof deportivo potente que no está convertido en argumento de captación digital.</div>
+    </div>
+  </div>
+
+  <!-- REPUTACIÓN -->
+  <div class="section">
+    <div class="section-header">
+      <h2>⭐ Reputación Online</h2>
+      <span class="section-score score-red">20/100</span>
+    </div>
+    <div class="card">
+      <div class="hallazgo bad">Sin reseñas de Google Maps encontradas. Para una escuela de fútbol formativo esto es crítico — las familias buscan reseñas antes de inscribir a sus hijos.</div>
+      <div class="hallazgo bad">Sin testimonios publicados en Instagram ni en ningún canal. 1.115 posts y ninguno recoge la voz de una familia satisfecha.</div>
+      <div class="hallazgo warn">Menciones en prensa deportiva (lapreferente.com, resultados-futbol.com) — presencia pasiva en medios especializados.</div>
+      <div class="hallazgo ok">Partido vs Valencia CF benjamín indexado en valenciacf.com — credencial de alto valor no explotado.</div>
+      <div class="hallazgo warn">Competencia directa detectada: <strong>Rocafort Club de Fútbol (@rocafort.cf)</strong> también en Instagram — mismo municipio, misma audiencia.</div>
+    </div>
+  </div>
+
+  <!-- COMPETENCIA -->
+  <div class="section">
+    <div class="section-header">
+      <h2>🥊 Competencia en el municipio</h2>
+    </div>
+    <div class="card">
+      <div class="data-row"><span class="data-label">Rocafort CF (@rocafort.cf)</span><span class="data-val"><span class="tag tag-red">Competencia directa — mismo municipio</span></span></div>
+      <div class="data-row"><span class="data-label">DiR Esportiu Rocafort</span><span class="data-val"><span class="tag tag-amber">Centro deportivo con web propia</span></span></div>
+      <div style="margin-top:12px;">
+        <div class="hallazgo bad">Rocafort CF tiene presencia en Instagram en el mismo municipio. Sin web propia, UD Rocafort CF no puede diferenciarse digitalmente.</div>
+        <div class="hallazgo warn">DiR Esportiu Rocafort tiene web (esportiurocafort.com) — referente digital en el municipio que UD Rocafort CF no puede igualar sin web propia.</div>
+        <div class="hallazgo ok">UD Rocafort CF tiene más historial competitivo (campeones 24/25, partido vs VCF) — la narrativa deportiva existe, falta plataforma para contarla.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPORTUNIDAD PALFERIA -->
+  <div class="oportunidad-box">
+    <h2>💡 Oportunidad PalferIA — Lo que se puede activar</h2>
+    <div class="oportunidad-item">Web profesional propia: dominio udrocafortcf.com (o similar) + 5 secciones (Inicio, Club, Categorías, Galería, Contacto). Resuelve el hallazgo crítico #1 y activa SEO local inmediatamente.</div>
+    <div class="oportunidad-item">Agente IA en WhatsApp + Instagram: responde consultas de familias 24/7 ("¿Cuánto cuesta?", "¿Qué categoría le corresponde a mi hijo?", "¿Cómo me apunto?"). Elimina la barrera de la oficina presencial.</div>
+    <div class="oportunidad-item">Formulario de inscripción digital conectado al agente: familias se apuntan desde el móvil, el club recibe la ficha completada y una notificación WA.</div>
+    <div class="oportunidad-item">Google Business Profile optimizado + automatización de solicitud de reseñas post-inscripción. Objetivo: 20 reseñas en 3 meses.</div>
+    <div class="oportunidad-item">Explotación del credencial deportivo: sección "Nuestros logros" con los campeonatos 24/25 y el partido vs Valencia CF. Convierte el historial en argumento de captación.</div>
+    <div class="oportunidad-item">SEO local: posicionarse para "escuela fútbol Rocafort", "fútbol formativo Valencia norte", "fútbol base Rocafort" — competencia baja, impacto alto.</div>
+  </div>
+
+  <!-- TOP 10 ACCIONES -->
+  <div class="section">
+    <div class="section-header">
+      <h2>🎯 Top 10 Acciones Priorizadas</h2>
+    </div>
+    <div class="acciones">
+      <div class="accion-item">
+        <div class="accion-num">1</div>
+        <div class="accion-body">
+          <h3>Crear web profesional propia con dominio propio</h3>
+          <p>Sin web no hay SEO, no hay credibilidad, no hay captación digital. Es el primer paso que desbloquea todo lo demás.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto muy alto</span><span class="tag-esfuerzo-medio">Esfuerzo medio</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">2</div>
+        <div class="accion-body">
+          <h3>Añadir formulario de inscripción digital</h3>
+          <p>Integrado en la web y conectado al agente IA. Familias se apuntan desde el móvil cualquier día a cualquier hora.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto alto</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">3</div>
+        <div class="accion-body">
+          <h3>Agente IA en WhatsApp para consultas de familias</h3>
+          <p>Responde "¿Cuánto cuesta?", "¿Dónde entrenáis?", "¿Qué categoría le corresponde a mi hijo?" — sin que el club tenga que estar pendiente.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto alto</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">4</div>
+        <div class="accion-body">
+          <h3>Optimizar Google Business Profile y pedir reseñas</h3>
+          <p>Fotos, horarios, descripción, categoría correcta. Automatisar solicitud de reseña a familias tras inscripción. Objetivo: 20 reseñas en 90 días.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto alto</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">5</div>
+        <div class="accion-body">
+          <h3>SEO local: "escuela fútbol Rocafort" y variantes</h3>
+          <p>Municipio pequeño, competencia digital casi nula. Posicionarse en top 3 de Google Maps es alcanzable en 60–90 días con web + GBP optimizados.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto alto</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">6</div>
+        <div class="accion-body">
+          <h3>Publicar precios y categorías en web + Instagram bio</h3>
+          <p>La transparencia de precios reduce la fricción. Una familia que ya sabe cuánto cuesta llega a la inscripción más decidida.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto medio</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">7</div>
+        <div class="accion-body">
+          <h3>Añadir CTA en bio de Instagram con link directo al formulario</h3>
+          <p>Cambiar el Linktree por un enlace directo al formulario de inscripción o al WhatsApp del agente IA.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto medio</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">8</div>
+        <div class="accion-body">
+          <h3>Publicar testimonios de familias en Instagram</h3>
+          <p>1.115 posts y ninguno recoge la voz de una familia. 3–5 testimonios bien presentados cambian la percepción del club.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto medio</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">9</div>
+        <div class="accion-body">
+          <h3>Explotar el partido vs Valencia CF y los campeonatos 24/25</h3>
+          <p>Son credenciales deportivos de primer nivel que ningún competidor local puede igualar. Convertirlos en contenido de captación y en sección destacada de la web.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto medio</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+      <div class="accion-item">
+        <div class="accion-num">10</div>
+        <div class="accion-body">
+          <h3>Email corporativo propio</h3>
+          <p>Cambiar Gmail por contacto@udrocafortcf.com. Pequeño cambio, gran diferencia en percepción de profesionalidad frente a familias.</p>
+          <div class="accion-tags"><span class="tag-impacto">Impacto bajo</span><span class="tag-esfuerzo-bajo">Esfuerzo bajo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Auditoría generada por <strong>PalferIA · ME-sport</strong> · ri@palferia.com · Septiembre 2026<br>
+  Datos obtenidos de fuentes públicas: Instagram, Facebook, Linktree, futbol-regional.es, lapreferente.com
+</footer>
+
+</body>
+</html>

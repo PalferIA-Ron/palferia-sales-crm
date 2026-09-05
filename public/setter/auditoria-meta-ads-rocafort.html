@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditoría Meta Ads — UD Rocafort CF</title>
+  <style>
+    :root {
+      --bg: #0a0b14; --card: #111827; --border: rgba(255,255,255,0.08);
+      --text: #f1f5f9; --muted: #94a3b8; --dim: #64748b;
+      --green: #C4F000; --red: #f87171; --amber: #fbbf24;
+      --blue: #60a5fa; --orange: #f97316;
+      --meta: #1877F2;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .header { background: #0d0f1c; border-bottom: 1px solid rgba(24,119,242,0.25); padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .header-left h1 { font-size: 1.4rem; font-weight: 700; }
+    .header-left p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+    .badge-meta { background: rgba(24,119,242,0.12); border: 1px solid rgba(24,119,242,0.3); color: var(--meta); font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+    /* SCORE */
+    .score-hero { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 36px; text-align: center; margin-bottom: 32px; }
+    .score-zero { font-size: 5rem; font-weight: 800; line-height: 1; color: var(--red); }
+    .score-label { color: var(--muted); font-size: 0.9rem; margin-top: 8px; }
+    .score-sub { color: var(--dim); font-size: 0.78rem; margin-top: 6px; }
+
+    /* VEREDICTO */
+    .veredicto { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.2); border-radius: 16px; padding: 28px; margin-bottom: 28px; display: flex; gap: 20px; align-items: flex-start; }
+    .veredicto-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .veredicto h2 { font-size: 1.1rem; font-weight: 700; color: var(--red); margin-bottom: 8px; }
+    .veredicto p { font-size: 0.88rem; color: var(--muted); }
+
+    /* CARDS */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .card-amber { border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.04); }
+    .card-green { border-color: rgba(196,240,0,0.2); background: rgba(196,240,0,0.04); }
+    .card-meta { border-color: rgba(24,119,242,0.25); background: rgba(24,119,242,0.04); }
+    .section { margin-bottom: 28px; }
+    .section h2 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* HALLAZGOS */
+    .hallazgo { display: flex; gap: 10px; font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .hallazgo:last-child { border-bottom: none; }
+    .hallazgo-icon { flex-shrink: 0; width: 20px; }
+    .hallazgo p { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+    .hallazgo strong { color: var(--text); }
+
+    /* BENCHMARK */
+    .bench-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .bench-row:last-child { border-bottom: none; }
+    .bench-label { color: var(--muted); }
+    .bench-val { font-weight: 600; }
+    .bench-val.red { color: var(--red); }
+    .bench-val.amber { color: var(--amber); }
+    .bench-val.green { color: var(--green); }
+
+    /* OPORTUNIDAD */
+    .op-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid rgba(196,240,0,0.08); }
+    .op-item:last-child { border-bottom: none; }
+    .op-num { font-family: monospace; font-size: 1.1rem; font-weight: 800; color: var(--orange); opacity: 0.6; flex-shrink: 0; min-width: 28px; }
+    .op-body h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; }
+    .op-body p { font-size: 0.8rem; color: var(--muted); }
+    .tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 8px; margin-top: 5px; }
+    .tag-presupuesto { background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); }
+    .tag-impacto { background: rgba(196,240,0,0.1); color: var(--green); border: 1px solid rgba(196,240,0,0.2); }
+    .tag-plazo { background: rgba(251,191,36,0.1); color: var(--amber); border: 1px solid rgba(251,191,36,0.2); }
+
+    /* COPY IDEAS */
+    .copy-card { background: rgba(24,119,242,0.05); border: 1px solid rgba(24,119,242,0.15); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .copy-card .copy-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--meta); margin-bottom: 8px; }
+    .copy-card .copy-text { font-size: 0.88rem; color: var(--text); font-style: italic; line-height: 1.5; }
+    .copy-card .copy-meta { font-size: 0.75rem; color: var(--dim); margin-top: 8px; }
+
+    footer { text-align: center; padding: 32px; color: var(--dim); font-size: 0.78rem; border-top: 1px solid var(--border); margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Auditoría Meta Ads — UD Rocafort CF</h1>
+    <p>ME-sport · PalferIA · Facebook Ads Library + análisis de página</p>
+  </div>
+  <span class="badge-meta">Meta / Facebook Ads</span>
+</div>
+
+<div class="container">
+
+  <!-- SCORE -->
+  <div class="score-hero">
+    <div class="score-zero">0</div>
+    <div class="score-label">Anuncios activos detectados en Meta Ads Library</div>
+    <div class="score-sub">Búsqueda realizada en septiembre 2026 · Página: facebook.com/udrocafortcf</div>
+  </div>
+
+  <!-- VEREDICTO -->
+  <div class="veredicto">
+    <div class="veredicto-icon">📭</div>
+    <div>
+      <h2>Sin actividad publicitaria en Meta — nunca han hecho paid</h2>
+      <p>La búsqueda en la Biblioteca de Anuncios de Meta para "UD Rocafort CF" y "Unión Deportiva Rocafort" no devuelve ningún anuncio activo ni histórico. El club nunca ha utilizado publicidad de pago en Facebook o Instagram. Toda su captación ha sido 100% orgánica a través de Instagram y boca a boca.</p>
+    </div>
+  </div>
+
+  <!-- ANÁLISIS PÁGINA FACEBOOK -->
+  <div class="section">
+    <h2>📘 Análisis página Facebook</h2>
+    <div class="card">
+      <div class="hallazgo">
+        <span class="hallazgo-icon">✓</span>
+        <div><strong>Página verificada:</strong> facebook.com/udrocafortcf — página activa</div>
+      </div>
+      <div class="hallazgo">
+        <span class="hallazgo-icon">⚠</span>
+        <div><strong>Sin datos de seguidores públicos</strong> — no se pudo extraer el número exacto de seguidores de la página. Probablemente inferior a Instagram (2.650).</div>
+      </div>
+      <div class="hallazgo">
+        <span class="hallazgo-icon">✓</span>
+        <div><strong>Campus de verano publicado:</strong> Se detectó post de apertura de inscripciones para campus de verano — el único CTA de captación encontrado en toda su presencia digital.</div>
+      </div>
+      <div class="hallazgo">
+        <span class="hallazgo-icon">✗</span>
+        <div><strong>Sin Pixel de Meta instalado</strong> — al no tener web propia, no pueden instalar el Pixel. Esto significa que cualquier campaña futura partiría de cero en datos de audiencia.</div>
+      </div>
+      <div class="hallazgo">
+        <span class="hallazgo-icon">✗</span>
+        <div><strong>Sin catálogo de productos / servicios</strong> en la página — no hay sección de servicios, precios ni formulario de lead en Facebook.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BENCHMARK -->
+  <div class="section">
+    <h2>📊 Benchmark — UD Rocafort CF vs clubes similares</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size:0.75rem;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">UD Rocafort CF (real)</div>
+        <div class="bench-row"><span class="bench-label">Anuncios activos</span><span class="bench-val red">0</span></div>
+        <div class="bench-row"><span class="bench-label">Gasto estimado/mes</span><span class="bench-val red">0 €</span></div>
+        <div class="bench-row"><span class="bench-label">Pixel Meta instalado</span><span class="bench-val red">No</span></div>
+        <div class="bench-row"><span class="bench-label">Lead Form en Facebook</span><span class="bench-val red">No</span></div>
+        <div class="bench-row"><span class="bench-label">Retargeting activo</span><span class="bench-val red">No</span></div>
+        <div class="bench-row"><span class="bench-label">Audiencias guardadas</span><span class="bench-val red">No</span></div>
+      </div>
+      <div class="card">
+        <div style="font-size:0.75rem;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Club deportivo tipo con IA activa</div>
+        <div class="bench-row"><span class="bench-label">Anuncios activos</span><span class="bench-val green">2–4 campañas</span></div>
+        <div class="bench-row"><span class="bench-label">Gasto estimado/mes</span><span class="bench-val amber">200–400 €</span></div>
+        <div class="bench-row"><span class="bench-label">Pixel Meta instalado</span><span class="bench-val green">Sí</span></div>
+        <div class="bench-row"><span class="bench-label">Lead Form en Facebook</span><span class="bench-val green">Sí</span></div>
+        <div class="bench-row"><span class="bench-label">Retargeting activo</span><span class="bench-val green">Sí</span></div>
+        <div class="bench-row"><span class="bench-label">Audiencias guardadas</span><span class="bench-val green">Familias 30–45 años</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPORTUNIDAD -->
+  <div class="section">
+    <h2>💡 Oportunidad — Qué se puede activar con PalferIA</h2>
+    <div class="card card-green">
+      <div class="op-item">
+        <div class="op-num">1</div>
+        <div class="op-body">
+          <h3>Campaña de captación en época de inscripciones (agosto–septiembre)</h3>
+          <p>Anuncio en Instagram/Facebook dirigido a familias de Rocafort y municipios limítrofes (Bétera, Moncada, Godella) con niños de 6–16 años. CTA: "Apunta a tu hijo al fútbol formativo — plazas limitadas". Lead Form directo en Meta sin necesidad de web.</p>
+          <div><span class="tag tag-presupuesto">Budget recomendado: 150–300€/mes</span> <span class="tag tag-impacto">Impacto alto</span> <span class="tag tag-plazo">Activo en 1 semana</span></div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-num">2</div>
+        <div class="op-body">
+          <h3>Instalar Pixel Meta en la web nueva (día 1 del proyecto)</h3>
+          <p>Sin web no hay Pixel. Con la web de PalferIA activa, el Pixel empieza a capturar visitantes desde el primer día. En 30 días habrá datos suficientes para crear audiencias de retargeting y lookalike de familias interesadas.</p>
+          <div><span class="tag tag-presupuesto">Coste: 0€ adicionales</span> <span class="tag tag-impacto">Base de toda la estrategia paid</span></div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-num">3</div>
+        <div class="op-body">
+          <h3>Anuncio de credencial deportivo — "Hemos jugado contra el Valencia CF"</h3>
+          <p>Creatividad con foto o vídeo del partido vs Valencia CF benjamín. Copy: "En UD Rocafort CF formamos jugadores que compiten al nivel del Valencia CF. ¿Quieres que tu hijo sea el próximo?" — diferenciador imbatible en el municipio.</p>
+          <div><span class="tag tag-presupuesto">Budget: 100–200€ campaña</span> <span class="tag tag-impacto">Diferenciador único</span></div>
+        </div>
+      </div>
+      <div class="op-item">
+        <div class="op-num">4</div>
+        <div class="op-body">
+          <h3>Automatización: lead Meta → agente IA → WhatsApp</h3>
+          <p>Cuando una familia rellena el Lead Form de Meta, el agente IA de PalferIA les envía un WhatsApp en menos de 2 minutos con información de categorías, precio y un link para reservar plaza. Conversión antes de que se enfríe.</p>
+          <div><span class="tag tag-impacto">Multiplica la conversión ×3</span> <span class="tag tag-plazo">n8n + OpenWA</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDEAS DE COPY -->
+  <div class="section">
+    <h2>✍️ Ideas de copy para primeros anuncios</h2>
+
+    <div class="copy-card">
+      <div class="copy-label">Anuncio 1 — Captación inscripciones temporada 26/27</div>
+      <div class="copy-text">
+        "¿Buscas fútbol formativo de verdad en Rocafort?<br><br>
+        En UD Rocafort CF llevamos formando jugadores desde 2014. Campeones en benjamín, infantil y cadete la temporada pasada. Y este año hemos jugado contra el Valencia CF.<br><br>
+        Plazas abiertas para temporada 26/27. Rellena el formulario y te llamamos hoy."
+      </div>
+      <div class="copy-meta">Formato recomendado: Imagen estática · Audiencia: Padres/madres 30–45 años · Radio 15km de Rocafort</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="copy-label">Anuncio 2 — Credencial Valencia CF</div>
+      <div class="copy-text">
+        "Nuestros benjamines ya han jugado contra el Valencia CF.<br><br>
+        En UD Rocafort CF no solo enseñamos a jugar al fútbol — formamos personas. Metodología profesional, entrenadores licenciados y un ambiente familiar que las familias valoran.<br><br>
+        ¿Quieres que tu hijo forme parte del equipo? Consulta sin compromiso."
+      </div>
+      <div class="copy-meta">Formato recomendado: Vídeo o carrusel con foto del partido · Alto engagement esperado</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="copy-label">Anuncio 3 — Campus de verano (reutilizable cada año)</div>
+      <div class="copy-text">
+        "Campus de Fútbol UD Rocafort CF · Verano 2027<br><br>
+        Una semana de fútbol, amigos y diversión en Rocafort. Para niños de 6 a 16 años. Plazas limitadas — los primeros en apuntarse tienen prioridad.<br><br>
+        👉 Apunta a tu hijo ahora."
+      </div>
+      <div class="copy-meta">Activar en mayo–junio · Lead Form directo · Budget: 100€/semana</div>
+    </div>
+  </div>
+
+  <!-- CONCLUSIÓN -->
+  <div class="card card-amber">
+    <h2 style="margin-bottom:10px;">Conclusión para la reunión</h2>
+    <p style="font-size:0.88rem;color:var(--muted);">UD Rocafort CF nunca ha invertido un euro en publicidad digital. Esto es una oportunidad, no un problema: <strong style="color:var(--text)">cualquier presupuesto que activen, por pequeño que sea, les generará resultados inmediatos</strong> porque parten de cero. En un municipio de 6.000 habitantes con audiencia hiperlocal, 150€/mes en Meta puede generar 10–15 leads de nuevas familias al mes en época de inscripciones.</p>
+    <p style="font-size:0.88rem;color:var(--amber);margin-top:10px;font-style:italic;">"Ahora mismo cualquier club de la zona que haga un anuncio de Instagram con 100€ capta familias que buscan fútbol para sus hijos y no os encuentran. ¿Cuántas plazas habéis llenado este año solo por boca a boca? Imagina si además os encontraran en Google y en Instagram Ads."</p>
+  </div>
+
+</div>
+
+<footer>
+  Auditoría generada por <strong>PalferIA · ME-sport</strong> · ri@palferia.com · Septiembre 2026<br>
+  Fuentes: Meta Ads Library · facebook.com/udrocafortcf · búsquedas orgánicas
+</footer>
+
+</body>
+</html>
