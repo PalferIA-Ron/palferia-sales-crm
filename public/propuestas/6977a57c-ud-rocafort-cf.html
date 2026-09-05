@@ -18,7 +18,7 @@
       --bg3:      #C9BB9E;
       --card:     #EAE2D2;
       --border:   rgba(75,0,130,0.18);
-      --text:     #4B0082;
+      --text:     #1e1f3d;
       --muted:    #7B52A8;
       --dim:      #9B7CC8;
     }
@@ -54,7 +54,7 @@
       clip-path: polygon(50% 0%, 100% 20%, 100% 70%, 50% 100%, 0% 70%, 0% 20%);
       display: flex; align-items: center; justify-content: center;
       font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
-      color: #4B0082;
+      color: #1e1f3d;
     }
     .nav-text {
       font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600;
@@ -224,7 +224,7 @@
     }
     .maint-badge {
       position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-      background: var(--orange); color: #4B0082; font-size: 9px; font-weight: 700;
+      background: var(--orange); color: #1e1f3d; font-size: 9px; font-weight: 700;
       letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
       white-space: nowrap;
     }
@@ -238,7 +238,7 @@
     /* ── CTA ── */
     .cta-btn {
       display: inline-flex; align-items: center; gap: 10px;
-      background: var(--orange); color: #4B0082; font-weight: 700; font-size: 1rem;
+      background: var(--orange); color: #1e1f3d; font-weight: 700; font-size: 1rem;
       padding: 16px 32px; border-radius: 50px; text-decoration: none;
       transition: background 0.2s, transform 0.15s;
       border: none; cursor: pointer;
@@ -307,11 +307,11 @@
       margin-bottom: 28px;
     }
     .logo-shield {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: var(--orange); display: flex; align-items: center; justify-content: center;
-      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 14px; color: #4B0082;
-      flex-shrink: 0;
+      width: 52px; height: 52px; border-radius: 50%;
+      overflow: hidden; flex-shrink: 0;
+      border: 2px solid var(--border);
     }
+    .logo-shield img { width: 100%; height: 100%; object-fit: cover; }
     .logo-strip-text { font-family: 'Oswald', sans-serif; font-size: 0.95rem; line-height: 1.3; }
     .logo-strip-text strong { font-size: 1.05rem; font-weight: 700; color: var(--text); }
     .logo-strip-text small { color: var(--muted); font-size: 0.78rem; }
@@ -385,7 +385,7 @@
   <div class="hero-deco">ME</div>
   <div class="slide-inner" style="position:relative;z-index:1">
     <div class="logo-strip">
-      <div class="logo-shield">UD</div>
+      <div class="logo-shield"><img src="logo-escudo-UD-Rocafort.jpg" alt="UD Rocafort CF"></div>
       <div class="logo-strip-text">
         <strong>UD Rocafort CF</strong>
         <br><small>Fútbol formativo · Rocafort, Valencia · Desde 1974</small>
