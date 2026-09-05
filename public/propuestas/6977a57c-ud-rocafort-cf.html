@@ -9,18 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --orange:   #f97316;
-      --orange-d: #ea580c;
-      --orange-l: #fdba74;
-      --green:    #5a9e0a;
-      --bg:       #E0D6C3;
-      --bg2:      #D5C9B0;
-      --bg3:      #C9BB9E;
-      --card:     #EAE2D2;
-      --border:   rgba(75,0,130,0.18);
-      --text:     #1e1f3d;
-      --muted:    #7B52A8;
-      --dim:      #9B7CC8;
+      --orange:        #f97316;
+      --orange-d:      #ea580c;
+      --orange-l:      #fdba74;
+      --green:         #C4F000;
+      --green-d:       #a8cc00;
+      --nav-bg:        #0a0b14;
+      --bg:            #E0D6C3;
+      --bg2:           #D5C9B0;
+      --bg3:           #C9BB9E;
+      --card:          #EAE2D2;
+      --border:        rgba(30,31,61,0.18);
+      --text:          #1e1f3d;
+      --muted:         #5a5c7a;
+      --dim:           #8889a8;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -42,31 +44,30 @@
       position: fixed; top: 3px; left: 0; right: 0; z-index: 200;
       height: 56px; padding: 0 24px;
       display: flex; align-items: center; justify-content: space-between;
-      background: rgba(224,214,195,0.95); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      background: var(--nav-bg);
+      border-bottom: 1px solid rgba(196,240,0,0.15);
     }
     .nav-brand {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 12px;
     }
-    .nav-logo {
-      width: 32px; height: 32px;
-      background: var(--orange);
-      clip-path: polygon(50% 0%, 100% 20%, 100% 70%, 50% 100%, 0% 70%, 0% 20%);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700;
-      color: #1e1f3d;
+    .nav-logo-img {
+      height: 32px; width: auto; display: block;
     }
-    .nav-text {
-      font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600;
-      letter-spacing: 0.5px; color: var(--text);
-    }
-    .nav-text span { color: var(--orange); }
     .nav-badge {
       font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
-      text-transform: uppercase; color: var(--muted);
-      background: rgba(75,0,130,0.08); border: 1px solid var(--border);
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
       padding: 3px 10px; border-radius: 20px;
     }
+    .nav-cta {
+      display: inline-flex; align-items: center;
+      background: var(--green); color: var(--nav-bg);
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 16px; border-radius: 20px; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--green-d); }
 
     /* ── SLIDE BASE ── */
     .slide {
@@ -238,19 +239,19 @@
     /* ── CTA ── */
     .cta-btn {
       display: inline-flex; align-items: center; gap: 10px;
-      background: var(--orange); color: #1e1f3d; font-weight: 700; font-size: 1rem;
+      background: var(--text); color: #E0D6C3; font-weight: 700; font-size: 1rem;
       padding: 16px 32px; border-radius: 50px; text-decoration: none;
       transition: background 0.2s, transform 0.15s;
       border: none; cursor: pointer;
     }
-    .cta-btn:hover { background: var(--orange-d); transform: translateY(-1px); }
+    .cta-btn:hover { background: #2e3060; transform: translateY(-1px); }
     .cta-ghost {
       display: inline-flex; align-items: center; gap: 8px;
       background: transparent; color: var(--text); font-weight: 600; font-size: 0.95rem;
       padding: 14px 28px; border-radius: 50px; text-decoration: none;
-      border: 1px solid var(--border); transition: border-color 0.2s;
+      border: 2px solid var(--text); transition: background 0.2s, color 0.2s;
     }
-    .cta-ghost:hover { border-color: rgba(249,115,22,0.5); }
+    .cta-ghost:hover { background: var(--text); color: #E0D6C3; }
 
     /* ── HERO DECORATION ── */
     .hero-deco {
@@ -358,10 +359,10 @@
 <!-- Nav -->
 <nav>
   <div class="nav-brand">
-    <div class="nav-logo">ME</div>
-    <div class="nav-text">PalferIA <span>ME-sport</span></div>
+    <img src="isologo-palferia.png" alt="PalferIA" class="nav-logo-img">
+    <div class="nav-badge">Propuesta · UD Rocafort CF</div>
   </div>
-  <div class="nav-badge">Propuesta · UD Rocafort CF</div>
+  <a href="https://wa.me/34643469239?text=Hola%20Ronald%2C%20quiero%20hablar%20sobre%20la%20propuesta%20UD%20Rocafort%20CF" class="nav-cta">Reservar reunión</a>
 </nav>
 
 <!-- Slide dots -->
