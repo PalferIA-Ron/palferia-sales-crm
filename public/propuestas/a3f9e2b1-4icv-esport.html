@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Palferia.me — Deck 4iCV Esport 2026</title>
+<link href="/assets/img/Imagotipo_PIA01.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Barlow+Condensed:wght@400;600;700;800&amp;family=Barlow:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --deep:#010C11;--surface:#01404F;--raised:#025265;
+  --accent:#B1F727;--accentd:#8BC920;
+  --teal:#7BB5C4;--faint:#3D6B78;--border:#0A4A5C;
+  --text:#EFF8FF;
+  --fd:'Bebas Neue',sans-serif;
+  --fh:'Barlow Condensed',sans-serif;
+  --fb:'Barlow',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+body{background:var(--deep);color:var(--text);font-family:var(--fb);overflow-x:hidden;height:100vh;overflow-y:scroll}
+
+/* SLIDES */
+.slide{
+  min-height:100vh;width:100%;
+  scroll-snap-align:start;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:5rem 7rem;position:relative;overflow:hidden;
+}
+.slide-alt{background:var(--surface)}
+.slide-dark{background:#000d10}
+
+/* GRAIN */
+.slide::after{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.025;pointer-events:none;z-index:0
+}
+.slide>*{position:relative;z-index:1}
+
+/* NAV DOTS */
+.nav-dots{
+  position:fixed;right:2rem;top:50%;transform:translateY(-50%);
+  z-index:200;display:flex;flex-direction:column;gap:.6rem;
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--faint);border:none;cursor:pointer;
+  transition:background .2s,transform .2s;padding:0;
+}
+.dot.active{background:var(--accent);transform:scale(1.4)}
+
+/* SLIDE COUNTER */
+.slide-counter{
+  position:fixed;bottom:1.5rem;right:2rem;z-index:200;
+  font-family:var(--fh);font-size:.7rem;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--faint)
+}
+.slide-counter span{color:var(--accent)}
+
+/* LOGO WATERMARK */
+.watermark{
+  position:absolute;right:-2rem;bottom:-3rem;
+  font-family:var(--fd);font-size:18rem;color:rgba(177,247,39,.025);
+  line-height:1;pointer-events:none;user-select:none;z-index:0
+}
+
+/* ─── SLIDE 1 — PORTADA ─── */
+.s1-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:4rem;align-items:center;width:100%
+}
+.s1-badge{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:var(--fh);font-size:.65rem;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--deep);background:var(--accent);
+  padding:.35rem .9rem;border-radius:2px;margin-bottom:2rem
+}
+.s1-pulse{
+  width:6px;height:6px;background:var(--deep);border-radius:50%;
+  animation:pulse 1.5s infinite
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+.s1-h1{
+  font-family:var(--fd);font-size:clamp(4rem,7vw,8rem);
+  line-height:.92;color:var(--text);margin-bottom:1.5rem
+}
+.s1-h1 .hl{color:var(--accent)}
+.s1-sub{font-size:1.05rem;color:var(--teal);line-height:1.7;max-width:480px;margin-bottom:2.5rem}
+.s1-meta{display:flex;flex-direction:column;gap:.5rem}
+.s1-meta-item{
+  font-family:var(--fh);font-size:.72rem;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--faint)
+}
+.s1-meta-item span{color:var(--teal)}
+.s1-right{display:flex;flex-direction:column;gap:1rem}
+.s1-stat{
+  background:rgba(177,247,39,.04);border:1px solid var(--border);
+  border-radius:3px;padding:1.5rem 2rem;
+  border-left:3px solid var(--accent)
+}
+.s1-stat-num{font-family:var(--fd);font-size:3.5rem;color:var(--accent);line-height:1}
+.s1-stat-label{font-family:var(--fh);font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-top:.25rem}
+.s1-stat-desc{font-size:.82rem;color:var(--faint);margin-top:.5rem;line-height:1.5}
+.s1-line{
+  position:absolute;top:0;bottom:0;left:50%;width:1px;
+  background:linear-gradient(180deg,transparent,var(--border) 20%,var(--border) 80%,transparent)
+}
+
+/* ─── SECTION LABELS ─── */
+.sec-label{
+  display:flex;align-items:center;gap:.75rem;
+  font-family:var(--fh);font-size:.65rem;font-weight:700;
+  letter-spacing:.25em;text-transform:uppercase;color:var(--accent);
+  margin-bottom:1rem
+}
+.sec-label::before{content:'';display:block;width:20px;height:2px;background:var(--accent)}
+.sec-h2{
+  font-family:var(--fd);font-size:clamp(3rem,6vw,6.5rem);
+  line-height:.92;color:var(--text);margin-bottom:1rem
+}
+.sec-h2 .hl{color:var(--accent)}
+.sec-h2 .stroke{-webkit-text-stroke:1.5px var(--text);color:transparent}
+.sec-p{font-size:1rem;color:var(--teal);max-width:560px;line-height:1.75;margin-bottom:3rem}
+
+/* ─── SLIDE 2 — PROBLEMA ─── */
+.prob-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.prob-card{background:var(--deep);padding:2.5rem 2rem;position:relative;overflow:hidden;transition:background .3s}
+.prob-card:hover{background:rgba(2,82,101,.5)}
+.prob-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ff4455,transparent)}
+.prob-num{font-family:var(--fd);font-size:5rem;color:rgba(255,68,85,.12);position:absolute;bottom:-.5rem;right:.5rem;line-height:1;pointer-events:none}
+.prob-icon{font-size:2rem;margin-bottom:1rem;display:block}
+.prob-title{font-family:var(--fh);font-weight:700;font-size:1.2rem;letter-spacing:.04em;text-transform:uppercase;color:var(--text);margin-bottom:.6rem}
+.prob-desc{font-size:.88rem;color:var(--teal);line-height:1.65}
+.prob-quote{
+  background:rgba(255,68,85,.04);border:1px solid rgba(255,68,85,.15);
+  border-radius:3px;padding:1.5rem 2rem;margin-top:2rem;
+  font-size:.95rem;color:var(--text);line-height:1.7;font-style:italic;
+  border-left:3px solid rgba(255,68,85,.5)
+}
+.prob-stat-row{display:flex;gap:2rem;margin-top:2rem}
+.prob-stat{text-align:center}
+.prob-stat-num{font-family:var(--fd);font-size:3rem;color:var(--accent);line-height:1}
+.prob-stat-label{font-family:var(--fh);font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-top:.25rem}
+
+/* ─── SLIDE 3 — SOLUCIÓN ─── */
+.sol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-top:2rem}
+.sol-card{background:var(--deep);padding:2.5rem 2rem;position:relative;overflow:hidden;transition:background .3s}
+.sol-card:hover{background:rgba(2,82,101,.4)}
+.sol-num{font-family:var(--fd);font-size:6rem;color:rgba(177,247,39,.04);position:absolute;top:-.5rem;right:.5rem;line-height:1;user-select:none;transition:color .3s}
+.sol-card:hover .sol-num{color:rgba(177,247,39,.1)}
+.sol-ico{width:44px;height:44px;background:rgba(177,247,39,.1);border-radius:3px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;transition:background .3s}
+.sol-card:hover .sol-ico{background:rgba(177,247,39,.2)}
+.sol-ico svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sol-name{font-family:var(--fh);font-weight:700;font-size:1.3rem;letter-spacing:.04em;text-transform:uppercase;color:var(--text);margin-bottom:.5rem}
+.sol-desc{font-size:.85rem;color:var(--teal);line-height:1.65;margin-bottom:1rem}
+.sol-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.sol-tag{font-family:var(--fh);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(177,247,39,.2);background:rgba(177,247,39,.05);padding:.15rem .5rem;border-radius:2px}
+
+/* ─── SLIDE 4 — BALONCESTO ─── */
+.bball-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem}
+.bball-card{
+  background:var(--deep);border:1px solid var(--border);border-radius:3px;
+  padding:2rem 1.75rem;position:relative;overflow:hidden;
+  transition:border-color .3s,transform .3s
+}
+.bball-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.bball-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+.bball-tag{font-family:var(--fh);font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.bball-title{font-family:var(--fd);font-size:2.2rem;color:var(--text);line-height:.95;margin-bottom:.75rem}
+.bball-desc{font-size:.85rem;color:var(--teal);line-height:1.65;margin-bottom:1.25rem}
+.bball-result{
+  background:rgba(177,247,39,.06);border:1px solid rgba(177,247,39,.15);
+  border-radius:2px;padding:.75rem 1rem;
+  font-family:var(--fh);font-size:.75rem;font-weight:600;
+  letter-spacing:.08em;color:var(--accent)
+}
+
+/* ─── SLIDE 5 — FEDERACIONES ─── */
+.fed-split{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.fed-list{display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem}
+.fed-item{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:1.25rem 1.5rem;
+  background:var(--deep);border:1px solid var(--border);border-radius:3px;
+  transition:border-color .3s
+}
+.fed-item:hover{border-color:rgba(177,247,39,.3)}
+.fed-item-dot{width:6px;height:6px;background:var(--accent);border-radius:1px;flex-shrink:0;margin-top:.4rem}
+.fed-item-text{font-size:.88rem;color:var(--teal);line-height:1.6}
+.fed-item-text strong{color:var(--text);display:block;font-family:var(--fh);font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.2rem}
+.fed-impact{
+  background:linear-gradient(135deg,rgba(177,247,39,.06),rgba(177,247,39,.02));
+  border:1px solid rgba(177,247,39,.2);border-radius:3px;padding:2.5rem;
+}
+.fed-impact-label{font-family:var(--fh);font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem}
+.fed-impact-stat{margin-bottom:1.5rem}
+.fed-impact-num{font-family:var(--fd);font-size:4.5rem;color:var(--accent);line-height:1}
+.fed-impact-desc{font-family:var(--fh);font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-top:.25rem}
+.fed-impact-quote{font-size:.85rem;color:var(--teal);line-height:1.65;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:1.25rem;font-style:italic}
+
+/* ─── SLIDE 6 — COMPETENCIA ─── */
+.comp-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-top:2rem}
+.comp-table th{font-family:var(--fh);font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);background:rgba(0,0,0,.3);padding:.85rem 1.25rem;text-align:left}
+.comp-table td{font-size:.85rem;color:var(--teal);padding:.85rem 1.25rem;border-top:1px solid var(--border)}
+.comp-table tr:hover td{background:rgba(177,247,39,.03);color:var(--text)}
+.comp-no{color:rgba(255,68,85,.6);font-weight:700}
+.comp-yes{color:var(--accent);font-weight:700}
+.comp-highlight{background:rgba(177,247,39,.04)!important;border-top:1px solid rgba(177,247,39,.3)!important;border-bottom:1px solid rgba(177,247,39,.3)!important}
+.comp-highlight td{color:var(--text)!important}
+.comp-name{font-family:var(--fh);font-weight:700;font-size:.88rem;letter-spacing:.04em;text-transform:uppercase;color:var(--text)!important}
+.comp-gap{
+  margin-top:2rem;background:rgba(177,247,39,.05);
+  border:1px solid rgba(177,247,39,.2);border-radius:3px;
+  padding:1.25rem 1.75rem;
+  font-size:.92rem;color:var(--text);line-height:1.65
+}
+.comp-gap strong{color:var(--accent)}
+
+/* ─── SLIDE 7 — PROCESO ─── */
+.proc-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden;margin-top:2rem}
+.proc-step{background:var(--deep);padding:2.5rem 2rem;position:relative}
+.proc-step::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);font-family:var(--fd);font-size:1.5rem;color:var(--accent);z-index:1}
+.proc-step:last-child::after{display:none}
+.proc-num{font-family:var(--fd);font-size:4rem;color:var(--accent);line-height:1;margin-bottom:.75rem}
+.proc-name{font-family:var(--fh);font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text);margin-bottom:.5rem}
+.proc-desc{font-size:.82rem;color:var(--teal);line-height:1.6}
+.proc-time{display:inline-block;margin-top:.75rem;font-family:var(--fh);font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--deep);background:var(--accent);padding:.2rem .6rem;border-radius:2px}
+
+/* ─── SLIDE 8 — FUNDADOR ─── */
+.founder-split{display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:start;width:100%}
+.founder-card{
+  background:rgba(177,247,39,.04);border:1px solid rgba(177,247,39,.2);
+  border-radius:3px;padding:2.5rem;min-width:260px;max-width:340px;
+}
+.founder-name{font-family:var(--fd);font-size:3.5rem;line-height:.95;color:var(--text);margin-bottom:.5rem}
+.founder-role{font-family:var(--fh);font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem}
+.founder-bio{font-size:.9rem;color:var(--teal);line-height:1.75}
+.founder-creds{display:flex;flex-direction:column;gap:.85rem;margin-top:2rem}
+.cred{display:flex;align-items:flex-start;gap:.85rem}
+.cred-dot{width:6px;height:6px;background:var(--accent);border-radius:1px;flex-shrink:0;margin-top:.4rem}
+.cred-text{font-size:.85rem;color:var(--teal);line-height:1.55}
+.cred-text strong{color:var(--text)}
+.founder-key{
+  background:var(--deep);border:1px solid var(--border);border-radius:3px;padding:2rem;
+  margin-top:2rem;font-size:.9rem;color:var(--teal);line-height:1.7;
+  font-style:italic;border-left:3px solid var(--accent)
+}
+.ecosystem{display:flex;flex-direction:column;gap:1rem;margin-top:1rem}
+.eco-item{
+  background:var(--deep);border:1px solid var(--border);border-radius:3px;
+  padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;
+  transition:border-color .3s
+}
+.eco-item:hover{border-color:rgba(177,247,39,.3)}
+.eco-name{font-family:var(--fd);font-size:1.5rem;color:var(--text)}
+.eco-desc{font-size:.78rem;color:var(--faint)}
+.eco-tag{font-family:var(--fh);font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(177,247,39,.2);padding:.15rem .5rem;border-radius:2px}
+
+/* ─── SLIDE 9 — LO QUE PEDIMOS ─── */
+.ask-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-top:2rem}
+.ask-list{display:flex;flex-direction:column;gap:1rem}
+.ask-item{
+  background:var(--deep);border:1px solid var(--border);border-radius:3px;
+  padding:1.5rem 1.75rem;transition:border-color .3s,transform .3s
+}
+.ask-item:hover{border-color:var(--accent);transform:translateX(4px)}
+.ask-num{font-family:var(--fd);font-size:2.5rem;color:rgba(177,247,39,.15);line-height:1;margin-bottom:.5rem}
+.ask-title{font-family:var(--fh);font-weight:700;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text);margin-bottom:.35rem}
+.ask-desc{font-size:.82rem;color:var(--teal);line-height:1.6}
+.give-box{
+  background:rgba(177,247,39,.04);border:1px solid rgba(177,247,39,.2);
+  border-radius:3px;padding:2rem
+}
+.give-label{font-family:var(--fh);font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.25rem}
+.give-list{display:flex;flex-direction:column;gap:.85rem}
+.give-item{display:flex;align-items:flex-start;gap:.75rem;font-size:.88rem;color:var(--teal);line-height:1.6}
+.give-item::before{content:'';width:5px;height:5px;background:var(--accent);border-radius:1px;flex-shrink:0;margin-top:.45rem}
+.give-item strong{color:var(--text)}
+
+/* ─── SLIDE 10 — CIERRE ─── */
+.close-center{text-align:center;max-width:700px;margin:0 auto}
+.close-h1{font-family:var(--fd);font-size:clamp(4rem,9vw,9rem);line-height:.9;color:var(--text);margin-bottom:1.5rem}
+.close-h1 .hl{color:var(--accent)}
+.close-h1 .stroke{-webkit-text-stroke:1.5px var(--text);color:transparent}
+.close-sub{font-size:1.1rem;color:var(--teal);line-height:1.75;margin-bottom:3rem}
+.close-contact{display:flex;flex-direction:column;gap:.6rem;margin-bottom:3rem}
+.close-contact-item{font-family:var(--fh);font-size:1rem;font-weight:600;letter-spacing:.08em;color:var(--teal)}
+.close-contact-item span{color:var(--accent)}
+.close-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:.75rem}
+.close-tag{
+  font-family:var(--fh);font-size:.7rem;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--faint);border:1px solid var(--border);
+  padding:.35rem .9rem;border-radius:2px
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .slide{padding:3rem 1.5rem}
+  .s1-grid,.sol-grid,.fed-split,.founder-split,.ask-grid{grid-template-columns:1fr}
+  .founder-card{max-width:none;margin:0 auto}
+  .s1-line{display:none}
+  .prob-grid,.bball-grid,.proc-steps{grid-template-columns:1fr}
+  .comp-table{display:block;overflow-x:auto}
+  .contact-wrap{grid-template-columns:1fr}
+  .contact-left{padding-right:0}
+}
+
+/* ─── SLIDE PV — PROPUESTA DE VALOR ─── */
+.pv-statement{
+  font-family:var(--fd);font-size:clamp(1.6rem,2.8vw,2.4rem);
+  color:var(--text);line-height:1.15;max-width:700px;
+  margin-bottom:3rem;border-left:3px solid var(--accent);padding-left:1.5rem
+}
+.pv-statement .hl{color:var(--accent)}
+.pv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.pv-card{background:var(--deep);padding:2rem 1.75rem;position:relative;overflow:hidden;transition:background .3s}
+.pv-card:hover{background:rgba(2,82,101,.4)}
+.pv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
+.pv-icon{font-size:1.8rem;margin-bottom:1rem;display:block}
+.pv-title{font-family:var(--fh);font-weight:700;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text);margin-bottom:.6rem}
+.pv-desc{font-size:.82rem;color:var(--teal);line-height:1.6}
+.pv-accent{color:var(--accent);font-weight:700}
+
+/* ─── LOGO FIJO ─── */
+.logo-fixed{
+  position:fixed;top:1.5rem;left:2rem;z-index:200;
+  display:flex;align-items:center
+}
+.logo-fixed img{height:28px;width:auto;display:block}
+
+/* ─── SELECTOR DE IDIOMA ─── */
+.lang-switch{
+  position:fixed;top:1.5rem;right:2rem;z-index:200;
+  display:flex;gap:.25rem;background:rgba(1,12,17,.65);
+  backdrop-filter:blur(6px);border:1px solid var(--border);
+  border-radius:20px;padding:.3rem
+}
+.lang-btn{
+  font-family:var(--fh);font-size:.65rem;font-weight:700;
+  letter-spacing:.08em;color:var(--faint);background:transparent;
+  border:none;padding:.35rem .75rem;border-radius:16px;cursor:pointer;
+  transition:background .2s,color .2s
+}
+.lang-btn:hover:not(.active){color:var(--text)}
+.lang-btn.active{background:var(--accent);color:var(--deep)}
+@media(max-width:900px){
+  .lang-switch{top:1rem;right:1rem;padding:.2rem}
+  .lang-btn{padding:.3rem .55rem;font-size:.6rem}
+}
+
+/* ─── IMG PLACEHOLDER ─── */
+.img-placeholder{
+  border:1px dashed var(--border);border-radius:3px;
+  background:rgba(177,247,39,.02);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--faint);font-family:var(--fh);font-size:.6rem;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;gap:.5rem;
+  transition:background .2s,border-color .2s
+}
+.img-placeholder:hover{background:rgba(177,247,39,.05);border-color:rgba(177,247,39,.2)}
+.img-placeholder svg{width:24px;height:24px;stroke:var(--faint);fill:none;stroke-width:1.5;stroke-linecap:round}
+.img-placeholder img{width:100%;height:100%;object-fit:cover;border-radius:3px;display:block}
+
+/* ─── SLIDE 11 — CONTACTO ─── */
+.contact-wrap{
+  display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;
+  align-items:start;width:100%;max-width:1100px
+}
+.contact-left .sec-p{margin-bottom:2rem}
+.contact-data{display:flex;flex-direction:column;gap:.75rem}
+.contact-data-item{
+  display:flex;align-items:center;gap:.75rem;
+  font-size:.9rem;color:var(--teal);font-family:var(--fb)
+}
+.contact-data-icon{font-size:1rem;width:1.5rem;text-align:center}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.cf-field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+.cf-label{
+  font-family:var(--fh);font-size:.62rem;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--faint)
+}
+.cf-input{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:3px;padding:.75rem 1rem;
+  color:var(--text);font-family:var(--fb);font-size:.9rem;
+  outline:none;transition:border-color .2s,background .2s;
+  width:100%
+}
+.cf-input::placeholder{color:var(--faint)}
+.cf-input:focus{border-color:var(--accent);background:rgba(177,247,39,.04)}
+.cf-textarea{resize:vertical;min-height:110px}
+.cf-btn{
+  width:100%;padding:1rem 2rem;
+  background:var(--accent);color:var(--deep);
+  font-family:var(--fh);font-size:1rem;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;
+  border:none;border-radius:3px;cursor:pointer;
+  transition:background .2s,transform .15s;margin-top:.5rem
+}
+.cf-btn:hover{background:var(--accentd);transform:translateY(-2px)}
+.cf-btn:active{transform:translateY(0)}
+.cf-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.cf-success{
+  margin-top:1.5rem;padding:1.5rem;
+  background:rgba(177,247,39,.06);border:1px solid rgba(177,247,39,.25);
+  border-radius:3px;text-align:center
+}
+.cf-success-icon{font-size:2rem;color:var(--accent);margin-bottom:.5rem}
+.cf-success-text{font-size:.9rem;color:var(--teal);line-height:1.6}
+</style>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+</head>
+<body>
+<!-- LOGO FIJO -->
+<div class="logo-fixed">
+<img alt="PalferIA" src="/assets/img/Isologo-PIA03.png"/>
+</div>
+<!-- SELECTOR DE IDIOMA -->
+<div class="lang-switch" id="langSwitch">
+<button class="lang-btn active" data-lang="es" type="button">ES</button>
+<button class="lang-btn" data-lang="en" type="button">EN</button>
+<button class="lang-btn" data-lang="va" type="button">VA</button>
+</div>
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots"></nav>
+<div class="slide-counter"><span id="currentSlide">1</span> / 12</div>
+<!-- ═══════════════════════════════════════════
+     SLIDE 1 — PORTADA
+════════════════════════════════════════════ -->
+<section class="slide" id="slide-1">
+<div class="watermark">PIA</div>
+<div class="s1-line"></div>
+<div class="s1-grid">
+<div>
+<img alt="PalferIA" src="/assets/img/Isologo-PIA03.png" style="height:42px;width:auto;margin-bottom:2rem;display:block;opacity:.9"/>
+<div class="s1-badge" data-i18n="t1">
+<span class="s1-pulse"></span>
+        4iCV Esport · Candidatura 2026
+      </div>
+<h1 class="s1-h1" data-i18n="t2">
+        IA PARA<br/>EL SPORT<br/><span class="hl">BUSINESS</span>
+</h1>
+<p class="s1-sub" data-i18n="t3">
+        Palferia.me automatiza los procesos manuales de clubes, federaciones y eventos deportivos. Empezamos por el baloncesto valenciano.
+      </p>
+<div class="s1-meta">
+<div class="s1-meta-item" data-i18n="t4">Empresa: <span>Palferia.me — PalferIA Studio</span></div>
+<div class="s1-meta-item" data-i18n="t5">Sede: <span>Valencia, España · 2025</span></div>
+<div class="s1-meta-item" data-i18n="t6">Web: <span>palferia.me</span></div>
+</div>
+</div>
+<div class="s1-right">
+<div class="s1-stat">
+<div class="s1-stat-num" data-i18n="t7">10.000+</div>
+<div class="s1-stat-label" data-i18n="t8">Clubes en la Comunitat Valenciana</div>
+<div class="s1-stat-desc" data-i18n="t9">La mayoría sin ninguna herramienta digital más allá del móvil.</div>
+</div>
+<div class="s1-stat">
+<div class="s1-stat-num" data-i18n="t10">59</div>
+<div class="s1-stat-label" data-i18n="t11">Federaciones autonómicas en la CV</div>
+<div class="s1-stat-desc" data-i18n="t12">Presupuesto predecible vía subvenciones. Sin digitalización real.</div>
+</div>
+<div class="s1-stat">
+<div class="s1-stat-num" data-i18n="t13">0</div>
+<div class="s1-stat-label" data-i18n="t14">Competidores especializados en IA para sport SMB</div>
+<div class="s1-stat-desc" data-i18n="t15">El hueco existe. Nadie lo ha llenado todavía en España.</div>
+</div>
+<!-- IMAGEN PORTADA: reemplazar src con imagen Magnific -->
+<div class="img-placeholder" style="height:140px;margin-top:.5rem">
+<svg viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="3"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg><span data-i18n="t186">Imagen portada · 1200×800px</span></div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 2 — EL PROBLEMA
+════════════════════════════════════════════ -->
+<section class="slide slide-alt" id="slide-2">
+<div class="watermark">PROB</div>
+<div class="sec-label" data-i18n="t16">El punto de partida</div>
+<h2 class="sec-h2" data-i18n="t17">EL PROBLEMA<br/>QUE <span class="hl">TODOS</span> <span class="stroke">CONOCEN</span></h2>
+<div class="prob-grid">
+<div class="prob-card">
+<div class="prob-num">01</div>
+<span class="prob-icon">📱</span>
+<div class="prob-title" data-i18n="t18">WhatsApp como herramienta de gestión</div>
+<div class="prob-desc" data-i18n="t19">El secretario del club gestiona altas, recordatorios de pago y comunicación con 200 familias desde su móvil personal. Entre 6 y 8 horas semanales que no van al deporte.</div>
+</div>
+<div class="prob-card">
+<div class="prob-num">02</div>
+<span class="prob-icon">📊</span>
+<div class="prob-title" data-i18n="t20">Excel que ya no entiende nadie</div>
+<div class="prob-desc" data-i18n="t21">Las inscripciones, los pagos y los socios viven en hojas de cálculo que nadie más sabe leer. Cuando alguien se va de vacaciones, el club se para.</div>
+</div>
+<div class="prob-card">
+<div class="prob-num">03</div>
+<span class="prob-icon">📧</span>
+<div class="prob-title" data-i18n="t22">El mismo email para 50 marcas</div>
+<div class="prob-desc" data-i18n="t23">Jugadores y entrenadores semiprofesionales que buscan patrocinadores mandan una propuesta genérica a todos. La mayoría no responden. El proceso se abandona.</div>
+</div>
+</div>
+<div class="prob-quote" data-i18n="t24">
+    "La brecha no es tecnológica — las herramientas existen y son accesibles. Falta quien las adapte, implemente y enseñe en el contexto concreto del deporte."
+  </div>
+<div class="prob-stat-row">
+<div class="prob-stat">
+<div class="prob-stat-num" data-i18n="t25">6–8h</div>
+<div class="prob-stat-label" data-i18n="t26">Semanales en admin manual · secretario típico</div>
+</div>
+<div class="prob-stat">
+<div class="prob-stat-num" data-i18n="t27">54%</div>
+<div class="prob-stat-label" data-i18n="t28">Población española practica deporte (2022)</div>
+</div>
+<div class="prob-stat">
+<div class="prob-stat-num" data-i18n="t29">~0%</div>
+<div class="prob-stat-label" data-i18n="t30">Con IA real en su gestión</div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 3 — PROPUESTA DE VALOR
+════════════════════════════════════════════ -->
+<section class="slide" id="slide-pv">
+<div class="watermark">PV</div>
+<div class="sec-label" data-i18n="t31">Propuesta de valor</div>
+<h2 class="sec-h2" data-i18n="t32">POR QUÉ<br/><span class="hl">PALFERIA.ME</span></h2>
+<p class="pv-statement" data-i18n="t33">
+    No somos una startup tecnológica que quiere entrar en el deporte.<br/>
+    Somos una <span class="hl">empresa deportiva que usa tecnología</span>.<br/>
+    Esa distinción importa cuando hablas con clubes y federaciones.
+  </p>
+<div class="pv-grid">
+<div class="pv-card">
+<span class="pv-icon">🎯</span>
+<div class="pv-title" data-i18n="t34">Especialización total</div>
+<div class="pv-desc" data-i18n="t35">Solo deporte. No trabajamos con restaurantes, clínicas ni abogados. Cada sistema que montamos nace del conocimiento real del sector deportivo — desde dentro.</div>
+</div>
+<div class="pv-card">
+<span class="pv-icon">⚡</span>
+<div class="pv-title" data-i18n="t36">Resultados en semanas</div>
+<div class="pv-desc" data-i18n="t37">Primera automatización operativa en <span class="pv-accent">2–3 semanas</span>. No en tres meses. Empezamos por lo que más duele y lo primero que se puede medir.</div>
+</div>
+<div class="pv-card">
+<span class="pv-icon">🔧</span>
+<div class="pv-title" data-i18n="t38">Sin cambiar nada</div>
+<div class="pv-desc" data-i18n="t39">El club no cambia de herramienta. Trabajamos sobre lo que ya usan — Clupik, WhatsApp, Google Sheets — y añadimos la capa inteligente encima.</div>
+</div>
+<div class="pv-card">
+<span class="pv-icon">📐</span>
+<div class="pv-title" data-i18n="t40">Cumplimiento normativo</div>
+<div class="pv-desc" data-i18n="t41">AI Act (UE 2024/1689) y RGPD desde el diseño. Crítico para clubs y federaciones que gestionan datos de menores. Sin letra pequeña.</div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 4 — LA SOLUCIÓN
+════════════════════════════════════════════ -->
+<section class="slide" id="slide-3">
+<div class="watermark">SOL</div>
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:3rem">
+<div style="flex:1">
+<div class="sec-label" data-i18n="t42">Lo que hacemos</div>
+<h2 class="sec-h2" data-i18n="t43">CUATRO SISTEMAS<br/><span class="hl">QUE FUNCIONAN</span> SOLOS</h2>
+<p class="sec-p" data-i18n="t44" style="margin-bottom:0">No vendemos software. Montamos el sistema, lo dejamos funcionando y formamos al equipo para operarlo. Sin cambiar las herramientas que ya usan.</p>
+</div>
+<!-- IMAGEN SERVICIOS: reemplazar src con imagen Magnific de automatización -->
+<div class="img-placeholder" style="width:200px;min-width:200px;height:140px;align-self:flex-start;margin-top:1.5rem">
+<svg viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="3"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg><span data-i18n="t187">Visual servicio</span></div>
+</div>
+<div class="sol-grid">
+<div class="sol-card">
+<div class="sol-num">01</div>
+<div class="sol-ico">
+<svg viewbox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+</div>
+<div class="sol-name" data-i18n="t45">Automatización de Procesos</div>
+<div class="sol-desc" data-i18n="t46">Altas de socios, cobros, comunicación con familias e informes mensuales. Sin que nadie lo haga a mano. La primera automatización operativa en 2–3 semanas.</div>
+<div class="sol-tags"><span class="sol-tag" data-i18n="t47">Socios</span><span class="sol-tag" data-i18n="t48">Cobros</span><span class="sol-tag" data-i18n="t49">Comunicación</span><span class="sol-tag" data-i18n="t50">Informes</span></div>
+</div>
+<div class="sol-card">
+<div class="sol-num">02</div>
+<div class="sol-ico">
+<svg viewbox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+</div>
+<div class="sol-name" data-i18n="t51">Marketing Digital</div>
+<div class="sol-desc" data-i18n="t52">Que el club aparezca cuando alguien busca en Google. Contenido que se produce con IA. Campañas para captar nuevos socios o participantes. SEO local en 60–90 días.</div>
+<div class="sol-tags"><span class="sol-tag" data-i18n="t53">SEO Local</span><span class="sol-tag" data-i18n="t54">Contenido IA</span><span class="sol-tag" data-i18n="t55">Captación</span></div>
+</div>
+<div class="sol-card">
+<div class="sol-num">03</div>
+<div class="sol-ico">
+<svg viewbox="0 0 24 24"><circle cx="9" cy="7" r="4"></circle><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path><path d="M21 21v-2a4 4 0 0 0-3-3.85"></path></svg>
+</div>
+<div class="sol-name" data-i18n="t56">Patrocinios con IA</div>
+<div class="sol-desc" data-i18n="t57">Sistema de identificación de marcas con presupuesto activo, propuestas personalizadas para cada una y seguimiento automatizado. Para clubes y para jugadores/entrenadores.</div>
+<div class="sol-tags"><span class="sol-tag" data-i18n="t58">Marcas</span><span class="sol-tag" data-i18n="t59">Propuestas</span><span class="sol-tag" data-i18n="t60">Seguimiento</span></div>
+</div>
+<div class="sol-card">
+<div class="sol-num">04</div>
+<div class="sol-ico">
+<svg viewbox="0 0 24 24"><rect height="14" rx="2" width="20" x="2" y="3"></rect><path d="M8 21h8M12 17v4"></path><path d="M7 8h10M7 12h6"></path></svg>
+</div>
+<div class="sol-name" data-i18n="t61">IA sobre las Apps que ya Usas</div>
+<div class="sol-desc" data-i18n="t62">Conectamos Clupik, Sportlyzer, Weezevent u otras apps con un sistema de IA. Los datos que ya tienes empiezan a generar mensajes, informes y alertas solos.</div>
+<div class="sol-tags"><span class="sol-tag" data-i18n="t63">Clupik</span><span class="sol-tag" data-i18n="t64">Sportlyzer</span><span class="sol-tag" data-i18n="t65">Weezevent</span><span class="sol-tag" data-i18n="t66">Playtomic</span></div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 4 — APLICACIÓN AL BALONCESTO
+════════════════════════════════════════════ -->
+<section class="slide slide-alt" id="slide-4">
+<div class="watermark">BALL</div>
+<div style="display:grid;grid-template-columns:1fr 180px;gap:2.5rem;align-items:start">
+<div>
+<div class="sec-label" data-i18n="t67">Aplicación concreta</div>
+<h2 class="sec-h2" data-i18n="t68">PALFERIA.ME<br/>PARA EL <span class="hl">BALONCESTO</span></h2>
+<p class="sec-p" data-i18n="t69" style="margin-bottom:0">El baloncesto es el deporte más organizado a nivel amateur en España — miles de clubes con estructura real y sin ningún sistema digital. Tres escenarios concretos e inmediatos.</p>
+</div>
+<!-- IMAGEN BALONCESTO: reemplazar src con imagen Magnific de acción deportiva -->
+<div class="img-placeholder" style="height:180px;margin-top:1rem">
+<svg viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="3"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg><span data-i18n="t188">Foto acción</span></div>
+</div>
+<div class="bball-grid">
+<div class="bball-card">
+<div class="bball-tag" data-i18n="t70">Escenario 01 · Club amateur</div>
+<div class="bball-title" data-i18n="t71">EL CLUB<br/>CON 300<br/>SOCIOS</div>
+<div class="bball-desc" data-i18n="t72">El secretario dedica 6–8 horas semanales a gestionar altas, recordar pagos y comunicarse con familias. Con Palferia.me, ese trabajo pasa a ser automático en las primeras 3 semanas. Él recupera su tiempo. El club gana estructura.</div>
+<div class="bball-result" data-i18n="t73">→ Primera automatización operativa: semana 2–3</div>
+</div>
+<div class="bball-card">
+<div class="bball-tag" data-i18n="t74">Escenario 02 · Club semipro</div>
+<div class="bball-title" data-i18n="t75">EL CLUB<br/>QUE QUIERE<br/>CRECER</div>
+<div class="bball-desc" data-i18n="t76">Varios equipos en categorías distintas, necesidad de visibilidad digital y captación de patrocinadores locales. Montamos la presencia online, el canal de captación de socios y el sistema para conseguir marcas — todo integrado y funcionando a la vez.</div>
+<div class="bball-result" data-i18n="t77">→ Marketing activo + patrocinadores en paralelo</div>
+</div>
+<div class="bball-card">
+<div class="bball-tag" data-i18n="t78">Escenario 03 · Jugador / Entrenador</div>
+<div class="bball-title" data-i18n="t79">EL QUE<br/>BUSCA<br/>MARCAS</div>
+<div class="bball-desc" data-i18n="t80">Jugador semiprofesional o entrenador con comunidad que quiere conseguir patrocinadores de ropa, suplementos o equipamiento. Identificamos marcas con presupuesto activo y mandamos propuestas personalizadas de forma sistemática.</div>
+<div class="bball-result" data-i18n="t81">→ Primera propuesta enviada en 7 días · 300–1.500€/colab.</div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 5 — FEDERACIONES
+════════════════════════════════════════════ -->
+<section class="slide" id="slide-5">
+<div class="watermark">FED</div>
+<div class="fed-split">
+<div>
+<div class="sec-label" data-i18n="t82">Segunda línea de impacto</div>
+<h2 class="sec-h2" data-i18n="t83">PARA LA<br/><span class="hl">FEDERACIÓ</span><br/>DE BÀSQUET</h2>
+<p class="sec-p" data-i18n="t84">Las federaciones tienen presupuesto predecible vía subvenciones públicas. El problema es que parte de ese presupuesto se va en tareas administrativas que podrían hacerse solas.</p>
+<div class="fed-list">
+<div class="fed-item">
+<div class="fed-item-dot"></div>
+<div class="fed-item-text" data-i18n="t85"><strong>Afiliación digital de clubs</strong>Sin papel, sin correos de ida y vuelta, sin Excel compartido entre el técnico y la secretaría.</div>
+</div>
+<div class="fed-item">
+<div class="fed-item-dot"></div>
+<div class="fed-item-text" data-i18n="t86"><strong>Reporting automático para subvenciones</strong>Los informes para Conselleria o el CSD se generan solos con los datos que ya tiene la federación.</div>
+</div>
+<div class="fed-item">
+<div class="fed-item-dot"></div>
+<div class="fed-item-text" data-i18n="t87"><strong>Comunicación con clubs afiliados</strong>Convocatorias, cambios de normativa, calendarios de competición — sin que nadie los mande a mano uno por uno.</div>
+</div>
+<div class="fed-item">
+<div class="fed-item-dot"></div>
+<div class="fed-item-text" data-i18n="t88"><strong>Gestión de licencias con alertas</strong>El sistema avisa cuando una licencia vence, cuando falta documentación o cuando hay una incidencia — sin esperar a que lo detecte alguien.</div>
+</div>
+</div>
+</div>
+<div>
+<div class="fed-impact">
+<div class="fed-impact-label" data-i18n="t89">Impacto estimado · Federació de Bàsquet CV</div>
+<div class="fed-impact-stat">
+<div class="fed-impact-num" data-i18n="t90">-70%</div>
+<div class="fed-impact-desc" data-i18n="t91">Tiempo en gestión administrativa de inicio de temporada</div>
+</div>
+<div class="fed-impact-stat">
+<div class="fed-impact-num" data-i18n="t92">+100%</div>
+<div class="fed-impact-desc" data-i18n="t93">Trazabilidad del proceso de afiliación</div>
+</div>
+<div class="fed-impact-quote" data-i18n="t94">
+          "La federación dedica menos recursos a lo administrativo y más a lo que importa: el desarrollo del baloncesto en la Comunitat."
+        </div>
+</div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 6 — EL HUECO
+════════════════════════════════════════════ -->
+<section class="slide slide-alt" id="slide-6">
+<div class="watermark">GAP</div>
+<div class="sec-label" data-i18n="t95">Análisis competitivo</div>
+<h2 class="sec-h2" data-i18n="t96">EL HUECO QUE<br/><span class="hl">NADIE</span> HA LLENADO</h2>
+<table class="comp-table">
+<thead>
+<tr>
+<th data-i18n="t161">Solución</th>
+<th data-i18n="t162">Especialización deportiva</th>
+<th data-i18n="t163">IA aplicada</th>
+<th data-i18n="t164">Precio accesible SMB</th>
+<th data-i18n="t165">Conocimiento del sector</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="comp-name" data-i18n="t166">Stats Perform / Hudl</td>
+<td data-i18n="t167"><span class="comp-yes">✓</span> Solo élite</td>
+<td data-i18n="t168"><span class="comp-yes">✓</span></td>
+<td data-i18n="t169"><span class="comp-no">✗</span> 6.000–50.000€/año</td>
+<td data-i18n="t170"><span class="comp-yes">✓</span></td>
+</tr>
+<tr>
+<td class="comp-name" data-i18n="t171">Clupik / Sportlyzer</td>
+<td data-i18n="t172"><span class="comp-yes">✓</span></td>
+<td data-i18n="t173"><span class="comp-no">✗</span> Solo gestión</td>
+<td data-i18n="t174"><span class="comp-yes">✓</span></td>
+<td data-i18n="t175"><span class="comp-yes">✓</span></td>
+</tr>
+<tr>
+<td class="comp-name" data-i18n="t176">Agencias marketing generalistas</td>
+<td data-i18n="t177"><span class="comp-no">✗</span></td>
+<td data-i18n="t178"><span class="comp-no">✗</span></td>
+<td data-i18n="t179"><span class="comp-yes">✓</span></td>
+<td data-i18n="t180"><span class="comp-no">✗</span></td>
+</tr>
+<tr class="comp-highlight">
+<td class="comp-name" data-i18n="t181">Palferia.me</td>
+<td data-i18n="t182"><span class="comp-yes">✓</span> Solo deporte</td>
+<td data-i18n="t183"><span class="comp-yes">✓</span> Procesos reales</td>
+<td data-i18n="t184"><span class="comp-yes">✓</span> Adaptado al SMB deportivo</td>
+<td data-i18n="t185"><span class="comp-yes">✓</span> Fundador del sector</td>
+</tr>
+</tbody>
+</table>
+<div class="comp-gap" data-i18n="t101">
+    En España no existe ningún actor que combine <strong>especialización deportiva + IA aplicada a procesos reales + precio accesible para el SMB</strong>. Ese espacio — sin dueño todavía — es exactamente donde está Palferia.me.
+  </div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 7 — CÓMO FUNCIONA
+════════════════════════════════════════════ -->
+<section class="slide" id="slide-7">
+<div class="watermark">HOW</div>
+<div class="sec-label" data-i18n="t102">El proceso</div>
+<h2 class="sec-h2" data-i18n="t103">CÓMO ARRANCA<br/>UN <span class="hl">PROYECTO</span></h2>
+<p class="sec-p" data-i18n="t104">Cuatro pasos. Sin letra pequeña. Sin desaparecer hasta la entrega.</p>
+<div class="proc-steps">
+<div class="proc-step">
+<div class="proc-num">01</div>
+<div class="proc-name" data-i18n="t105">Diagnóstico</div>
+<div class="proc-desc" data-i18n="t106">30 minutos para entender qué procesos son manuales, cuánto tiempo cuestan y dónde se pierden socios o ingresos. Sin presentación de ventas.</div>
+<span class="proc-time" data-i18n="t107">Día 1</span>
+</div>
+<div class="proc-step">
+<div class="proc-num">02</div>
+<div class="proc-name" data-i18n="t108">Propuesta</div>
+<div class="proc-desc" data-i18n="t109">En 48–72 horas tienes por escrito qué hacemos exactamente, cuándo estará listo y qué incluye. Alcance cerrado desde el principio.</div>
+<span class="proc-time" data-i18n="t110">Día 3–4</span>
+</div>
+<div class="proc-step">
+<div class="proc-num">03</div>
+<div class="proc-name" data-i18n="t111">Implementación</div>
+<div class="proc-desc" data-i18n="t112">Construimos el sistema. Primera automatización operativa en 2–3 semanas. No en 3 meses. El cliente ve el progreso en tiempo real.</div>
+<span class="proc-time" data-i18n="t113">Semana 2–3</span>
+</div>
+<div class="proc-step">
+<div class="proc-num">04</div>
+<div class="proc-name" data-i18n="t114">Acompañamiento</div>
+<div class="proc-desc" data-i18n="t115">Retainer mensual para ajustar, mejorar y añadir automatizaciones. El equipo aprende a operarlo solo. El objetivo es que cada vez dependan menos de nosotros.</div>
+<span class="proc-time" data-i18n="t116">Mes a mes</span>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 8 — QUIÉN HAY DETRÁS
+════════════════════════════════════════════ -->
+<section class="slide slide-alt" id="slide-8">
+<div class="watermark">WHO</div>
+<div class="sec-label" data-i18n="t117">El fundador</div>
+<div class="founder-split">
+<div class="founder-card">
+<img alt="PalferIA" src="/assets/img/Imagotipo_PIA01.png" style="height:50px;width:auto;margin-bottom:1.5rem;display:block;mix-blend-mode:screen;filter:brightness(1.1)"/>
+<div style="aspect-ratio:4/5;margin-bottom:1.5rem;border-radius:3px;overflow:hidden">
+<img alt="Ronald Palma, fundador de Palferia.me" src="/assets/img/Deks_img_Fundador.png" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block"/>
+</div>
+<div class="founder-name" data-i18n="t118">RONALD<br/>PALMA</div>
+<div class="founder-role" data-i18n="t119">Fundador · Palferia.me · Valencia</div>
+<div class="founder-bio" data-i18n="t120">Palferia.me no nació en un garaje tecnológico. Nació de trabajar dentro del sector deportivo y ver de cerca qué herramientas faltan.</div>
+</div>
+<div>
+<div class="founder-creds">
+<div class="cred">
+<div class="cred-dot"></div>
+<div class="cred-text" data-i18n="t121"><strong>Máster en Gestión de Empresas Deportivas · UPV 2026</strong><br/>Especialización en legislación deportiva, organización de eventos y marketing deportivo.</div>
+</div>
+<div class="cred">
+<div class="cred-dot"></div>
+<div class="cred-text" data-i18n="t122"><strong>Partnership Developer · Freestyle Trampoline Association (FTA) · 2025–2026</strong><br/>Captación de patrocinios en España y Latinoamérica. Trabajo directo con organizaciones deportivas internacionales.</div>
+</div>
+<div class="cred">
+<div class="cred-dot"></div>
+<div class="cred-text" data-i18n="t123"><strong>Cumplimiento normativo integrado</strong><br/>AI Act (UE 2024/1689) y RGPD desde el diseño. Crítico para clubs y federaciones que gestionan datos de menores.</div>
+</div>
+</div>
+<div class="founder-key" data-i18n="t124">
+        "No somos una startup tecnológica que quiere entrar en el deporte. Somos una empresa deportiva que usa tecnología. Esa distinción importa cuando hablas con clubes y federaciones."
+      </div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 9 — LO QUE PEDIMOS AL HUB
+════════════════════════════════════════════ -->
+<section class="slide" id="slide-9">
+<div class="watermark">HUB</div>
+<div class="sec-label" data-i18n="t125">Nuestra propuesta al Hub</div>
+<h2 class="sec-h2" data-i18n="t126">LO QUE<br/>PEDIMOS AL <span class="hl">HUB</span></h2>
+<p class="sec-p" data-i18n="t127">No venimos a vender. Venimos a construir algo concreto con el ecosistema del baloncesto valenciano.</p>
+<div class="ask-grid">
+<div class="ask-list">
+<div class="ask-item">
+<div class="ask-num">01</div>
+<div class="ask-title" data-i18n="t128">Acceso a clubs y federación</div>
+<div class="ask-desc" data-i18n="t129">Dos o tres clubs de baloncesto de la CV y contacto con la Federació de Bàsquet para desarrollar un caso de uso real durante la mentoría. No un piloto de prueba — un proyecto real.</div>
+</div>
+<div class="ask-item">
+<div class="ask-num">02</div>
+<div class="ask-title" data-i18n="t130">Mentoría sectorial</div>
+<div class="ask-desc" data-i18n="t131">Guía para afinar la propuesta específica para el baloncesto valenciano: qué necesita cada tipo de club, cómo funciona la estructura federativa y cómo adaptar los sistemas a su contexto.</div>
+</div>
+<div class="ask-item">
+<div class="ask-num">03</div>
+<div class="ask-title" data-i18n="t132">Red del ecosistema deportivo CV</div>
+<div class="ask-desc" data-i18n="t133">Conexiones con clubs, federaciones y organizadores de eventos deportivos en la Comunitat. Nuestro primer mercado objetivo es Valencia — el Hub acelera ese proceso.</div>
+</div>
+</div>
+<div class="give-box">
+<div class="give-label" data-i18n="t134">Lo que aportamos al Hub</div>
+<div class="give-list">
+<div class="give-item" data-i18n="t135"><strong>Un sistema funcional y probado tecnicamente</strong> — palferia.me operativa con 6 verticales especializados y metodología de implementación definida.</div>
+<div class="give-item" data-i18n="t136"><strong>Conocimiento sectorial real</strong> — no teórico. El fundador trabajó dentro de una organización deportiva internacional antes de crear Palferia.me.</div>
+<div class="give-item" data-i18n="t137"><strong>Cumplimiento normativo integrado</strong> — AI Act y RGPD desde el diseño. Relevante para cualquier federación o club que gestione datos de menores.</div>
+<div class="give-item" data-i18n="t138"><strong>Compromiso de caso de uso en baloncesto</strong> — desarrollamos durante la mentoría un proyecto piloto real con un club o la federación, documentado y replicable.</div>
+<div class="give-item" data-i18n="t139"><strong>Modelo escalable a otros deportes</strong> — el baloncesto como primer caso de validación de un sistema que puede extenderse al resto del ecosistema deportivo de la CV.</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ═══════════════════════════════════════════
+     SLIDE 10 — CIERRE
+════════════════════════════════════════════ -->
+<section class="slide slide-dark" id="slide-10">
+<div class="watermark">PIA</div>
+<div class="close-center">
+<img alt="PalferIA" src="/assets/img/Isologo-PIA03.png" style="height:36px;width:auto;margin:0 auto 2rem;display:block;opacity:.85"/>
+<div class="sec-label" data-i18n="t140" style="justify-content:center;margin-bottom:2rem">Palferia.me · 4iCV Esport 2026</div>
+<h1 class="close-h1" data-i18n="t141">
+      LA BRECHA<br/><span class="hl">ESTÁ AHÍ.</span><br/>ALGUIEN<br/>TIENE QUE<br/><span class="stroke">LLENARLA.</span>
+</h1>
+<p class="close-sub" data-i18n="t142">Más de 10.000 clubs en la Comunitat Valenciana. La mayoría sin sistema digital. La tecnología para resolverlo existe y es accesible. Lo que falta es alguien que la adapte al contexto real del deporte valenciano.</p>
+<div class="close-tags">
+<span class="close-tag" data-i18n="t143">Valencia · España</span>
+<span class="close-tag" data-i18n="t144">IA para sport business</span>
+<span class="close-tag" data-i18n="t145">Clubes de baloncesto</span>
+<span class="close-tag" data-i18n="t146">Federaciones CV</span>
+<span class="close-tag" data-i18n="t147">Sin jerga · Sin humo</span>
+</div>
+</div>
+</section>
+<!-- SLIDE 11 — CONTACTO -->
+<section class="slide slide-dark" id="s11">
+<div class="contact-wrap">
+<div class="contact-left">
+<img alt="PalferIA" src="/assets/img/Isologo-PIA03.png" style="height:32px;width:auto;margin-bottom:1.5rem;display:block;opacity:.8"/>
+<div class="sec-label" data-i18n="t148">Hablemos</div>
+<h2 class="sec-h2" data-i18n="t149" style="font-size:clamp(2.8rem,5vw,5.5rem)">¿Tu club<br/>en esto?</h2>
+<p class="sec-p" data-i18n="t150" style="margin-bottom:1.5rem">Una llamada de 30 minutos. Sin presentación de ventas, sin promesas vacías. Si tiene sentido para tu organización, te lo decimos con números. Si no, también.</p>
+<div class="contact-data">
+<div class="contact-data-item" data-i18n="t151"><span class="contact-data-icon">✉</span><span>ri@palferia.com</span></div>
+<div class="contact-data-item" data-i18n="t152"><span class="contact-data-icon">🌐</span><span>palferia.me</span></div>
+<div class="contact-data-item" data-i18n="t153"><span class="contact-data-icon">📍</span><span>Valencia · España</span></div>
+</div>
+</div>
+<div class="contact-right">
+<form action="https://formspree.io/f/XXXXXXXX" id="contactForm" method="POST">
+<input name="_subject" type="hidden" value="Contacto desde deck 4iCV — Palferia.me"/>
+<div class="cf-row">
+<div class="cf-field">
+<label class="cf-label" data-i18n="t154">Nombre</label>
+<input class="cf-input" data-i18n-placeholder="t189" name="nombre" placeholder="Tu nombre" required="" type="text"/>
+</div>
+<div class="cf-field">
+<label class="cf-label" data-i18n="t155">Email</label>
+<input class="cf-input" data-i18n-placeholder="t190" name="email" placeholder="tu@correo.com" required="" type="email"/>
+</div>
+</div>
+<div class="cf-field">
+<label class="cf-label" data-i18n="t156">Organización</label>
+<input class="cf-input" data-i18n-placeholder="t191" name="organizacion" placeholder="Club, federación, evento..." type="text"/>
+</div>
+<div class="cf-field">
+<label class="cf-label" data-i18n="t157">¿Qué necesitas resolver?</label>
+<textarea class="cf-input cf-textarea" data-i18n-placeholder="t192" name="mensaje" placeholder="Cuéntanos brevemente tu situación actual..." required=""></textarea>
+</div>
+<button class="cf-btn" type="submit">
+<span class="cf-btn-text" data-i18n="t158">Enviar mensaje →</span>
+<span class="cf-btn-sending" data-i18n="t159" style="display:none">Enviando...</span>
+</button>
+<div class="cf-success" style="display:none">
+<div class="cf-success-icon">✓</div>
+<div class="cf-success-text" data-i18n="t160">Mensaje recibido. Te escribimos en menos de 24 horas.</div>
+</div>
+</form>
+</div>
+</div>
+<div class="watermark">PF</div>
+</section>
+<script>
+(function(){
+  const slides=document.querySelectorAll('.slide');
+  const dotsContainer=document.getElementById('navDots');
+  const counter=document.getElementById('currentSlide');
+  const dots=[];
+
+  slides.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='dot'+(i===0?' active':'');
+    d.setAttribute('aria-label','Slide '+(i+1));
+    d.addEventListener('click',()=>slides[i].scrollIntoView({behavior:'smooth'}));
+    dotsContainer.appendChild(d);
+    dots.push(d);
+  });
+
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const idx=[...slides].indexOf(e.target);
+        dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+        counter.textContent=idx+1;
+      }
+    });
+  },{threshold:.5});
+
+  slides.forEach(s=>io.observe(s));
+
+  document.addEventListener('keydown',e=>{
+    const active=[...dots].findIndex(d=>d.classList.contains('active'));
+    if(e.key==='ArrowDown'&&active<slides.length-1) slides[active+1].scrollIntoView({behavior:'smooth'});
+    if(e.key==='ArrowUp'&&active>0) slides[active-1].scrollIntoView({behavior:'smooth'});
+  });
+
+  // Form submit via fetch (no page reload)
+  const form=document.getElementById('contactForm');
+  if(form){
+    form.addEventListener('submit',async function(e){
+      e.preventDefault();
+      const btn=form.querySelector('.cf-btn');
+      const btnText=form.querySelector('.cf-btn-text');
+      const btnSending=form.querySelector('.cf-btn-sending');
+      const success=form.querySelector('.cf-success');
+      btn.disabled=true;
+      btnText.style.display='none';
+      btnSending.style.display='inline';
+      try{
+        const res=await fetch(form.action,{
+          method:'POST',
+          body:new FormData(form),
+          headers:{Accept:'application/json'}
+        });
+        if(res.ok){
+          form.querySelectorAll('.cf-field,.cf-row').forEach(el=>el.style.display='none');
+          btn.style.display='none';
+          success.style.display='block';
+        }else{
+          btn.disabled=false;btnText.style.display='inline';btnSending.style.display='none';
+          alert('Error al enviar. Escríbenos directamente a ri@palferia.me');
+        }
+      }catch{
+        btn.disabled=false;btnText.style.display='inline';btnSending.style.display='none';
+        alert('Sin conexión. Escríbenos a ri@palferia.me');
+      }
+    });
+  }
+})();
+</script>
+<script id="i18n-data" type="application/json">{"en": {"t1": "<span class=\"s1-pulse\"></span>4iCV Esport · 2026 Candidacy", "t2": "AI FOR<br/>SPORT<br/><span class=\"hl\">BUSINESS</span>", "t3": "Palferia.me automates the manual processes of clubs, federations and sports events. We're starting with Valencian basketball.", "t4": "Company: <span>Palferia.me — PalferIA Studio</span>", "t5": "HQ: <span>Valencia, Spain · 2025</span>", "t6": "Web: <span>palferia.me</span>", "t7": "10,000+", "t8": "Clubs in the Comunitat Valenciana", "t9": "Most with no digital tools beyond their phone.", "t10": "59", "t11": "Regional federations in the CV", "t12": "Predictable budget via public grants. No real digitization.", "t13": "0", "t14": "Competitors specialized in AI for sport SMBs", "t15": "The gap exists. No one has filled it yet in Spain.", "t16": "The starting point", "t17": "THE PROBLEM<br/>EVERYONE <span class=\"hl\">ALREADY</span> <span class=\"stroke\">KNOWS</span>", "t18": "WhatsApp as a management tool", "t19": "The club secretary manages sign-ups, payment reminders and communication with 200 families from their personal phone. Between 6 and 8 hours a week that don't go toward sport.", "t20": "Spreadsheets nobody understands anymore", "t21": "Registrations, payments and members live in spreadsheets that no one else knows how to read. When someone goes on holiday, the club grinds to a halt.", "t22": "The same email sent to 50 brands", "t23": "Semi-professional players and coaches looking for sponsors send the same generic proposal to everyone. Most don't respond. The process gets abandoned.", "t24": "\"The gap isn't technological — the tools exist and are accessible. What's missing is someone to adapt, implement and teach them in sport's specific context.\"", "t25": "6–8h", "t26": "Weekly on manual admin · typical secretary", "t27": "54%", "t28": "of the Spanish population plays sport (2022)", "t29": "~0%", "t30": "With real AI in their management", "t31": "Value proposition", "t32": "WHY<br/><span class=\"hl\">PALFERIA.ME</span>", "t33": "We're not a tech startup trying to break into sport.<br/>\n    We're a <span class=\"hl\">sports company that uses technology</span>.<br/>\n    That distinction matters when you talk to clubs and federations.", "t34": "Total specialization", "t35": "Sport only. We don't work with restaurants, clinics or law firms. Every system we build comes from real knowledge of the sports sector — from the inside.", "t36": "Results in weeks", "t37": "First automation live in <span class=\"pv-accent\">2–3 weeks</span>. Not three months. We start with what hurts most and what can be measured first.", "t38": "Nothing to switch", "t39": "The club doesn't change tools. We work on top of what they already use — Clupik, WhatsApp, Google Sheets — and add the intelligent layer on top.", "t40": "Regulatory compliance", "t41": "AI Act (EU 2024/1689) and GDPR by design. Critical for clubs and federations handling minors' data. No fine print.", "t42": "What we do", "t43": "FOUR SYSTEMS<br/>THAT <span class=\"hl\">RUN</span> THEMSELVES", "t44": "We don't sell software. We build the system, leave it running and train the team to operate it. Without changing the tools they already use.", "t45": "Process Automation", "t46": "Member sign-ups, payments, family communication and monthly reports. No one doing it by hand. First automation live in 2–3 weeks.", "t47": "Members", "t48": "Payments", "t49": "Communication", "t50": "Reports", "t51": "Digital Marketing", "t52": "Getting the club to show up when someone searches Google. Content produced with AI. Campaigns to attract new members or participants. Local SEO in 60–90 days.", "t53": "Local SEO", "t54": "AI Content", "t55": "Acquisition", "t56": "AI-driven Sponsorships", "t57": "A system that identifies brands with active budget, sends personalized proposals to each one, and automates follow-up. For clubs and for players/coaches.", "t58": "Brands", "t59": "Proposals", "t60": "Follow-up", "t61": "AI on Top of the Apps You Already Use", "t62": "We connect Clupik, Sportlyzer, Weezevent or other apps to an AI system. The data you already have starts generating messages, reports and alerts on its own.", "t63": "Clupik", "t64": "Sportlyzer", "t65": "Weezevent", "t66": "Playtomic", "t67": "A concrete application", "t68": "PALFERIA.ME<br/>FOR <span class=\"hl\">BASKETBALL</span>", "t69": "Basketball is the most organized amateur sport in Spain — thousands of clubs with real structure and no digital system at all. Three concrete, immediate scenarios.", "t70": "Scenario 01 · Amateur club", "t71": "THE CLUB<br/>WITH 300<br/>MEMBERS", "t72": "The secretary spends 6–8 hours a week managing sign-ups, chasing payments and talking to families. With Palferia.me, that work becomes automatic within the first 3 weeks. He gets his time back. The club gains structure.", "t73": "→ First automation live: week 2–3", "t74": "Scenario 02 · Semi-pro club", "t75": "THE CLUB<br/>THAT WANTS<br/>TO GROW", "t76": "Several teams across different categories, needing digital visibility and local sponsor acquisition. We build the online presence, the member-acquisition channel and the system to land sponsors — all integrated and running at once.", "t77": "→ Active marketing + sponsors in parallel", "t78": "Scenario 03 · Player / Coach", "t79": "THE ONE<br/>LOOKING FOR<br/>BRANDS", "t80": "A semi-pro player or coach with a community who wants to land sponsors for apparel, supplements or equipment. We identify brands with active budget and send personalized proposals systematically.", "t81": "→ First proposal sent within 7 days · €300–1,500/collab.", "t82": "Second line of impact", "t83": "FOR THE<br/><span class=\"hl\">FEDERACIÓ</span><br/>DE BÀSQUET", "t84": "Federations have a predictable budget via public grants. The problem is part of that budget goes into administrative tasks that could run themselves.", "t85": "<strong>Digital club affiliation</strong>No paper, no back-and-forth emails, no spreadsheet shared between the coach and the office.", "t86": "<strong>Automatic reporting for grants</strong>Reports for the Conselleria or the CSD generate themselves from the data the federation already has.", "t87": "<strong>Communication with affiliated clubs</strong>Calls for entry, rule changes, competition calendars — without anyone sending them by hand one by one.", "t88": "<strong>License management with alerts</strong>The system flags when a license expires, when documentation is missing or when there's an issue — without waiting for someone to spot it.", "t89": "Estimated impact · Federació de Bàsquet CV", "t90": "-70%", "t91": "Time spent on start-of-season admin", "t92": "+100%", "t93": "Traceability of the affiliation process", "t94": "\"The federation spends fewer resources on admin and more on what matters: developing basketball in the Comunitat.\"", "t95": "Competitive analysis", "t96": "THE GAP<br/><span class=\"hl\">NO ONE</span> HAS FILLED", "t97": "Stats Perform / Hudl", "t98": "Clupik / Sportlyzer", "t99": "Generalist marketing agencies", "t100": "Palferia.me", "t101": "In Spain, no player combines <strong>sport specialization + AI applied to real processes + SMB-accessible pricing</strong>. That space — still unclaimed — is exactly where Palferia.me sits.", "t102": "The process", "t103": "HOW A<br/><span class=\"hl\">PROJECT</span> STARTS", "t104": "Four steps. No fine print. No disappearing until delivery.", "t105": "Diagnosis", "t106": "30 minutes to understand which processes are manual, how much time they cost, and where members or revenue are being lost. No sales pitch.", "t107": "Day 1", "t108": "Proposal", "t109": "Within 48–72 hours you have it in writing: exactly what we do, when it'll be ready, and what's included. Scope locked in from the start.", "t110": "Day 3–4", "t111": "Implementation", "t112": "We build the system. First automation live in 2–3 weeks. Not 3 months. The client sees progress in real time.", "t113": "Week 2–3", "t114": "Ongoing support", "t115": "Monthly retainer to adjust, improve and add automations. The team learns to run it themselves. The goal is for them to depend on us less over time.", "t116": "Month to month", "t117": "The founder", "t118": "RONALD<br/>PALMA", "t119": "Founder · Palferia.me · Valencia", "t120": "Palferia.me wasn't born in a tech garage. It was born from working inside the sports sector and seeing up close which tools were missing.", "t121": "<strong>Master's in Sports Entity Management · UPV 2026</strong><br/>Specialization in sports law, event organization and sports marketing.", "t122": "<strong>Partnership Developer · Freestyle Trampoline Association (FTA) · 2025–2026</strong><br/>Sponsorship acquisition across Spain and Latin America. Direct work with international sports organizations.", "t123": "<strong>Built-in regulatory compliance</strong><br/>AI Act (EU 2024/1689) and GDPR by design. Critical for clubs and federations handling minors' data.", "t124": "\"We're not a tech startup trying to break into sport. We're a sports company that uses technology. That distinction matters when you talk to clubs and federations.\"", "t125": "Our proposal to the Hub", "t126": "WHAT WE'RE<br/>ASKING THE <span class=\"hl\">HUB</span>", "t127": "We're not here to sell. We're here to build something concrete with the Valencian basketball ecosystem.", "t128": "Access to clubs and the federation", "t129": "Two or three basketball clubs from the CV, and contact with the Federació de Bàsquet, to develop a real use case during the mentorship. Not a test pilot — a real project.", "t130": "Sector mentorship", "t131": "Guidance to fine-tune the proposal specifically for Valencian basketball: what each type of club needs, how the federative structure works, and how to adapt the systems to their context.", "t132": "Network across the CV sports ecosystem", "t133": "Connections with clubs, federations and sports event organizers across the Comunitat. Our first target market is Valencia — the Hub accelerates that process.", "t134": "What we bring to the Hub", "t135": "<strong>A functional, technically proven system</strong> — palferia.me operational with 6 specialized verticals and a defined implementation methodology.", "t136": "<strong>Real sector knowledge</strong> — not theoretical. The founder worked inside an international sports organization before creating Palferia.me.", "t137": "<strong>Built-in regulatory compliance</strong> — AI Act and GDPR by design. Relevant for any federation or club handling minors' data.", "t138": "<strong>Commitment to a basketball use case</strong> — during the mentorship we develop a real pilot project with a club or the federation, documented and replicable.", "t139": "<strong>Model scalable to other sports</strong> — basketball as the first validation case for a system that can extend to the rest of the CV's sports ecosystem.", "t140": "Palferia.me · 4iCV Esport 2026", "t141": "THE GAP<br/><span class=\"hl\">IS THERE.</span><br/>SOMEONE<br/>HAS TO<br/><span class=\"stroke\">FILL IT.</span>", "t142": "More than 10,000 clubs in the Comunitat Valenciana. Most with no digital system. The technology to solve it exists and is accessible. What's missing is someone to adapt it to the real context of Valencian sport.", "t143": "Valencia · Spain", "t144": "AI for sport business", "t145": "Basketball clubs", "t146": "CV federations", "t147": "No jargon · No smoke", "t148": "Let's talk", "t149": "Your club<br/>in this?", "t150": "A 30-minute call. No sales pitch, no empty promises. If it makes sense for your organization, we'll tell you with numbers. If it doesn't, we'll tell you that too.", "t151": "<span class=\"contact-data-icon\">✉</span><span>ri@palferia.com</span>", "t152": "<span class=\"contact-data-icon\">🌐</span><span>palferia.me</span>", "t153": "<span class=\"contact-data-icon\">📍</span><span>Valencia · Spain</span>", "t154": "Name", "t155": "Email", "t156": "Organization", "t157": "What do you need to solve?", "t158": "Send message →", "t159": "Sending...", "t160": "Message received. We'll write back within 24 hours.", "t161": "Solution", "t162": "Sport specialization", "t163": "Applied AI", "t164": "SMB-accessible pricing", "t165": "Sector knowledge", "t166": "Stats Perform / Hudl", "t167": "<span class=\"comp-yes\">✓</span> Elite only", "t168": "<span class=\"comp-yes\">✓</span>", "t169": "<span class=\"comp-no\">✗</span> €6,000–50,000/year", "t170": "<span class=\"comp-yes\">✓</span>", "t171": "Clupik / Sportlyzer", "t172": "<span class=\"comp-yes\">✓</span>", "t173": "<span class=\"comp-no\">✗</span> Management only", "t174": "<span class=\"comp-yes\">✓</span>", "t175": "<span class=\"comp-yes\">✓</span>", "t176": "Generalist marketing agencies", "t177": "<span class=\"comp-no\">✗</span>", "t178": "<span class=\"comp-no\">✗</span>", "t179": "<span class=\"comp-yes\">✓</span>", "t180": "<span class=\"comp-no\">✗</span>", "t181": "Palferia.me", "t182": "<span class=\"comp-yes\">✓</span> Sport only", "t183": "<span class=\"comp-yes\">✓</span> Real processes", "t184": "<span class=\"comp-yes\">✓</span> Adapted to sport SMB", "t185": "<span class=\"comp-yes\">✓</span> Sector founder", "t186": "Cover image · 1200×800px", "t187": "Service visual", "t188": "Action photo", "t189": "Your name", "t190": "you@email.com", "t191": "Club, federation, event...", "t192": "Briefly tell us about your current situation..."}, "va": {"t1": "<span class=\"s1-pulse\"></span>4iCV Esport · Candidatura 2026", "t2": "IA PER AL<br/>SPORT<br/><span class=\"hl\">BUSINESS</span>", "t3": "Palferia.me automatitza els processos manuals de clubs, federacions i esdeveniments esportius. Comencem pel bàsquet valencià.", "t4": "Empresa: <span>Palferia.me — PalferIA Studio</span>", "t5": "Seu: <span>València, Espanya · 2025</span>", "t6": "Web: <span>palferia.me</span>", "t7": "10.000+", "t8": "Clubs a la Comunitat Valenciana", "t9": "La majoria sense cap eina digital més enllà del mòbil.", "t10": "59", "t11": "Federacions autonòmiques a la CV", "t12": "Pressupost previsible via subvencions. Sense digitalització real.", "t13": "0", "t14": "Competidors especialitzats en IA per a sport SMB", "t15": "El buit existix. Encara ningú l'ha omplit a Espanya.", "t16": "El punt de partida", "t17": "EL PROBLEMA<br/>QUE <span class=\"hl\">TOTS</span> <span class=\"stroke\">CONEIXEN</span>", "t18": "WhatsApp com a eina de gestió", "t19": "El secretari del club gestiona altes, recordatoris de pagament i comunicació amb 200 famílies des del seu mòbil personal. Entre 6 i 8 hores setmanals que no van cap a l'esport.", "t20": "Excel que ja no entén ningú", "t21": "Les inscripcions, els pagaments i els socis viuen en fulls de càlcul que ningú més sap llegir. Quan algú se'n va de vacances, el club es para.", "t22": "El mateix correu per a 50 marques", "t23": "Jugadors i entrenadors semiprofessionals que busquen patrocinadors envien una proposta genèrica a tots. La majoria no responen. El procés s'abandona.", "t24": "\"La bretxa no és tecnològica — les eines existixen i són accessibles. Falta qui les adapte, implemente i ensenye en el context concret de l'esport.\"", "t25": "6–8h", "t26": "Setmanals en admin manual · secretari típic", "t27": "54%", "t28": "de la població espanyola practica esport (2022)", "t29": "~0%", "t30": "Amb IA real en la seua gestió", "t31": "Proposta de valor", "t32": "PER QUÈ<br/><span class=\"hl\">PALFERIA.ME</span>", "t33": "No som una startup tecnològica que vol entrar a l'esport.<br/>\n    Som una <span class=\"hl\">empresa esportiva que utilitza tecnologia</span>.<br/>\n    Eixa distinció importa quan parles amb clubs i federacions.", "t34": "Especialització total", "t35": "Només esport. No treballem amb restaurants, clíniques ni advocats. Cada sistema que muntem naix del coneixement real del sector esportiu — des de dins.", "t36": "Resultats en setmanes", "t37": "Primera automatització operativa en <span class=\"pv-accent\">2–3 setmanes</span>. No en tres mesos. Comencem per allò que fa més mal i el primer que es pot mesurar.", "t38": "Sense canviar res", "t39": "El club no canvia d'eina. Treballem sobre el que ja usen — Clupik, WhatsApp, Google Sheets — i afegim la capa intel·ligent damunt.", "t40": "Compliment normatiu", "t41": "AI Act (UE 2024/1689) i RGPD des del disseny. Crític per a clubs i federacions que gestionen dades de menors. Sense lletra menuda.", "t42": "El que fem", "t43": "QUATRE SISTEMES<br/><span class=\"hl\">QUE FUNCIONEN</span> SOLS", "t44": "No venem programari. Muntem el sistema, el deixem funcionant i formem l'equip per a operar-lo. Sense canviar les eines que ja usen.", "t45": "Automatització de Processos", "t46": "Altes de socis, cobraments, comunicació amb famílies i informes mensuals. Sense que ningú ho faça a mà. La primera automatització operativa en 2–3 setmanes.", "t47": "Socis", "t48": "Cobraments", "t49": "Comunicació", "t50": "Informes", "t51": "Màrqueting Digital", "t52": "Que el club aparega quan algú busca a Google. Contingut que es produïx amb IA. Campanyes per a captar nous socis o participants. SEO local en 60–90 dies.", "t53": "SEO Local", "t54": "Contingut IA", "t55": "Captació", "t56": "Patrocinis amb IA", "t57": "Sistema d'identificació de marques amb pressupost actiu, propostes personalitzades per a cadascuna i seguiment automatitzat. Per a clubs i per a jugadors/entrenadors.", "t58": "Marques", "t59": "Propostes", "t60": "Seguiment", "t61": "IA sobre les Apps que ja Uses", "t62": "Connectem Clupik, Sportlyzer, Weezevent o altres apps amb un sistema d'IA. Les dades que ja tens comencen a generar missatges, informes i alertes soles.", "t63": "Clupik", "t64": "Sportlyzer", "t65": "Weezevent", "t66": "Playtomic", "t67": "Aplicació concreta", "t68": "PALFERIA.ME<br/>PER AL <span class=\"hl\">BÀSQUET</span>", "t69": "El bàsquet és l'esport més organitzat a nivell amateur a Espanya — milers de clubs amb estructura real i sense cap sistema digital. Tres escenaris concrets i immediats.", "t70": "Escenari 01 · Club amateur", "t71": "EL CLUB<br/>AMB 300<br/>SOCIS", "t72": "El secretari dedica 6–8 hores setmanals a gestionar altes, recordar pagaments i comunicar-se amb famílies. Amb Palferia.me, eixe treball passa a ser automàtic en les primeres 3 setmanes. Ell recupera el seu temps. El club guanya estructura.", "t73": "→ Primera automatització operativa: setmana 2–3", "t74": "Escenari 02 · Club semipro", "t75": "EL CLUB<br/>QUE VOL<br/>CRÉIXER", "t76": "Diversos equips en categories distintes, necessitat de visibilitat digital i captació de patrocinadors locals. Muntem la presència online, el canal de captació de socis i el sistema per a aconseguir marques — tot integrat i funcionant alhora.", "t77": "→ Màrqueting actiu + patrocinadors en paral·lel", "t78": "Escenari 03 · Jugador / Entrenador", "t79": "EL QUE<br/>BUSCA<br/>MARQUES", "t80": "Jugador semiprofessional o entrenador amb comunitat que vol aconseguir patrocinadors de roba, suplements o equipament. Identifiquem marques amb pressupost actiu i enviem propostes personalitzades de manera sistemàtica.", "t81": "→ Primera proposta enviada en 7 dies · 300–1.500€/colab.", "t82": "Segona línia d'impacte", "t83": "PER A LA<br/><span class=\"hl\">FEDERACIÓ</span><br/>DE BÀSQUET", "t84": "Les federacions tenen un pressupost previsible via subvencions públiques. El problema és que part d'eixe pressupost se'n va en tasques administratives que podrien fer-se soles.", "t85": "<strong>Afiliació digital de clubs</strong>Sense paper, sense correus d'anada i tornada, sense Excel compartit entre el tècnic i la secretaria.", "t86": "<strong>Reporting automàtic per a subvencions</strong>Els informes per a la Conselleria o el CSD es generen sols amb les dades que ja té la federació.", "t87": "<strong>Comunicació amb clubs afiliats</strong>Convocatòries, canvis de normativa, calendaris de competició — sense que ningú els envie a mà un per un.", "t88": "<strong>Gestió de llicències amb alertes</strong>El sistema avisa quan una llicència venç, quan falta documentació o quan hi ha una incidència — sense esperar que ho detecte algú.", "t89": "Impacte estimat · Federació de Bàsquet CV", "t90": "-70%", "t91": "Temps en gestió administrativa d'inici de temporada", "t92": "+100%", "t93": "Traçabilitat del procés d'afiliació", "t94": "\"La federació dedica menys recursos a l'administratiu i més al que importa: el desenvolupament del bàsquet a la Comunitat.\"", "t95": "Anàlisi competitiva", "t96": "EL BUIT QUE<br/><span class=\"hl\">NINGÚ</span> HA OMPLIT", "t97": "Stats Perform / Hudl", "t98": "Clupik / Sportlyzer", "t99": "Agències de màrqueting generalistes", "t100": "Palferia.me", "t101": "A Espanya no existix cap actor que combine <strong>especialització esportiva + IA aplicada a processos reals + preu accessible per a la SMB</strong>. Eixe espai — encara sense propietari — és exactament on està Palferia.me.", "t102": "El procés", "t103": "COM ARRANCA<br/>UN <span class=\"hl\">PROJECTE</span>", "t104": "Quatre passos. Sense lletra menuda. Sense desaparéixer fins al lliurament.", "t105": "Diagnòstic", "t106": "30 minuts per a entendre quins processos són manuals, quant de temps costen i on es perden socis o ingressos. Sense presentació de vendes.", "t107": "Dia 1", "t108": "Proposta", "t109": "En 48–72 hores tens per escrit què fem exactament, quan estarà llest i què inclou. Abast tancat des del principi.", "t110": "Dia 3–4", "t111": "Implementació", "t112": "Construïm el sistema. Primera automatització operativa en 2–3 setmanes. No en 3 mesos. El client veu el progrés en temps real.", "t113": "Setmana 2–3", "t114": "Acompanyament", "t115": "Retainer mensual per a ajustar, millorar i afegir automatitzacions. L'equip aprén a operar-lo sol. L'objectiu és que cada vegada depenguen menys de nosaltres.", "t116": "Mes a mes", "t117": "El fundador", "t118": "RONALD<br/>PALMA", "t119": "Fundador · Palferia.me · València", "t120": "Palferia.me no va nàixer en un garatge tecnològic. Va nàixer de treballar dins del sector esportiu i veure de prop quines eines falten.", "t121": "<strong>Màster en Gestió d'Empreses Esportives · UPV 2026</strong><br/>Especialització en legislació esportiva, organització d'esdeveniments i màrqueting esportiu.", "t122": "<strong>Partnership Developer · Freestyle Trampoline Association (FTA) · 2025–2026</strong><br/>Captació de patrocinis a Espanya i Llatinoamèrica. Treball directe amb organitzacions esportives internacionals.", "t123": "<strong>Compliment normatiu integrat</strong><br/>AI Act (UE 2024/1689) i RGPD des del disseny. Crític per a clubs i federacions que gestionen dades de menors.", "t124": "\"No som una startup tecnològica que vol entrar a l'esport. Som una empresa esportiva que utilitza tecnologia. Eixa distinció importa quan parles amb clubs i federacions.\"", "t125": "La nostra proposta al Hub", "t126": "EL QUE<br/>DEMANEM AL <span class=\"hl\">HUB</span>", "t127": "No venim a vendre. Venim a construir alguna cosa concreta amb l'ecosistema del bàsquet valencià.", "t128": "Accés a clubs i federació", "t129": "Dos o tres clubs de bàsquet de la CV i contacte amb la Federació de Bàsquet per a desenvolupar un cas d'ús real durant la mentoria. No un pilot de prova — un projecte real.", "t130": "Mentoria sectorial", "t131": "Guia per a afinar la proposta específica per al bàsquet valencià: què necessita cada tipus de club, com funciona l'estructura federativa i com adaptar els sistemes al seu context.", "t132": "Xarxa de l'ecosistema esportiu CV", "t133": "Connexions amb clubs, federacions i organitzadors d'esdeveniments esportius a la Comunitat. El nostre primer mercat objectiu és València — el Hub accelera eixe procés.", "t134": "El que aportem al Hub", "t135": "<strong>Un sistema funcional i provat tècnicament</strong> — palferia.me operativa amb 6 verticals especialitzats i metodologia d'implementació definida.", "t136": "<strong>Coneixement sectorial real</strong> — no teòric. El fundador va treballar dins d'una organització esportiva internacional abans de crear Palferia.me.", "t137": "<strong>Compliment normatiu integrat</strong> — AI Act i RGPD des del disseny. Rellevant per a qualsevol federació o club que gestione dades de menors.", "t138": "<strong>Compromís de cas d'ús en bàsquet</strong> — desenvolupem durant la mentoria un projecte pilot real amb un club o la federació, documentat i replicable.", "t139": "<strong>Model escalable a altres esports</strong> — el bàsquet com a primer cas de validació d'un sistema que pot estendre's a la resta de l'ecosistema esportiu de la CV.", "t140": "Palferia.me · 4iCV Esport 2026", "t141": "LA BRETXA<br/><span class=\"hl\">ÉS AHÍ.</span><br/>ALGÚ<br/>HA<br/><span class=\"stroke\">D'OMPLIR-LA.</span>", "t142": "Més de 10.000 clubs a la Comunitat Valenciana. La majoria sense sistema digital. La tecnologia per a resoldre-ho existix i és accessible. El que falta és algú que l'adapte al context real de l'esport valencià.", "t143": "València · Espanya", "t144": "IA per a sport business", "t145": "Clubs de bàsquet", "t146": "Federacions CV", "t147": "Sense argot · Sense fum", "t148": "Parlem", "t149": "El teu club<br/>en açò?", "t150": "Una trucada de 30 minuts. Sense presentació de vendes, sense promeses buides. Si té sentit per a la teua organització, t'ho diem amb números. Si no, també.", "t151": "<span class=\"contact-data-icon\">✉</span><span>ri@palferia.com</span>", "t152": "<span class=\"contact-data-icon\">🌐</span><span>palferia.me</span>", "t153": "<span class=\"contact-data-icon\">📍</span><span>València · Espanya</span>", "t154": "Nom", "t155": "Email", "t156": "Organització", "t157": "Què necessites resoldre?", "t158": "Enviar missatge →", "t159": "Enviant...", "t160": "Missatge rebut. T'escrivim en menys de 24 hores.", "t161": "Solució", "t162": "Especialització esportiva", "t163": "IA aplicada", "t164": "Preu accessible SMB", "t165": "Coneixement del sector", "t166": "Stats Perform / Hudl", "t167": "<span class=\"comp-yes\">✓</span> Només elit", "t168": "<span class=\"comp-yes\">✓</span>", "t169": "<span class=\"comp-no\">✗</span> 6.000–50.000€/any", "t170": "<span class=\"comp-yes\">✓</span>", "t171": "Clupik / Sportlyzer", "t172": "<span class=\"comp-yes\">✓</span>", "t173": "<span class=\"comp-no\">✗</span> Només gestió", "t174": "<span class=\"comp-yes\">✓</span>", "t175": "<span class=\"comp-yes\">✓</span>", "t176": "Agències de màrqueting generalistes", "t177": "<span class=\"comp-no\">✗</span>", "t178": "<span class=\"comp-no\">✗</span>", "t179": "<span class=\"comp-yes\">✓</span>", "t180": "<span class=\"comp-no\">✗</span>", "t181": "Palferia.me", "t182": "<span class=\"comp-yes\">✓</span> Només esport", "t183": "<span class=\"comp-yes\">✓</span> Processos reals", "t184": "<span class=\"comp-yes\">✓</span> Adaptat al SMB esportiu", "t185": "<span class=\"comp-yes\">✓</span> Fundador del sector", "t186": "Imatge portada · 1200×800px", "t187": "Visual servei", "t188": "Foto acció", "t189": "El teu nom", "t190": "tu@correu.com", "t191": "Club, federació, esdeveniment...", "t192": "Conta'ns breument la teua situació actual..."}}</script>
+<script>
+(function(){
+  var i18n = JSON.parse(document.getElementById('i18n-data').textContent);
+  var els = document.querySelectorAll('[data-i18n]');
+  var originalHTML = {};
+  els.forEach(function(el){ originalHTML[el.getAttribute('data-i18n')] = el.innerHTML; });
+
+  var placeholderEls = document.querySelectorAll('[data-i18n-placeholder]');
+  var originalPlaceholder = {};
+  placeholderEls.forEach(function(el){ originalPlaceholder[el.getAttribute('data-i18n-placeholder')] = el.getAttribute('placeholder'); });
+
+  function setLang(lang){
+    els.forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if(lang==='es'){ el.innerHTML = originalHTML[key]; }
+      else if(i18n[lang] && i18n[lang][key]!==undefined){ el.innerHTML = i18n[lang][key]; }
+    });
+    placeholderEls.forEach(function(el){
+      var key = el.getAttribute('data-i18n-placeholder');
+      if(lang==='es'){ el.setAttribute('placeholder', originalPlaceholder[key]); }
+      else if(i18n[lang] && i18n[lang][key]!==undefined){ el.setAttribute('placeholder', i18n[lang][key]); }
+    });
+    document.documentElement.setAttribute('lang', lang==='va' ? 'ca' : lang);
+    document.querySelectorAll('.lang-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang')===lang);
+    });
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.addEventListener('click', function(){ setLang(b.getAttribute('data-lang')); });
+  });
+})();
+</script>
+</body>
+</html>
