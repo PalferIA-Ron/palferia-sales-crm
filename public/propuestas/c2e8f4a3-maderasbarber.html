@@ -9,15 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg:      #0D0A06;
-      --surface: #1C1508;
-      --raised:  #2A1E0A;
-      --gold:    #C8861A;
-      --gold-lt: #F0A832;
-      --cream:   #F5EDD6;
-      --muted:   #9C8A6C;
-      --border:  rgba(200,134,26,0.22);
-      --border2: rgba(200,134,26,0.12);
+      --bg:      #1A2B0D;
+      --surface: #223812;
+      --raised:  #2D4A1A;
+      --green:   #5C8A35;
+      --green-lt:#7AB04A;
+      --cream:   #EFF5EB;
+      --muted:   #91A882;
+      --border:  rgba(92,138,53,0.32);
+      --border2: rgba(92,138,53,0.16);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -35,9 +35,9 @@
     }
     #progress-bar {
       height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+      background: linear-gradient(90deg, var(--green), var(--green-lt));
       transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
-      box-shadow: 0 0 12px rgba(200,134,26,0.5);
+      box-shadow: 0 0 12px rgba(92,138,53,0.5);
       width: 10%;
     }
 
@@ -66,13 +66,13 @@
     /* SCROLLBAR */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; opacity: 0.5; }
+    ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 4px; opacity: 0.5; }
 
     /* NAV */
     #nav {
       position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
       z-index: 200; display: flex; align-items: center; gap: 8px;
-      background: rgba(28,21,8,0.85); backdrop-filter: blur(12px);
+      background: rgba(20,36,10,0.92); backdrop-filter: blur(12px);
       border: 1px solid var(--border); border-radius: 50px;
       padding: 10px 20px;
     }
@@ -81,10 +81,10 @@
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       font-size: 16px; transition: all 0.2s;
     }
-    .nav-btn.prev { background: rgba(200,134,26,0.12); color: var(--gold); }
-    .nav-btn.next { background: var(--gold); color: var(--bg); }
-    .nav-btn:hover.prev { background: rgba(200,134,26,0.22); }
-    .nav-btn.next:hover { background: var(--gold-lt); }
+    .nav-btn.prev { background: rgba(92,138,53,0.12); color: var(--green); }
+    .nav-btn.next { background: var(--green); color: var(--bg); }
+    .nav-btn:hover.prev { background: rgba(92,138,53,0.22); }
+    .nav-btn.next:hover { background: var(--green-lt); }
     #slide-counter { font-size: 12px; color: var(--muted); font-weight: 600; min-width: 50px; text-align: center; letter-spacing: 0.5px; }
 
     /* NAV DOTS */
@@ -94,10 +94,10 @@
     }
     .dot {
       width: 7px; height: 7px; border-radius: 50%;
-      background: rgba(200,134,26,0.25); border: none; cursor: pointer;
+      background: rgba(92,138,53,0.25); border: none; cursor: pointer;
       transition: all 0.3s; padding: 0;
     }
-    .dot.active { background: var(--gold); transform: scale(1.4); }
+    .dot.active { background: var(--green); transform: scale(1.4); }
 
     /* GRAIN OVERLAY */
     .grain::after {
@@ -113,9 +113,9 @@
       content: '';
       position: absolute; inset: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse 900px 600px at 80% 50%, rgba(200,134,26,0.05) 0%, transparent 70%),
-        radial-gradient(circle 300px at 15% 80%, rgba(200,134,26,0.04) 0%, transparent 60%),
-        radial-gradient(circle 150px at 90% 15%, rgba(240,168,50,0.03) 0%, transparent 60%);
+        radial-gradient(ellipse 900px 600px at 80% 50%, rgba(92,138,53,0.05) 0%, transparent 70%),
+        radial-gradient(circle 300px at 15% 80%, rgba(92,138,53,0.04) 0%, transparent 60%),
+        radial-gradient(circle 150px at 90% 15%, rgba(92,138,53,0.03) 0%, transparent 60%);
     }
 
     /* LAYOUT HELPERS */
@@ -127,14 +127,14 @@
     /* TYPOGRAPHY */
     .eyebrow {
       font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
-      text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+      text-transform: uppercase; color: var(--green); margin-bottom: 16px;
     }
     .h-display {
       font-family: 'Playfair Display', serif;
       font-size: clamp(3rem, 6vw, 5.5rem);
       line-height: 1.05; color: var(--cream); font-weight: 900;
     }
-    .h-display .gold { color: var(--gold-lt); }
+    .h-display .gold { color: var(--green-lt); }
     .h-display .stroke {
       -webkit-text-stroke: 1.5px var(--cream);
       color: transparent;
@@ -144,15 +144,15 @@
       font-size: clamp(2rem, 4vw, 3.2rem);
       line-height: 1.1; color: var(--cream); font-weight: 700;
     }
-    .h-section .gold { color: var(--gold-lt); }
+    .h-section .gold { color: var(--green-lt); }
     .lead {
       font-size: clamp(1rem, 1.6vw, 1.15rem);
-      line-height: 1.75; color: rgba(245,237,214,0.75);
+      line-height: 1.75; color: rgba(239,245,235,0.75);
       max-width: 640px;
     }
     .body-text {
       font-size: 0.95rem; line-height: 1.75;
-      color: rgba(245,237,214,0.7);
+      color: rgba(239,245,235,0.7);
     }
 
     /* TAGS */
@@ -161,10 +161,9 @@
       letter-spacing: 1.6px; text-transform: uppercase;
       padding: 4px 12px; border-radius: 20px;
     }
-    .tag-gold { background: rgba(200,134,26,0.15); color: var(--gold-lt); border: 1px solid rgba(200,134,26,0.35); }
-    .tag-cream { background: rgba(245,237,214,0.08); color: var(--cream); border: 1px solid rgba(245,237,214,0.2); }
+    .tag-green { background: rgba(92,138,53,0.15); color: var(--green-lt); border: 1px solid rgba(92,138,53,0.35); }
+    .tag-cream { background: rgba(239,245,235,0.08); color: var(--cream); border: 1px solid rgba(239,245,235,0.2); }
     .tag-red   { background: rgba(220,60,60,0.12); color: #f87171; border: 1px solid rgba(220,60,60,0.3); }
-    .tag-green { background: rgba(80,180,80,0.12); color: #86efac; border: 1px solid rgba(80,180,80,0.3); }
 
     /* CARDS */
     .card {
@@ -172,13 +171,13 @@
       border: 1px solid var(--border);
       border-radius: 16px; padding: 28px;
     }
-    .card-gold {
-      background: rgba(200,134,26,0.07);
+    .card-green {
+      background: rgba(92,138,53,0.07);
       border: 1px solid var(--border);
       border-radius: 16px; padding: 28px;
     }
     .card-dark {
-      background: rgba(13,10,6,0.7);
+      background: rgba(16,26,8,0.75);
       border: 1px solid var(--border2);
       border-radius: 16px; padding: 24px;
     }
@@ -188,7 +187,7 @@
     .stat-num {
       font-family: 'Playfair Display', serif;
       font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 900; color: var(--gold-lt); line-height: 1;
+      font-weight: 900; color: var(--green-lt); line-height: 1;
     }
     .stat-label {
       font-size: 0.82rem; font-weight: 600; color: var(--muted);
@@ -198,19 +197,19 @@
     /* FLOW STEP */
     .flow-row {
       display: flex; gap: 16px; padding: 16px 0;
-      border-bottom: 1px solid rgba(200,134,26,0.1);
+      border-bottom: 1px solid rgba(92,138,53,0.1);
     }
     .flow-row:last-child { border-bottom: none; }
     .flow-num {
       width: 30px; height: 30px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 12px; font-weight: 900; flex-shrink: 0;
-      background: rgba(200,134,26,0.15);
-      border: 1px solid rgba(200,134,26,0.4);
-      color: var(--gold-lt);
+      background: rgba(92,138,53,0.15);
+      border: 1px solid rgba(92,138,53,0.4);
+      color: var(--green-lt);
     }
     .flow-arrow {
-      font-size: 0.82rem; color: var(--gold); margin-left: 4px;
+      font-size: 0.82rem; color: var(--green); margin-left: 4px;
     }
 
     /* STEP CIRCLE */
@@ -218,9 +217,9 @@
       width: 50px; height: 50px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-weight: 900; font-size: 18px; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      background: linear-gradient(135deg, var(--green), var(--green-lt));
       color: var(--bg);
-      box-shadow: 0 0 20px rgba(200,134,26,0.35);
+      box-shadow: 0 0 20px rgba(92,138,53,0.35);
     }
 
     /* DIVIDER */
@@ -232,22 +231,22 @@
     .price-row {
       display: flex; justify-content: space-between; align-items: center;
       padding: 16px 24px;
-      border-bottom: 1px solid rgba(200,134,26,0.1);
+      border-bottom: 1px solid rgba(92,138,53,0.1);
     }
     .price-row:last-child { border-bottom: none; }
     .price-row .label { font-size: 0.95rem; font-weight: 500; color: var(--cream); }
-    .price-row .price { font-size: 1.05rem; font-weight: 700; color: var(--gold-lt); }
+    .price-row .price { font-size: 1.05rem; font-weight: 700; color: var(--green-lt); }
     .price-row .note { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
 
     /* CTA BUTTON */
     .btn-cta {
       display: inline-flex; align-items: center; gap: 10px;
-      background: var(--gold); color: var(--bg);
+      background: var(--green); color: var(--bg);
       font-size: 0.9rem; font-weight: 800; letter-spacing: 0.3px;
       padding: 14px 28px; border-radius: 50px; text-decoration: none;
       transition: all 0.2s; border: none; cursor: pointer;
     }
-    .btn-cta:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .btn-cta:hover { background: var(--green-lt); transform: translateY(-1px); }
     .btn-outline {
       display: inline-flex; align-items: center; gap: 10px;
       border: 1.5px solid var(--border); color: var(--cream);
@@ -255,26 +254,26 @@
       padding: 13px 26px; border-radius: 50px; text-decoration: none;
       transition: all 0.2s; background: transparent; cursor: pointer;
     }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold-lt); }
+    .btn-outline:hover { border-color: var(--green); color: var(--green-lt); }
 
     /* LOGO PALFERIA */
     .palferia-logo {
       display: flex; align-items: center; gap: 10px;
       font-size: 1rem; font-weight: 800; color: var(--cream); letter-spacing: -0.2px;
     }
-    .palferia-logo span { color: var(--gold); }
+    .palferia-logo span { color: var(--green); }
 
     /* QUOTE */
     blockquote {
-      border-left: 3px solid var(--gold);
+      border-left: 3px solid var(--green);
       padding: 16px 24px;
-      background: rgba(200,134,26,0.06);
+      background: rgba(92,138,53,0.06);
       border-radius: 0 12px 12px 0;
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 1.1rem;
       line-height: 1.6;
-      color: rgba(245,237,214,0.85);
+      color: rgba(239,245,235,0.85);
     }
 
     /* KEYBOARD HINT */
@@ -300,7 +299,7 @@
     .metric-big {
       font-family: 'Playfair Display', serif;
       font-size: clamp(2.2rem, 4.5vw, 3.5rem);
-      font-weight: 900; color: var(--gold-lt); line-height: 1;
+      font-weight: 900; color: var(--green-lt); line-height: 1;
     }
     .metric-label {
       font-size: 0.8rem; font-weight: 600;
@@ -322,522 +321,465 @@
 
 <div id="presentation-container">
 
-  <!-- ============================================================
-       SLIDE 1 — PORTADA
-  ============================================================ -->
+  <!-- SLIDE 1 — PORTADA -->
   <div class="slide active grain wood-bg" id="slide-1">
     <div class="pad" style="height:100vh;display:flex;flex-direction:column;justify-content:center;">
       <div class="max-w">
-        <!-- Logo Maderas Barber -->
         <div style="margin-bottom:48px;">
-          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUAAAABKCAYAAADKfI14AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAgAElEQVR42u2deZxV1ZXvv9SrV+FTjw9NI/HRNO0jxCZKjKFplhKjOMYhYusR9OCcOCUOqMQYNSfGT2JOE5MY5ykY56hHo0fjAM6KisNWgjzbAZEo2jyDhK5USKW6LKreH2ufuvueunNVcZV7fp9Pferec8/ZZ49rr2mvNay3t5cMGTJkaEQ0py8MGzas3nUaEgSRtxMwBngo9OPuetcnQ4YM9UPC+DXVuyKbAkHkHQ08B9wHvBhE3rgBlDU9iLw59W5ThgwZBo6GIIDAaOfzVOCZIPLGV1tIEHlNKBG9PYi8c1K/fS+IvDeCyLsliLzt6t3gDBkylEejEMDrgBXO94nA00HkbeXeFETehCDyDg8i7xtB5E0pUM6+wJb289nOc+OAC4FtgCOBV4PI+169G50hQ4bSGJY2gmzGOsBzgPmpy+uAS4E2YBawW+r3JcBTwN+AfwIOB0bY37pCP/6MLXsU8BY54pjgx6Efn1/vtmfIkCEfCd1rJAL4PDB9EIv8XejHBzrljwXuB6al7pPQj1+ud/szZMiQQ0MZQSymDbyIPrTjiMAAoR9/CNxQ4N696t3wDBkyFEbzwIv41OAY4NfA8AGW0wbsE/rxmwV+2xWgtxcSRnrp3evOFZEDgOXAo8Czxpi19e6MDBkyNJAIDBBE3qFAVOHtG4CVgGsMWQScEvrxqlS5TcD3gQvoBWwXtn/YxQu35tG6TqAL6ADuBC43xqysd79kyNBoSOheI3GAoEaPStAOfDH04w+spXga8Frox64lmSDyRgIHA2cC6vpiiV9vL7z+6H+lyx1u/0YCpwHfEJHXgJOMMcvr3TkZMjQaGo0DPBW4PHV5A/AB6sKSYFHox/sVKWMq6g7zNWBnimwi7yxp735nSXsHSuzKoR111TnLGNNT737KkGFzRyMaQUAJTRr7hX68LeC6q/TT0QWRd2wQee8ArwAh6jJTjINevvr3G/4eda35JbDavrvYEbyRwMnAoyLSaGOSIUPd0Ggi8EOo/q3Vfn8g9ONn7eebgR/Zz3n+fEHknQhcW+E7fhL68Xn282P270wRGQccC5xi35/mDIcDOwFXA9+qd0dlyNAIaChuI/TjdcA859LVzm/vouIwwOTUo/tRGeaGfnxeEHkTg8j7uvuDMWaNMeYnxph/ADzgTZQYuxgOHCoikyt8X4YMGQaAhiKAAKEf/wrlsJaiVl0XiWvLVqnzvC9WUPQa4CrrEP0ccF8QeaML3WiMeQLYFiXGabF8FPipeUOGDEOEhjKClAMf2C2gLjcBOK+O0A3b7o/oe+3JhQ+AYKWgLPfkiJrCaghoVvT/B4r++3qfPH9bR8VJN7cCv7T19VJKniX2h0oGVsHYpV+FrMqPM7Sqy7CnRvQHQ8QLUR9ADyLvZVkqHJtmL3K6Dg9jl5r0FzK1vp6eG/C9QL5zx2PgHYAnm3HgLPmzFE5J2HwTj+jUL2VLQ/dvlgDN2cLtO7tg8b0MfXE2g4yIqKQP42IKgWXaP2fQ=="
-               alt="Maderas Barber" style="height:52px;width:auto;"/>
+          <div style="background:rgba(255,255,255,0.95);padding:7px 16px;border-radius:10px;display:inline-flex;align-items:center;"><img src="data:image/png;base64,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" alt="Maderas Barber" style="height:52px;width:auto;"/></div>
         </div>
-
-        <p class="eyebrow">Propuesta de automatización · 2026</p>
-
+        <p class="eyebrow">Diagnóstico de procesos · 2026</p>
         <h1 class="h-display" style="margin-bottom:24px;">
-          Más tiempo<br/>para <span class="gold">seleccionar</span><br/>las mejores <span class="stroke">maderas.</span>
+          Más tiempo<br/>para <span class="gold">lo que sabe</span><br/>hacer el <span class="stroke">equipo.</span>
         </h1>
-
         <p class="lead" style="margin-bottom:40px;">
-          Desde 1957 construyendo relaciones con luthiers de todo el mundo.<br/>
-          Lo que proponemos no cambia eso — <strong>libera tiempo para hacerlo mejor.</strong>
+          Desde 1957, el valor de Maderas Barber lo crean las personas que conocen la madera.<br/>
+          La tecnología no reemplaza ese conocimiento — <strong>elimina el trabajo repetitivo que rodea.</strong>
         </p>
-
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
-          <span class="tag tag-gold">50+ países · Clientes B2B</span>
-          <span class="tag tag-cream">~100 especies en catálogo</span>
-          <span class="tag tag-cream">Tienda online activa</span>
+          <span class="tag tag-green">Automatización de procesos internos</span>
+          <span class="tag tag-cream">Sin sustituir sistemas actuales</span>
+          <span class="tag tag-cream">Implementación en semanas</span>
         </div>
-
         <div class="divider" style="margin-top:56px;margin-bottom:24px;max-width:400px;"></div>
         <div class="palferia-logo">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          Palfer<span>IA</span> · COM-studio
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          PalferIA · Automatización empresarial
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================
-       SLIDE 2 — EL PROBLEMA
-  ============================================================ -->
+  <!-- SLIDE 2 — DÓNDE VA EL TIEMPO -->
   <div class="slide slide-alt grain" id="slide-2">
     <div class="pad">
       <div class="max-w">
-        <p class="eyebrow">La situación actual</p>
-        <h2 class="h-section" style="margin-bottom:12px;">Lo que hemos <span class="gold">visto</span></h2>
-        <p class="body-text" style="margin-bottom:40px;max-width:600px;">
-          Con clientes en más de 50 países y casi 100 especies en catálogo, hay procesos que inevitablemente se hacen a mano todos los días.
+        <p class="eyebrow">Diagnóstico operativo</p>
+        <h2 class="h-section" style="margin-bottom:12px;">Dónde va el tiempo<br/>del <span class="gold">equipo</span></h2>
+        <p class="body-text" style="margin-bottom:36px;max-width:600px;">
+          Con pedidos en más de 50 países y casi 100 especies en catálogo, hay tareas que el equipo hace a mano — no porque quiera, sino porque no hay un sistema que las haga solas.
         </p>
 
-        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:40px;">
-
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:36px;">
           <div class="card-dark" style="display:flex;gap:20px;align-items:flex-start;">
-            <div style="font-size:1.6rem;flex-shrink:0;margin-top:2px;">📦</div>
+            <div style="font-size:1.5rem;flex-shrink:0;margin-top:2px;">📬</div>
             <div>
-              <p style="font-weight:700;font-size:1rem;color:var(--cream);margin-bottom:6px;">
-                Cada pedido internacional genera una cadena de emails manuales
-              </p>
-              <p class="body-text">
-                Confirmación, número de envío, documentación de aduanas, seguimiento hasta entrega. Con 50+ países, son decenas de mensajes semanales que alguien redacta uno a uno — en inglés, alemán, o el idioma que toque.
-              </p>
+              <p style="font-weight:700;font-size:0.95rem;color:var(--cream);margin-bottom:5px;">Comunicación de estado de pedido — redactada una a una</p>
+              <p class="body-text" style="font-size:0.88rem;">Confirmación, envío, número de seguimiento, incidencias de aduana. Cada pedido internacional genera entre 3 y 6 mensajes manuales. Multiplicado por el volumen semanal, es tiempo del equipo que no va a seleccionar maderas.</p>
             </div>
           </div>
 
           <div class="card-dark" style="display:flex;gap:20px;align-items:flex-start;">
-            <div style="font-size:1.6rem;flex-shrink:0;margin-top:2px;">📷</div>
+            <div style="font-size:1.5rem;flex-shrink:0;margin-top:2px;">📷</div>
             <div>
-              <p style="font-weight:700;font-size:1rem;color:var(--cream);margin-bottom:6px;">
-                El servicio de selección por foto es diferenciador pero consume tiempo experto
-              </p>
-              <p class="body-text">
-                El cliente pide ver opciones, alguien selecciona las fotos, las envía, el cliente responde, se negocia, se convierte en pedido. Cada transacción consume tiempo de alguien con conocimiento real del producto.
-              </p>
+              <p style="font-weight:700;font-size:0.95rem;color:var(--cream);margin-bottom:5px;">Selección por foto — el proceso previo es todo manual</p>
+              <p class="body-text" style="font-size:0.88rem;">Antes de seleccionar la madera, el equipo pregunta medidas, calidad y presupuesto, organiza la solicitud y hace seguimiento de la respuesta. Ese trabajo previo y posterior no requiere conocimiento experto — pero lo consume.</p>
             </div>
           </div>
 
           <div class="card-dark" style="display:flex;gap:20px;align-items:flex-start;">
-            <div style="font-size:1.6rem;flex-shrink:0;margin-top:2px;">🔔</div>
+            <div style="font-size:1.5rem;flex-shrink:0;margin-top:2px;">📋</div>
             <div>
-              <p style="font-weight:700;font-size:1rem;color:var(--cream);margin-bottom:6px;">
-                Los clientes B2B recurrentes dependen de que alguien lo recuerde
-              </p>
-              <p class="body-text">
-                Un fabricante en Argentina lleva tres meses preguntando por palo de rosa de Honduras. Cuando llega el stock, ¿quién le avisa? ¿Hay un sistema para eso, o depende de que alguien lo recuerde?
-              </p>
+              <p style="font-weight:700;font-size:0.95rem;color:var(--cream);margin-bottom:5px;">Notificaciones de stock — dependen de que alguien lo recuerde</p>
+              <p class="body-text" style="font-size:0.88rem;">Cuando llega una especie que alguien había pedido, no hay un sistema que avise. La información llega si alguien lo recuerda y tiene tiempo. Con casi 100 especies y clientes en 50 países, ese seguimiento manual no escala.</p>
             </div>
           </div>
-
         </div>
 
         <blockquote>
-          "No es un problema de intención. Es un problema de escala: con clientes en todo el mundo y casi 100 especies, el seguimiento manual no escala."
+          "El problema no es que el equipo trabaje mal. Es que parte de su tiempo se va en tareas que un sistema puede hacer automáticamente."
         </blockquote>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================
-       SLIDE 3 — QUÉ HACEMOS / CASO CUEVA
-  ============================================================ -->
+  <!-- SLIDE 3 — CASO GRUPO CUEVA -->
   <div class="slide grain wood-bg" id="slide-3">
     <div class="pad">
       <div class="max-w">
-        <p class="eyebrow">Nuestra propuesta</p>
-        <h2 class="h-section" style="margin-bottom:12px;">Qué hacemos <span class="gold">nosotros</span></h2>
-        <p class="lead" style="margin-bottom:40px;">
-          Construimos los flujos que hacen ese trabajo de comunicación de forma automática. Sin chatbots. Sin cambiar los sistemas que ya usan.
-        </p>
-
-        <div class="card-gold" style="margin-bottom:32px;">
-          <div style="display:flex;gap:12px;align-items:center;margin-bottom:20px;">
-            <span class="tag tag-gold">Caso de referencia</span>
-            <span style="font-size:0.9rem;font-weight:700;color:var(--cream);">Grupo Cueva</span>
-          </div>
-          <p class="body-text" style="margin-bottom:24px;">
-            Empresa multisede con 12 procesos internos completamente manuales: documentación, validaciones, comunicaciones entre delegaciones. Resultado tras trabajar con nosotros:
-          </p>
-          <div class="grid-3" style="text-align:center;">
-            <div>
-              <div class="metric-big">90%</div>
-              <div class="metric-label">Trabajo manual eliminado</div>
-            </div>
-            <div>
-              <div class="metric-big">12</div>
-              <div class="metric-label">Flujos automatizados</div>
-            </div>
-            <div>
-              <div class="metric-big">4 sem.</div>
-              <div class="metric-label">Tiempo de implementación</div>
-            </div>
-          </div>
-          <div class="divider" style="margin:20px 0 16px;"></div>
-          <p class="body-text" style="font-style:italic;color:var(--muted);">
-            Sin cambiar ningún sistema que ya usaban. El mismo principio aplica cuando el trabajo manual es comunicación con clientes internacionales.
-          </p>
-        </div>
-
-        <div class="grid-2">
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:7px;"></div>
-            <p class="body-text">No instalamos un chatbot genérico que "responde cualquier cosa"</p>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:7px;"></div>
-            <p class="body-text">Construimos flujos específicos para los procesos de Maderas Barber</p>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:7px;"></div>
-            <p class="body-text">Cada mensaje se adapta al idioma y al tipo de cliente</p>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:7px;"></div>
-            <p class="body-text">Primera automatización operativa en 2–3 semanas, no en meses</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       SLIDE 4 — FLUJO 1: PEDIDOS
-  ============================================================ -->
-  <div class="slide slide-alt grain" id="slide-4">
-    <div class="pad">
-      <div class="max-w">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-          <span class="tag tag-gold">Flujo 1 de 3</span>
-          <span style="font-size:0.82rem;color:var(--muted);">Mayor volumen de trabajo manual</span>
-        </div>
-        <h2 class="h-section" style="margin-bottom:8px;">Comunicación <span class="gold">automática</span> de pedidos</h2>
-        <p class="body-text" style="margin-bottom:32px;max-width:560px;">
-          Un luthier en Japón hace un pedido. Alguien confirma, informa del envío, adjunta el tracking, responde si hay incidencia en aduana. Todo manual. En inglés, alemán, o el idioma que toque.
-        </p>
-
-        <div class="card" style="margin-bottom:24px;">
-          <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:16px;">Cómo funciona el sistema</p>
-
-          <div class="flow-row">
-            <div class="flow-num">1</div>
-            <div>
-              <p style="font-size:0.9rem;font-weight:600;color:var(--cream);">Pedido confirmado</p>
-              <p class="body-text" style="font-size:0.85rem;">→ Email/mensaje automático de confirmación con detalles del pedido en el idioma del cliente</p>
-            </div>
-          </div>
-          <div class="flow-row">
-            <div class="flow-num">2</div>
-            <div>
-              <p style="font-size:0.9rem;font-weight:600;color:var(--cream);">Pedido enviado</p>
-              <p class="body-text" style="font-size:0.85rem;">→ Notificación automática con número de tracking y enlace de seguimiento</p>
-            </div>
-          </div>
-          <div class="flow-row">
-            <div class="flow-num">3</div>
-            <div>
-              <p style="font-size:0.9rem;font-weight:600;color:var(--cream);">7 días sin entrega confirmada</p>
-              <p class="body-text" style="font-size:0.85rem;">→ Alerta interna al equipo para revisar el envío antes de que el cliente pregunte</p>
-            </div>
-          </div>
-          <div class="flow-row">
-            <div class="flow-num">4</div>
-            <div>
-              <p style="font-size:0.9rem;font-weight:600;color:var(--cream);">Pedido entregado</p>
-              <p class="body-text" style="font-size:0.85rem;">→ Mensaje automático de seguimiento + invitación a valorar la experiencia</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-gold">
-          <p style="font-size:0.85rem;font-weight:700;color:var(--cream);margin-bottom:8px;">Lo que cambia para el equipo</p>
-          <p class="body-text">
-            Dejan de redactar emails de estado. Solo intervienen cuando hay una incidencia real que requiere criterio humano — una avería, un error de aduanas, una reclamación. El equipo aplica su conocimiento donde importa.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       SLIDE 5 — FLUJO 2: SELECCIÓN POR FOTO
-  ============================================================ -->
-  <div class="slide grain wood-bg" id="slide-5">
-    <div class="pad">
-      <div class="max-w">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-          <span class="tag tag-gold">Flujo 2 de 3</span>
-          <span style="font-size:0.82rem;color:var(--muted);">Servicio diferenciador de Maderas Barber</span>
-        </div>
-        <h2 class="h-section" style="margin-bottom:8px;">Gestión del servicio de <span class="gold">selección por foto</span></h2>
-        <p class="body-text" style="margin-bottom:32px;max-width:560px;">
-          El servicio de compra por foto es uno de los más valorados por los luthiers del mundo. También es uno de los que más tiempo consume del equipo por cada solicitud.
+        <p class="eyebrow">Caso de referencia real</p>
+        <h2 class="h-section" style="margin-bottom:8px;">Grupo Cueva:<br/><span class="gold">de 12 procesos manuales a 90% automatizado</span></h2>
+        <p class="body-text" style="margin-bottom:32px;max-width:600px;">
+          Empresa multisede con departamentos distribuidos. Antes de trabajar con nosotros: 12 procesos internos completamente manuales — documentación, validaciones, comunicaciones entre delegaciones y gestión de personas.
         </p>
 
         <div class="grid-2" style="margin-bottom:24px;">
           <div class="card">
-            <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#f87171;margin-bottom:12px;">Hoy — proceso manual</p>
+            <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:16px;">Antes — situación de partida</p>
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="display:flex;gap:10px;align-items:flex-start;">
-                <span style="color:#f87171;font-size:0.85rem;">→</span>
-                <p class="body-text" style="font-size:0.85rem;">Cliente escribe pidiendo ver opciones de una especie</p>
+                <span style="color:#f87171;flex-shrink:0;">✗</span>
+                <p class="body-text" style="font-size:0.85rem;">Recibos de nómina generados y enviados a mano por RRHH</p>
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;">
-                <span style="color:#f87171;font-size:0.85rem;">→</span>
-                <p class="body-text" style="font-size:0.85rem;">Alguien del equipo pregunta medidas, calidad, presupuesto</p>
+                <span style="color:#f87171;flex-shrink:0;">✗</span>
+                <p class="body-text" style="font-size:0.85rem;">Solicitudes de vacaciones y permisos por email, sin flujo definido</p>
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;">
-                <span style="color:#f87171;font-size:0.85rem;">→</span>
-                <p class="body-text" style="font-size:0.85rem;">Se seleccionan, fotografían y envían las piezas</p>
+                <span style="color:#f87171;flex-shrink:0;">✗</span>
+                <p class="body-text" style="font-size:0.85rem;">Validaciones y aprobaciones internas sin trazabilidad</p>
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;">
-                <span style="color:#f87171;font-size:0.85rem;">→</span>
-                <p class="body-text" style="font-size:0.85rem;">Va y vuelve hasta cerrar el pedido — todo por email/WA</p>
+                <span style="color:#f87171;flex-shrink:0;">✗</span>
+                <p class="body-text" style="font-size:0.85rem;">Comunicaciones entre delegaciones sin registro centralizado</p>
               </div>
             </div>
           </div>
 
-          <div class="card-gold">
-            <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:12px;">Con el sistema</p>
+          <div class="card-green">
+            <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:16px;">Después — 4 semanas de implementación</p>
             <div style="display:flex;flex-direction:column;gap:10px;">
               <div style="display:flex;gap:10px;align-items:flex-start;">
-                <span style="color:var(--gold-lt);font-size:0.85rem;">→</span>
-                <p class="body-text" style="font-size:0.85rem;">Solicitud llega → formulario automático de preferencias</p>
+                <span style="color:var(--green-lt);flex-shrink:0;">✓</span>
+                <p class="body-text" style="font-size:0.85rem;">Recibos generados y firmados digitalmente de forma automática</p>
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;">
-                <span style="color:var(--gold-lt);font-size:0.85rem;">→</span>
-                <p class="body-text" style="font-size:0.85rem;">El equipo recibe la solicitud <strong>ya estructurada</strong>, sin preguntar lo básico</p>
+                <span style="color:var(--green-lt);flex-shrink:0;">✓</span>
+                <p class="body-text" style="font-size:0.85rem;">Solicitudes con flujo de aprobación automático y notificación</p>
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;">
-                <span style="color:var(--gold-lt);font-size:0.85rem;">→</span>
-                <p class="body-text" style="font-size:0.85rem;">Selección enviada → seguimiento automático a 48h si no hay respuesta</p>
+                <span style="color:var(--green-lt);flex-shrink:0;">✓</span>
+                <p class="body-text" style="font-size:0.85rem;">Validaciones con registro completo y alertas de tiempo</p>
               </div>
               <div style="display:flex;gap:10px;align-items:flex-start;">
-                <span style="color:var(--gold-lt);font-size:0.85rem;">→</span>
-                <p class="body-text" style="font-size:0.85rem;">Cliente confirma → pedido creado automáticamente en el sistema</p>
+                <span style="color:var(--green-lt);flex-shrink:0;">✓</span>
+                <p class="body-text" style="font-size:0.85rem;">Panel centralizado con estado de todos los procesos en tiempo real</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:24px 32px;">
+          <div class="grid-3" style="text-align:center;">
+            <div>
+              <div class="metric-big">90%</div>
+              <div class="metric-label">Reducción de trabajo manual</div>
+            </div>
+            <div>
+              <div class="metric-big">12</div>
+              <div class="metric-label">Flujos de proceso automatizados</div>
+            </div>
+            <div>
+              <div class="metric-big">4 sem.</div>
+              <div class="metric-label">De cero a operativo</div>
+            </div>
+          </div>
+          <div class="divider" style="margin:20px 0 16px;"></div>
+          <p class="body-text" style="font-size:0.85rem;text-align:center;font-style:italic;">
+            Sin sustituir ningún sistema existente. Sin cambiar cómo trabaja el equipo. Solo eliminando el trabajo manual que rodea cada proceso.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — PROCESO 1: PEDIDOS -->
+  <div class="slide slide-alt grain" id="slide-4">
+    <div class="pad">
+      <div class="max-w">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+          <span class="tag tag-green">Proceso 1 de 3</span>
+          <span style="font-size:0.82rem;color:var(--muted);">Mayor volumen de comunicación manual</span>
+        </div>
+        <h2 class="h-section" style="margin-bottom:8px;">Gestión del estado<br/><span class="gold">de pedidos internacionales</span></h2>
+        <p class="body-text" style="margin-bottom:32px;max-width:580px;">
+          Cada pedido internacional genera hoy una cadena de mensajes manuales. No porque sea difícil — sino porque no hay un flujo que los envíe solo. Con 50+ países de destino, ese volumen acumula horas semanales de trabajo repetitivo.
+        </p>
+
+        <div class="grid-2" style="margin-bottom:20px;align-items:start;">
+          <div>
+            <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;">Flujo actual — manual</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="card-dark" style="padding:12px 16px;font-size:0.85rem;color:rgba(239,245,235,0.6);">Pedido confirmado → alguien redacta email de confirmación</div>
+              <div class="card-dark" style="padding:12px 16px;font-size:0.85rem;color:rgba(239,245,235,0.6);">Pedido enviado → alguien busca el tracking y lo envía</div>
+              <div class="card-dark" style="padding:12px 16px;font-size:0.85rem;color:rgba(239,245,235,0.6);">Incidencia en aduana → alguien gestiona y comunica</div>
+              <div class="card-dark" style="padding:12px 16px;font-size:0.85rem;color:rgba(239,245,235,0.6);">Sin entrega confirmada → nadie sabe si llegó</div>
+            </div>
+          </div>
+
+          <div>
+            <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:14px;">Flujo automatizado</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="card-green" style="padding:12px 16px;font-size:0.85rem;">Pedido confirmado → email automático inmediato con detalles</div>
+              <div class="card-green" style="padding:12px 16px;font-size:0.85rem;">Pedido enviado → notificación automática con tracking</div>
+              <div class="card-green" style="padding:12px 16px;font-size:0.85rem;">Incidencia → alerta interna al equipo para actuar</div>
+              <div class="card-green" style="padding:12px 16px;font-size:0.85rem;">7 días sin entrega → aviso automático para revisar</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:20px 28px;">
+          <p style="font-size:0.85rem;font-weight:700;color:var(--cream);margin-bottom:8px;">Qué cambia para el equipo</p>
+          <p class="body-text" style="font-size:0.88rem;">El equipo deja de redactar emails de estado. Solo interviene cuando hay una incidencia real que requiere criterio humano — un problema de aduanas, una reclamación, una situación imprevista. El conocimiento del equipo se aplica donde importa.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — PROCESO 2: SELECCIÓN POR FOTO -->
+  <div class="slide grain wood-bg" id="slide-5">
+    <div class="pad">
+      <div class="max-w">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+          <span class="tag tag-green">Proceso 2 de 3</span>
+          <span style="font-size:0.82rem;color:var(--muted);">Servicio diferenciador de Maderas Barber</span>
+        </div>
+        <h2 class="h-section" style="margin-bottom:8px;">Servicio de selección<br/><span class="gold">por fotografía</span></h2>
+        <p class="body-text" style="margin-bottom:32px;max-width:580px;">
+          El servicio de compra por foto es único en el sector. El experto dedica su tiempo a elegir las mejores piezas — eso es irremplazable. Pero alrededor de esa decisión hay coordinación manual que sí puede automatizarse.
+        </p>
+
+        <div class="card" style="margin-bottom:20px;">
+          <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:18px;">Qué parte se automatiza — y cuál no</p>
+
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div class="flow-row">
+              <div class="flow-num" style="background:rgba(92,138,53,0.08);border-color:rgba(92,138,53,0.2);color:var(--muted);">A</div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                  <p style="font-size:0.9rem;font-weight:600;color:var(--cream);">Recogida de información previa</p>
+                  <span class="tag tag-green" style="font-size:9px;">Automatizado</span>
+                </div>
+                <p class="body-text" style="font-size:0.85rem;margin-top:4px;">Solicitud llega → formulario automático pide especie, medidas, calidad, presupuesto. El equipo recibe la solicitud ya estructurada, sin tener que preguntar.</p>
+              </div>
+            </div>
+
+            <div class="flow-row">
+              <div class="flow-num">B</div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                  <p style="font-size:0.9rem;font-weight:600;color:var(--cream);">Selección de las piezas</p>
+                  <span class="tag tag-cream" style="font-size:9px;">Siempre humano</span>
+                </div>
+                <p class="body-text" style="font-size:0.85rem;margin-top:4px;">El experto elige las piezas. Esto no se automatiza. Es el valor que Maderas Barber lleva 65 años construyendo.</p>
+              </div>
+            </div>
+
+            <div class="flow-row">
+              <div class="flow-num" style="background:rgba(92,138,53,0.08);border-color:rgba(92,138,53,0.2);color:var(--muted);">C</div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                  <p style="font-size:0.9rem;font-weight:600;color:var(--cream);">Seguimiento hasta pedido</p>
+                  <span class="tag tag-green" style="font-size:9px;">Automatizado</span>
+                </div>
+                <p class="body-text" style="font-size:0.85rem;margin-top:4px;">Selección enviada → si no hay respuesta en 48h, recordatorio automático. Cliente confirma → pedido registrado automáticamente.</p>
               </div>
             </div>
           </div>
         </div>
 
         <blockquote>
-          "El equipo dedica su tiempo a seleccionar las maderas correctas. No a gestionar la logística de la conversación."
+          "El experto dedica su tiempo a elegir las mejores piezas. El sistema gestiona todo lo que ocurre antes y después de esa decisión."
         </blockquote>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================
-       SLIDE 6 — FLUJO 3: ALERTAS STOCK B2B
-  ============================================================ -->
+  <!-- SLIDE 6 — PROCESO 3: NOTIFICACIONES DE STOCK -->
   <div class="slide slide-alt grain" id="slide-6">
     <div class="pad">
       <div class="max-w">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-          <span class="tag tag-gold">Flujo 3 de 3</span>
-          <span style="font-size:0.82rem;color:var(--muted);">Clientes B2B recurrentes</span>
+          <span class="tag tag-green">Proceso 3 de 3</span>
+          <span style="font-size:0.82rem;color:var(--muted);">Gestión interna de disponibilidad</span>
         </div>
-        <h2 class="h-section" style="margin-bottom:8px;">Alertas de stock para <span class="gold">clientes B2B</span></h2>
-        <p class="body-text" style="margin-bottom:32px;max-width:560px;">
-          Los clientes que más compran son fabricantes que piden regularmente las mismas especies. Cuando llega stock nuevo, ¿hay un sistema que les avise, o depende de que alguien lo recuerde?
+        <h2 class="h-section" style="margin-bottom:8px;">Notificaciones de stock<br/><span class="gold">sin depender de la memoria</span></h2>
+        <p class="body-text" style="margin-bottom:32px;max-width:580px;">
+          Cuando llega una especie que alguien había pedido o que un cliente B2B compra habitualmente, ¿hay un proceso definido para avisarle? Si la respuesta depende de que alguien lo recuerde, hay margen de mejora.
         </p>
 
-        <div class="card" style="margin-bottom:20px;">
-          <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:20px;">Tres escenarios automatizados</p>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px;">
+          <div class="card" style="display:flex;gap:20px;align-items:flex-start;">
+            <div class="step-circle" style="font-size:1rem;">1</div>
+            <div>
+              <p style="font-size:0.95rem;font-weight:700;color:var(--cream);margin-bottom:6px;">Lista de espera automática por especie</p>
+              <p class="body-text" style="font-size:0.88rem;">Cliente consulta por una especie sin stock → queda registrado automáticamente. Cuando esa especie entra en almacén → notificación automática con disponibilidad y precio actualizado. Sin que nadie tenga que acordarse.</p>
+            </div>
+          </div>
 
-          <div class="flow-row">
-            <div class="flow-num">A</div>
+          <div class="card" style="display:flex;gap:20px;align-items:flex-start;">
+            <div class="step-circle" style="font-size:1rem;">2</div>
             <div>
-              <p style="font-size:0.9rem;font-weight:600;color:var(--cream);margin-bottom:4px;">Especie agotada → lista de espera automática</p>
-              <p class="body-text" style="font-size:0.85rem;">Cliente consulta por una especie sin stock → queda registrado. Cuando llega → recibe notificación automática con piezas disponibles y precios actualizados.</p>
-            </div>
-          </div>
-          <div class="flow-row">
-            <div class="flow-num">B</div>
-            <div>
-              <p style="font-size:0.9rem;font-weight:600;color:var(--cream);margin-bottom:4px;">Historial de compra → alertas personalizadas</p>
-              <p class="body-text" style="font-size:0.85rem;">Fabricantes con pedidos recurrentes reciben aviso automático cuando llega una especie que ya han comprado antes, antes de que salga al catálogo general.</p>
-            </div>
-          </div>
-          <div class="flow-row">
-            <div class="flow-num">C</div>
-            <div>
-              <p style="font-size:0.9rem;font-weight:600;color:var(--cream);margin-bottom:4px;">Reactivación de clientes sin actividad reciente</p>
-              <p class="body-text" style="font-size:0.85rem;">Clientes B2B sin pedido en X meses reciben un mensaje con novedades de su categoría habitual. Sin spam, con relevancia.</p>
+              <p style="font-size:0.95rem;font-weight:700;color:var(--cream);margin-bottom:6px;">Alertas para clientes B2B con historial de compra</p>
+              <p class="body-text" style="font-size:0.88rem;">Fabricantes que compran regularmente las mismas especies reciben aviso automático cuando llega nuevo material de su categoría habitual. El sistema usa el historial de pedidos — no hay que configurar nada manualmente por cliente.</p>
             </div>
           </div>
         </div>
 
-        <div class="grid-2">
-          <div class="card-gold">
-            <div class="metric-big" style="margin-bottom:6px;">1°</div>
-            <div class="metric-label">Los mejores clientes se enteran antes que nadie</div>
-          </div>
-          <div class="card-gold">
-            <div class="metric-big" style="margin-bottom:6px;">0</div>
-            <div class="metric-label">Clientes olvidados por falta de tiempo</div>
-          </div>
+        <div class="card-green" style="padding:20px 28px;">
+          <p style="font-size:0.85rem;font-weight:700;color:var(--cream);margin-bottom:8px;">Lo que no cambia</p>
+          <p class="body-text" style="font-size:0.88rem;">El equipo decide qué stock entra, a qué precio y cuándo está disponible. El sistema solo gestiona la comunicación de esa información a las personas correctas en el momento correcto.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================
-       SLIDE 7 — CÓMO ARRANCA
-  ============================================================ -->
+  <!-- SLIDE 7 — METODOLOGÍA -->
   <div class="slide grain wood-bg" id="slide-7">
     <div class="pad">
       <div class="max-w">
-        <p class="eyebrow">El proceso</p>
-        <h2 class="h-section" style="margin-bottom:8px;">Cómo <span class="gold">arranca</span></h2>
-        <p class="body-text" style="margin-bottom:40px;max-width:520px;">
-          Cuatro pasos. Sin letra pequeña. Sin desaparecer hasta la entrega.
+        <p class="eyebrow">Cómo lo implementamos</p>
+        <h2 class="h-section" style="margin-bottom:8px;">La misma metodología<br/><span class="gold">que en Grupo Cueva</span></h2>
+        <p class="body-text" style="margin-bottom:36px;max-width:520px;">
+          Cuatro fases. Sin cambiar los sistemas que ya usan. Sin desaparecer entre fase y fase.
         </p>
 
-        <div style="display:flex;flex-direction:column;gap:16px;">
-
+        <div style="display:flex;flex-direction:column;gap:14px;">
           <div class="card" style="display:flex;gap:20px;align-items:flex-start;">
             <div class="step-circle">1</div>
             <div style="flex:1;">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-                <p style="font-size:1rem;font-weight:700;color:var(--cream);">Diagnóstico</p>
-                <span class="tag tag-cream">Día 1 · Sin coste</span>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
+                <p style="font-size:0.95rem;font-weight:700;color:var(--cream);">Mapeo de procesos</p>
+                <span class="tag tag-cream">Semana 1 · Sin coste</span>
               </div>
-              <p class="body-text">30–45 minutos con el responsable de operaciones o comercial. Entendemos cuántos pedidos gestionan por semana, qué porcentaje son internacionales, cuántas solicitudes de selección por foto reciben y qué sistemas usan. Sin presentación de ventas.</p>
+              <p class="body-text" style="font-size:0.88rem;">Sesión de 45–60 minutos con el responsable de operaciones. Identificamos qué procesos son manuales, cuánto tiempo consumen y cuáles tienen mayor impacto al automatizarse. Resultado: mapa de procesos con priorización.</p>
             </div>
           </div>
 
           <div class="card" style="display:flex;gap:20px;align-items:flex-start;">
             <div class="step-circle">2</div>
             <div style="flex:1;">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-                <p style="font-size:1rem;font-weight:700;color:var(--cream);">Propuesta</p>
-                <span class="tag tag-cream">Días 3–4</span>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
+                <p style="font-size:0.95rem;font-weight:700;color:var(--cream);">Diseño de flujos</p>
+                <span class="tag tag-cream">Días 3–5</span>
               </div>
-              <p class="body-text">Por escrito: qué flujos construimos exactamente, cuándo estarán operativos y qué incluye. Alcance cerrado desde el principio. Sin sorpresas.</p>
+              <p class="body-text" style="font-size:0.88rem;">Documentamos exactamente cómo funcionará cada flujo automatizado antes de construirlo. El equipo de Maderas Barber lo revisa y aprueba. Nada se implementa sin validación previa.</p>
             </div>
           </div>
 
           <div class="card" style="display:flex;gap:20px;align-items:flex-start;">
             <div class="step-circle">3</div>
             <div style="flex:1;">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-                <p style="font-size:1rem;font-weight:700;color:var(--cream);">Implementación</p>
-                <span class="tag tag-gold">Semanas 2–4</span>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
+                <p style="font-size:0.95rem;font-weight:700;color:var(--cream);">Implementación y pruebas</p>
+                <span class="tag tag-green">Semanas 2–4</span>
               </div>
-              <p class="body-text">Construimos el sistema. Primera automatización operativa en 2–3 semanas. No en 3 meses. El equipo ve el progreso en tiempo real.</p>
+              <p class="body-text" style="font-size:0.88rem;">Construimos los flujos sobre los sistemas que ya usan (ERP, tienda online, email). Primera automatización operativa en 2–3 semanas. Pruebas en paralelo antes de activar en producción.</p>
             </div>
           </div>
 
           <div class="card" style="display:flex;gap:20px;align-items:flex-start;">
             <div class="step-circle">4</div>
             <div style="flex:1;">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
-                <p style="font-size:1rem;font-weight:700;color:var(--cream);">Acompañamiento</p>
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
+                <p style="font-size:0.95rem;font-weight:700;color:var(--cream);">Transferencia y ajuste</p>
                 <span class="tag tag-cream">Mes a mes</span>
               </div>
-              <p class="body-text">Retainer mensual para ajustar, mejorar y añadir flujos. El equipo aprende a operar el sistema. El objetivo es que cada vez dependan menos de nosotros.</p>
+              <p class="body-text" style="font-size:0.88rem;">El equipo de Maderas Barber aprende a operar y modificar los flujos. El objetivo es que dependan cada vez menos de nosotros, no más.</p>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================
-       SLIDE 8 — POR QUÉ TIENE SENTIDO
-  ============================================================ -->
+  <!-- SLIDE 8 — LO QUE NO CAMBIA -->
   <div class="slide slide-alt grain" id="slide-8">
     <div class="pad">
       <div class="max-w-sm">
-        <p class="eyebrow">La razón de fondo</p>
-        <h2 class="h-section" style="margin-bottom:32px;">Por qué tiene sentido en <span class="gold">Maderas Barber</span></h2>
+        <p class="eyebrow">Para el equipo escéptico</p>
+        <h2 class="h-section" style="margin-bottom:32px;">Lo que <span class="gold">no cambia</span></h2>
 
-        <blockquote style="margin-bottom:40px;font-size:1.2rem;">
-          "Maderas Barber lleva 65 años construyendo relaciones de confianza con luthiers de todo el mundo. Esa confianza viene de la calidad de la madera y del trato personal."
-        </blockquote>
-
-        <p class="lead" style="margin-bottom:32px;">
-          La automatización no reemplaza ese trato.<br/>
-          <strong style="color:var(--cream);">Libera tiempo para que el equipo pueda dedicarse a lo que crea ese valor.</strong>
+        <p class="lead" style="margin-bottom:36px;">
+          65 años construyendo criterio sobre la madera no se reemplaza con tecnología. Eso no es lo que hacemos.
         </p>
 
-        <div class="divider"></div>
-
-        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:40px;">
-          <div style="display:flex;gap:14px;align-items:flex-start;">
-            <span style="color:var(--gold);font-size:1.1rem;flex-shrink:0;">✓</span>
-            <p class="body-text">Seleccionar las mejores piezas para cada cliente</p>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:40px;">
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 20px;background:var(--raised);border-radius:12px;border:1px solid var(--border2);">
+            <span style="color:var(--green-lt);font-size:1.1rem;flex-shrink:0;margin-top:2px;">✓</span>
+            <div>
+              <p style="font-weight:600;font-size:0.9rem;color:var(--cream);margin-bottom:3px;">El equipo sigue tomando todas las decisiones</p>
+              <p class="body-text" style="font-size:0.85rem;">Qué especie, qué pieza, qué precio, qué cliente. El sistema ejecuta — las personas deciden.</p>
+            </div>
           </div>
-          <div style="display:flex;gap:14px;align-items:flex-start;">
-            <span style="color:var(--gold);font-size:1.1rem;flex-shrink:0;">✓</span>
-            <p class="body-text">Asesorar al luthier con criterio experto sobre especies y calidades</p>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 20px;background:var(--raised);border-radius:12px;border:1px solid var(--border2);">
+            <span style="color:var(--green-lt);font-size:1.1rem;flex-shrink:0;margin-top:2px;">✓</span>
+            <div>
+              <p style="font-weight:600;font-size:0.9rem;color:var(--cream);margin-bottom:3px;">Los sistemas actuales no se tocan</p>
+              <p class="body-text" style="font-size:0.85rem;">Ni la tienda online, ni el ERP, ni el email. Trabajamos encima de lo que ya existe.</p>
+            </div>
           </div>
-          <div style="display:flex;gap:14px;align-items:flex-start;">
-            <span style="color:var(--gold);font-size:1.1rem;flex-shrink:0;">✓</span>
-            <p class="body-text">Atender las incidencias que realmente requieren intervención humana</p>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 20px;background:var(--raised);border-radius:12px;border:1px solid var(--border2);">
+            <span style="color:var(--green-lt);font-size:1.1rem;flex-shrink:0;margin-top:2px;">✓</span>
+            <div>
+              <p style="font-weight:600;font-size:0.9rem;color:var(--cream);margin-bottom:3px;">Sin dependencia tecnológica creada</p>
+              <p class="body-text" style="font-size:0.85rem;">El objetivo es que el equipo entienda y controle los flujos. No que dependan de nosotros para cualquier cambio.</p>
+            </div>
           </div>
-          <div style="display:flex;gap:14px;align-items:flex-start;">
-            <span style="color:var(--gold);font-size:1.1rem;flex-shrink:0;">✓</span>
-            <p class="body-text">Crecer en nuevos mercados sin tener que ampliar el equipo administrativo</p>
+          <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 20px;background:var(--raised);border-radius:12px;border:1px solid var(--border2);">
+            <span style="color:var(--green-lt);font-size:1.1rem;flex-shrink:0;margin-top:2px;">✓</span>
+            <div>
+              <p style="font-weight:600;font-size:0.9rem;color:var(--cream);margin-bottom:3px;">Trazabilidad total de lo que hace el sistema</p>
+              <p class="body-text" style="font-size:0.85rem;">Cada acción automática queda registrada. El equipo puede revisar, pausar o modificar cualquier flujo en cualquier momento.</p>
+            </div>
           </div>
         </div>
 
-        <p style="font-size:0.95rem;font-weight:700;color:var(--cream);font-style:italic;border-top:1px solid var(--border);padding-top:20px;">
-          Lo que se automatiza es la logística de la comunicación, no la relación.
-        </p>
-
+        <blockquote>
+          "Lo que se automatiza es el trabajo repetitivo que rodea al conocimiento experto — no el conocimiento en sí."
+        </blockquote>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================
-       SLIDE 9 — INVERSIÓN + CTA
-  ============================================================ -->
+  <!-- SLIDE 9 — SIGUIENTE PASO -->
   <div class="slide grain wood-bg" id="slide-9">
     <div class="pad">
       <div class="max-w-sm">
-        <p class="eyebrow">Siguiente paso</p>
-        <h2 class="h-section" style="margin-bottom:8px;">Inversión y <span class="gold">próximo paso</span></h2>
-        <p class="body-text" style="margin-bottom:36px;">
-          El precio definitivo se establece tras el diagnóstico. Lo que mostramos es la horquilla habitual para este tipo de proyecto.
+        <p class="eyebrow">Próximo paso</p>
+        <h2 class="h-section" style="margin-bottom:8px;">Una conversación<br/><span class="gold">de 45 minutos</span></h2>
+        <p class="body-text" style="margin-bottom:36px;max-width:520px;">
+          No una presentación de ventas. Una sesión de trabajo donde analizamos juntos qué procesos consumen más tiempo y si tiene sentido automatizarlos. Sin compromiso.
         </p>
 
-        <div class="card" style="margin-bottom:24px;padding:0;overflow:hidden;">
-          <div style="background:rgba(200,134,26,0.1);padding:16px 24px;border-bottom:1px solid var(--border);">
-            <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);">Estructura de inversión</p>
+        <div class="card" style="margin-bottom:20px;padding:0;overflow:hidden;">
+          <div style="background:rgba(92,138,53,0.1);padding:14px 24px;border-bottom:1px solid var(--border);">
+            <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);">Qué sale de esa sesión</p>
           </div>
           <div class="price-row">
             <div>
-              <div class="label">Diagnóstico inicial</div>
-              <div class="note">30–45 min · Sin compromiso</div>
+              <div class="label">Mapa de procesos manuales</div>
+              <div class="note">Qué hace el equipo a mano y cuánto tiempo consume</div>
             </div>
-            <div class="price">Gratuito</div>
+            <span class="tag tag-green">Gratis</span>
           </div>
           <div class="price-row">
             <div>
-              <div class="label">Implementación — 3 flujos</div>
-              <div class="note">Pedidos + Foto + Alertas B2B · 4 semanas</div>
+              <div class="label">Priorización de flujos</div>
+              <div class="note">Qué automatizar primero según impacto real</div>
             </div>
-            <div class="price">Desde 3.100€</div>
+            <span class="tag tag-green">Gratis</span>
           </div>
           <div class="price-row">
             <div>
-              <div class="label">Retainer mensual</div>
-              <div class="note">Mantenimiento · Mejoras · Nuevos flujos</div>
+              <div class="label">Presupuesto cerrado</div>
+              <div class="note">Implementación desde 3.100€ · Retainer desde 499€/mes</div>
             </div>
-            <div class="price">Desde 499€/mes</div>
+            <span class="tag tag-cream">Transparente</span>
           </div>
         </div>
 
-        <div class="card-dark" style="margin-bottom:36px;">
-          <p style="font-size:0.85rem;font-weight:700;color:var(--cream);margin-bottom:8px;">Lo que no hacemos</p>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <p class="body-text" style="font-size:0.85rem;">✗ &nbsp;No tocamos ni sustituimos la tienda online ni el ERP</p>
-            <p class="body-text" style="font-size:0.85rem;">✗ &nbsp;No generamos comunicaciones genéricas — cada mensaje es específico</p>
-            <p class="body-text" style="font-size:0.85rem;">✗ &nbsp;No prometemos resultados sin antes hacer el diagnóstico</p>
-          </div>
+        <div class="card-dark" style="margin-bottom:32px;">
+          <p style="font-size:0.82rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Referencia</p>
+          <p class="body-text" style="font-size:0.88rem;">Grupo Cueva pasó de 12 flujos manuales a 90% automatizado en 4 semanas. El punto de partida fue exactamente esta conversación.</p>
         </div>
 
-        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
-          <a href="mailto:ri@palferia.com?subject=Maderas%20Barber%20×%20PalferIA%20—%20Diagnóstico&body=Hola%20Ronald%2C%20me%20gustaría%20explorar%20cómo%20podemos%20automatizar%20los%20procesos%20de%20Maderas%20Barber.%20¿Cuándo%20podemos%20hablar%3F"
-             class="btn-cta">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-            Reservar diagnóstico gratuito
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:40px;">
+          <a href="mailto:ri@palferia.com?subject=Maderas%20Barber%20×%20PalferIA%20—%20Mapeo%20de%20procesos&body=Hola%20Ronald%2C%20nos%20gustaría%20explorar%20cómo%20mejorar%20nuestros%20procesos%20internos.%20¿Cuándo%20podemos%20hablar%3F" class="btn-cta">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Escribir a Ronald
           </a>
-          <a href="https://wa.me/34623176981?text=Hola%20Ronald%2C%20soy%20de%20Maderas%20Barber.%20He%20visto%20vuestra%20propuesta%20y%20me%20gustaría%20saber%20más." class="btn-outline" target="_blank">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <a href="https://wa.me/34623176981?text=Hola%20Ronald%2C%20soy%20de%20Maderas%20Barber.%20Me%20interesa%20explorar%20la%20automatización%20de%20procesos%20internos." class="btn-outline" target="_blank">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             WhatsApp
           </a>
         </div>
 
-        <div class="divider" style="margin:36px 0 20px;"></div>
+        <div class="divider" style="margin-bottom:20px;"></div>
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
           <div>
             <p style="font-size:0.9rem;font-weight:700;color:var(--cream);">Ronald Palma</p>
-            <p style="font-size:0.82rem;color:var(--muted);">PalferIA · ri@palferia.com</p>
+            <p style="font-size:0.82rem;color:var(--muted);">PalferIA · ri@palferia.com · +34 623 176 981</p>
           </div>
           <div class="palferia-logo" style="font-size:0.85rem;">
             Palfer<span>IA</span>
@@ -847,27 +789,152 @@
     </div>
   </div>
 
+
+  <!-- SLIDE 10 — FORMULARIO PRE-REUNIÓN -->
+  <div class="slide grain wood-bg" id="slide-10">
+    <div class="pad" style="min-height:100vh;">
+      <div class="max-w-sm">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
+          <div style="background:rgba(255,255,255,0.95);padding:5px 12px;border-radius:8px;display:inline-flex;align-items:center;"><img src="data:image/png;base64,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" alt="Maderas Barber" style="height:38px;width:auto;"/></div>
+          <div class="palferia-logo" style="font-size:0.8rem;">Palfer<span>IA</span></div>
+        </div>
+
+        <p class="eyebrow">Antes de la reunión</p>
+        <h2 class="h-section" style="margin-bottom:8px;">Cuéntanos sobre<br/><span class="gold">vuestros procesos</span></h2>
+        <p class="body-text" style="margin-bottom:24px;">5 minutos que nos permiten llegar con un análisis inicial hecho — sin improvisar.</p>
+
+        <form id="pre-form" style="display:flex;flex-direction:column;gap:12px;" onsubmit="submitForm(event)">
+
+          <div class="grid-2">
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;">Nombre y apellidos *</label>
+              <input type="text" id="f-nombre" required placeholder="María García"
+                style="width:100%;background:var(--raised);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--cream);font-size:0.88rem;outline:none;font-family:inherit;transition:border-color 0.2s;"
+                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;">Cargo *</label>
+              <input type="text" id="f-cargo" required placeholder="Director de Operaciones"
+                style="width:100%;background:var(--raised);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--cream);font-size:0.88rem;outline:none;font-family:inherit;transition:border-color 0.2s;"
+                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;">Pedidos internacionales / semana *</label>
+              <select id="f-pedidos" required style="width:100%;background:var(--raised);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--cream);font-size:0.88rem;outline:none;font-family:inherit;">
+                <option value="" disabled selected>Selecciona</option>
+                <option>Menos de 20</option>
+                <option>20 – 50</option>
+                <option>50 – 100</option>
+                <option>Más de 100</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;">Solicitudes selección por foto / semana</label>
+              <select id="f-fotos" style="width:100%;background:var(--raised);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--cream);font-size:0.88rem;outline:none;font-family:inherit;">
+                <option>No lo sé exactamente</option>
+                <option>Menos de 5</option>
+                <option>5 – 15</option>
+                <option>Más de 15</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;">ERP / Software de gestión</label>
+              <input type="text" id="f-erp" placeholder="SAP, Odoo, Excel, ninguno…"
+                style="width:100%;background:var(--raised);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--cream);font-size:0.88rem;outline:none;font-family:inherit;transition:border-color 0.2s;"
+                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;">Correo de contacto *</label>
+              <input type="email" id="f-email" required placeholder="vuestro@correo.com"
+                style="width:100%;background:var(--raised);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--cream);font-size:0.88rem;outline:none;font-family:inherit;transition:border-color 0.2s;"
+                onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"/>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;">¿Qué proceso consume más tiempo manual actualmente? *</label>
+            <textarea id="f-proceso" required rows="2" placeholder="Ej. El seguimiento de pedidos internacionales, gestionar las solicitudes de foto, avisar a clientes de stock…"
+              style="width:100%;background:var(--raised);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--cream);font-size:0.88rem;outline:none;font-family:inherit;resize:vertical;transition:border-color 0.2s;"
+              onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+          </div>
+
+          <div>
+            <label style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:5px;">¿Algo concreto que os gustaría resolver con urgencia?</label>
+            <textarea id="f-urgencia" rows="2" placeholder="Opcional — cualquier detalle ayuda a preparar mejor la reunión."
+              style="width:100%;background:var(--raised);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--cream);font-size:0.88rem;outline:none;font-family:inherit;resize:vertical;transition:border-color 0.2s;"
+              onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:4px;">
+            <button type="submit" class="btn-cta" style="border:none;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Enviar y preparar reunión
+            </button>
+            <p style="font-size:0.75rem;color:var(--muted);">Llega directamente a ri@palferia.com</p>
+          </div>
+
+          <div id="form-ok" style="display:none;padding:18px 22px;background:rgba(92,138,53,0.12);border:1px solid rgba(92,138,53,0.35);border-radius:12px;margin-top:4px;">
+            <p style="font-weight:700;color:var(--green-lt);margin-bottom:5px;">✓ Enviado correctamente</p>
+            <p class="body-text" style="font-size:0.85rem;">Hemos recibido vuestras respuestas. Ronald os escribirá en menos de 24 horas para confirmar la reunión.</p>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /presentation-container -->
 
-<!-- NAV -->
-<div id="nav">
-  <button class="nav-btn prev" onclick="changeSlide(-1)">←</button>
-  <span id="slide-counter">1 / 9</span>
-  <button class="nav-btn next" onclick="changeSlide(1)">→</button>
-</div>
-
 <script>
-  const slides = document.querySelectorAll('.slide');
-  const dots = document.getElementById('nav-dots');
-  const progress = document.getElementById('progress-bar');
-  const counter = document.getElementById('slide-counter');
-  let current = 0;
+  function submitForm(e) {
+    e.preventDefault();
+    var nombre   = document.getElementById('f-nombre').value;
+    var cargo    = document.getElementById('f-cargo').value;
+    var pedidos  = document.getElementById('f-pedidos').value;
+    var fotos    = document.getElementById('f-fotos').value;
+    var erp      = document.getElementById('f-erp').value || 'No indicado';
+    var proceso  = document.getElementById('f-proceso').value;
+    var urgencia = document.getElementById('f-urgencia').value || 'No indicado';
+    var email    = document.getElementById('f-email').value;
 
-  // Build dots
-  slides.forEach((_, i) => {
-    const d = document.createElement('button');
+    var subject = 'Maderas Barber x PalferIA - Pre-reunion: ' + nombre;
+    var body = 'FORMULARIO PRE-REUNION - MADERAS BARBER\n'
+      + '==========================================\n\n'
+      + 'Nombre: ' + nombre + '\n'
+      + 'Cargo: ' + cargo + '\n'
+      + 'Correo: ' + email + '\n\n'
+      + '--- OPERATIVA ---\n'
+      + 'Pedidos internacionales/semana: ' + pedidos + '\n'
+      + 'Solicitudes seleccion por foto/semana: ' + fotos + '\n'
+      + 'Sistema de gestion (ERP): ' + erp + '\n\n'
+      + '--- PROCESOS ---\n'
+      + 'Proceso con mas tiempo manual:\n' + proceso + '\n\n'
+      + 'Que mejorar con urgencia:\n' + urgencia;
+
+    window.location.href = 'mailto:ri@palferia.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+    document.getElementById('form-ok').style.display = 'block';
+    var fields = document.getElementById('pre-form').querySelectorAll('input,select,textarea,button');
+    for (var i = 0; i < fields.length; i++) { fields[i].disabled = true; }
+  }
+
+  var slides = document.querySelectorAll('.slide');
+  var dots = document.getElementById('nav-dots');
+  var progress = document.getElementById('progress-bar');
+  var counter = document.getElementById('slide-counter');
+  var current = 0;
+
+  slides.forEach(function(_, i) {
+    var d = document.createElement('button');
     d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => goTo(i);
+    d.onclick = function() { goTo(i); };
     dots.appendChild(d);
   });
 
@@ -884,18 +951,16 @@
 
   function changeSlide(dir) { goTo(current + dir); }
 
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
     if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
   });
 
-  // Touch swipe
-  let tx = 0;
-  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-  document.addEventListener('touchend', e => {
-    const dx = tx - e.changedTouches[0].clientX;
+  var tx = 0;
+  document.addEventListener('touchstart', function(e) { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    var dx = tx - e.changedTouches[0].clientX;
     if (Math.abs(dx) > 50) changeSlide(dx > 0 ? 1 : -1);
   }, { passive: true });
 </script>
 </body>
-</html>
