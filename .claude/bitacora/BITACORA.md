@@ -5,8 +5,8 @@
 ---
 
 ## ESTADO ACTUAL
-**Fase:** 1 — MVP en producción / Consolidación de arquitectura
-**Última sesión:** 2026-09-03
+**Fase:** 1 — MVP en producción / Generación activa de propuestas
+**Última sesión:** 2026-10-04
 **Próxima acción prioritaria:**
 1. Generar ayudaventas/setter tool para UD Rocafort CF (interno — solo Ronald)
 2. Seguimiento Tecniluispa y Cortinajes Valls & París
@@ -57,6 +57,30 @@
 - [ ] Actualizar estado propuesta en Supabase a `enviada` cuando se comparta
 - [ ] Gap: Correr auditorías reales (kit-auditoria-negocio, kit-auditoria-meta-ads)
 - [ ] Gap: Deploy propuesta desde CRM (webhook/n8n)
+
+---
+
+## SESIÓN 04/10/2026 — Propuestas COM-studio + Stack IA visual
+
+### Ejecutado
+- **Propuesta Maderas Barber** — 10 slides HTML completos, desplegada en producción
+  - URL: `https://sales.palferia.me/propuestas/c2e8f4a3-maderasbarber.html`
+  - Contenido: 3 flujos (pedidos internacionales, selección por foto, alertas stock B2B)
+  - Diseño: light mode `#EAE6CA`, tipografía Playfair+Inter, estilo Studiova
+  - Imágenes: SVG violín, SVG sección madera, 4 fotos reales comprimidas
+  - Logo fijo en los 10 slides vía `#fixed-logo` (position:fixed)
+  - Formulario slide 10 → `ri@palferia.com` vía mailto
+
+- **Skills instaladas (scope usuario):**
+  - `~/.claude/skills/ui-ux-pro-max-skill` — DB diseño: estilos, paletas, tipografía, UX
+  - MCP `magic` 21st.dev — ✓ Connected
+  - MCP `magnific` — ⚠ Requiere reinicio de sesión para OAuth (auth.magnific.com/realms/mcp)
+
+### Pendientes prioritarios
+- [ ] Reiniciar Claude Code → MCP Magnific conectará via OAuth automáticamente
+- [ ] Propuesta HTML Edauto (3 flujos, desde 3.100€+499€/mes)
+- [ ] Propuesta HTML Peumovil (2 flujos, desde 1.900€+299€/mes)
+- [ ] Contactar Maderas Barber — buscar email directo responsable operaciones
 
 ---
 
