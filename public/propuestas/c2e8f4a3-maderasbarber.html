@@ -409,6 +409,38 @@
     #fixed-logo {
       filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12));
     }
+
+    /* ── IMAGEN / TEXTURA STYLES ── */
+    .slide-photo {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .photo-overlay {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: rgba(234,230,202,0.82);
+    }
+    .photo-overlay-dark {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background: linear-gradient(135deg, rgba(234,230,202,0.9) 0%, rgba(234,230,202,0.75) 100%);
+    }
+    .pad-over { position: relative; z-index: 1; }
+
+    /* Wood grain accent en cards de proceso */
+    .card-wood-accent {
+      border-left: 3px solid transparent;
+      border-image: linear-gradient(180deg,
+        #8B5A2B 0%, #C4973A 25%,
+        #7A4F24 50%, #B8894E 75%,
+        #6B3E1A 100%) 1;
+      padding-left: 20px !important;
+    }
+    .card-dark.card-wood-accent {
+      background: rgba(139,90,43,0.05);
+      border: none;
+      border-left: 3px solid transparent;
+      border-image: linear-gradient(180deg, #9B7040 0%, #C4973A 50%, #7A4F24 100%) 1;
+    }
   </style>
 </head>
 <body>
@@ -430,6 +462,40 @@
 
   <!-- SLIDE 1 — PORTADA -->
   <div class="slide active grain wood-bg" id="slide-1">
+    <!-- Violín SVG decorativo -->
+    <svg style="position:absolute;right:-60px;top:50%;transform:translateY(-52%);width:320px;height:580px;opacity:0.08;pointer-events:none;" viewBox="0 0 200 370" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Mástil -->
+      <rect x="92" y="0" width="16" height="42" rx="6" fill="#3A6618"/>
+      <!-- Clavijero (scroll simplificado) -->
+      <ellipse cx="100" cy="4" rx="9" ry="6" fill="#3A6618" opacity="0.7"/>
+      <!-- Cuerpo del violín -->
+      <path d="M100,42
+        C122,42 145,56 150,80
+        C155,98 147,112 147,126
+        C147,138 155,146 155,158
+        C155,172 147,180 147,194
+        C147,218 158,240 155,265
+        C148,300 126,318 100,320
+        C74,318 52,300 45,265
+        C42,240 53,218 53,194
+        C53,180 45,172 45,158
+        C45,146 53,138 53,126
+        C53,112 45,98 50,80
+        C55,56 78,42 100,42Z"
+        stroke="#3A6618" stroke-width="2.5" fill="rgba(58,102,24,0.06)"/>
+      <!-- F-holes izquierda -->
+      <path d="M74,172 C72,165 71,158 73,152 C75,146 78,144 78,148 C78,152 76,155 77,160 C78,165 81,168 80,172 C79,176 76,178 77,183" stroke="#3A6618" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <!-- F-holes derecha -->
+      <path d="M126,172 C128,165 129,158 127,152 C125,146 122,144 122,148 C122,152 124,155 123,160 C122,165 119,168 120,172 C121,176 124,178 123,183" stroke="#3A6618" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <!-- Puente -->
+      <path d="M86,210 L114,210 L112,218 L114,222 L86,222 L88,218 Z" stroke="#3A6618" stroke-width="1.2" fill="none"/>
+      <!-- Cuerdas -->
+      <line x1="93" y1="10" x2="90" y2="320" stroke="#3A6618" stroke-width="0.7" opacity="0.5"/>
+      <line x1="97" y1="8"  x2="96" y2="320" stroke="#3A6618" stroke-width="0.6" opacity="0.5"/>
+      <line x1="103" y1="8" x2="104" y2="320" stroke="#3A6618" stroke-width="0.6" opacity="0.5"/>
+      <line x1="107" y1="10" x2="110" y2="320" stroke="#3A6618" stroke-width="0.7" opacity="0.5"/>
+    </svg>
+
     <!-- Anillos decorativos (wood rings) -->
     <svg style="position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:560px;height:560px;opacity:0.07;pointer-events:none;" viewBox="0 0 560 560" fill="none">
       <circle cx="280" cy="280" r="260" stroke="#3A6618" stroke-width="1.2"/>
@@ -511,8 +577,9 @@
   </div>
 
   <!-- SLIDE 3 — CASO GRUPO CUEVA -->
-  <div class="slide grain wood-bg" id="slide-3">
-    <div class="pad">
+  <div class="slide slide-photo grain" id="slide-3" style="background-image:url('../assets/img/maderasbarber/taller.jpg');">
+    <div class="photo-overlay-dark"></div>
+    <div class="pad pad-over">
       <div class="max-w">
         <p class="eyebrow">Caso de referencia real</p>
         <h2 class="h-section" style="margin-bottom:8px;">Grupo Cueva:<br/><span class="gold">de 12 procesos manuales a 90% automatizado</span></h2>
@@ -607,10 +674,10 @@
           <div>
             <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;">Flujo actual — manual</p>
             <div style="display:flex;flex-direction:column;gap:8px;">
-              <div class="card-dark" style="padding:12px 16px;font-size:0.85rem;color:rgba(30,45,8,0.6);">Pedido confirmado → alguien redacta email de confirmación</div>
-              <div class="card-dark" style="padding:12px 16px;font-size:0.85rem;color:rgba(30,45,8,0.6);">Pedido enviado → alguien busca el tracking y lo envía</div>
-              <div class="card-dark" style="padding:12px 16px;font-size:0.85rem;color:rgba(30,45,8,0.6);">Incidencia en aduana → alguien gestiona y comunica</div>
-              <div class="card-dark" style="padding:12px 16px;font-size:0.85rem;color:rgba(30,45,8,0.6);">Sin entrega confirmada → nadie sabe si llegó</div>
+              <div class="card-dark card-wood-accent" style="padding:12px 16px 12px 20px;font-size:0.85rem;color:rgba(30,45,8,0.6);">Pedido confirmado → alguien redacta email de confirmación</div>
+              <div class="card-dark card-wood-accent" style="padding:12px 16px 12px 20px;font-size:0.85rem;color:rgba(30,45,8,0.6);">Pedido enviado → alguien busca el tracking y lo envía</div>
+              <div class="card-dark card-wood-accent" style="padding:12px 16px 12px 20px;font-size:0.85rem;color:rgba(30,45,8,0.6);">Incidencia en aduana → alguien gestiona y comunica</div>
+              <div class="card-dark card-wood-accent" style="padding:12px 16px 12px 20px;font-size:0.85rem;color:rgba(30,45,8,0.6);">Sin entrega confirmada → nadie sabe si llegó</div>
             </div>
           </div>
 
@@ -733,6 +800,26 @@
 
   <!-- SLIDE 7 — METODOLOGÍA -->
   <div class="slide grain wood-bg" id="slide-7">
+    <!-- Sección de madera decorativa slide 7 -->
+    <svg style="position:absolute;right:-40px;top:50%;transform:translateY(-50%);width:380px;height:380px;opacity:0.06;pointer-events:none;" viewBox="0 0 380 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Anillos externos irregulares (sección transversal de madera) -->
+      <ellipse cx="190" cy="190" rx="175" ry="168" stroke="#3A6618" stroke-width="1.5"/>
+      <ellipse cx="190" cy="192" rx="148" ry="142" stroke="#3A6618" stroke-width="1.2"/>
+      <ellipse cx="188" cy="190" rx="122" ry="117" stroke="#3A6618" stroke-width="1"/>
+      <ellipse cx="191" cy="189" rx="98" ry="93" stroke="#3A6618" stroke-width="1"/>
+      <ellipse cx="189" cy="191" rx="75" ry="71" stroke="#3A6618" stroke-width="0.9"/>
+      <ellipse cx="190" cy="190" rx="54" ry="51" stroke="#3A6618" stroke-width="0.8"/>
+      <ellipse cx="190" cy="190" rx="35" ry="33" stroke="#3A6618" stroke-width="0.7"/>
+      <ellipse cx="190" cy="190" rx="18" ry="17" stroke="#3A6618" stroke-width="0.6"/>
+      <!-- Médula central -->
+      <circle cx="190" cy="190" r="5" fill="#3A6618" opacity="0.4"/>
+      <!-- Radios (rayos medulares) -->
+      <line x1="190" y1="22" x2="190" y2="358" stroke="#3A6618" stroke-width="0.5" opacity="0.5"/>
+      <line x1="22" y1="190" x2="358" y2="190" stroke="#3A6618" stroke-width="0.5" opacity="0.5"/>
+      <line x1="70" y1="70" x2="310" y2="310" stroke="#3A6618" stroke-width="0.4" opacity="0.4"/>
+      <line x1="310" y1="70" x2="70" y2="310" stroke="#3A6618" stroke-width="0.4" opacity="0.4"/>
+    </svg>
+
     <div class="pad">
       <div class="max-w">
         <p class="eyebrow">Cómo lo implementamos</p>
@@ -791,8 +878,9 @@
   </div>
 
   <!-- SLIDE 8 — LO QUE NO CAMBIA -->
-  <div class="slide slide-alt grain" id="slide-8">
-    <div class="pad">
+  <div class="slide slide-photo grain" id="slide-8" style="background-image:url('../assets/img/maderasbarber/fondo-8.jpg');">
+    <div class="photo-overlay"></div>
+    <div class="pad pad-over">
       <div class="max-w-sm">
         <p class="eyebrow">Para el equipo escéptico</p>
         <h2 class="h-section" style="margin-bottom:32px;">Lo que <span class="gold">no cambia</span></h2>
@@ -839,9 +927,10 @@
     </div>
   </div>
 
-  <!-- SLIDE 9 — SIGUIENTE PASO -->
-  <div class="slide grain wood-bg" id="slide-9">
-    <div class="pad">
+  <!-- SLIDE 9 — UNA CONVERSACIÓN -->
+  <div class="slide slide-photo grain" id="slide-9" style="background-image:url('../assets/img/maderasbarber/fondo-9.jpg');">
+    <div class="photo-overlay"></div>
+    <div class="pad pad-over">
       <div class="max-w-sm">
         <p class="eyebrow">Próximo paso</p>
         <h2 class="h-section" style="margin-bottom:8px;">Una conversación<br/><span class="gold">de 45 minutos</span></h2>
@@ -907,9 +996,10 @@
   </div>
 
 
-  <!-- SLIDE 10 — FORMULARIO PRE-REUNIÓN -->
-  <div class="slide grain wood-bg" id="slide-10">
-    <div class="pad" style="min-height:100vh;">
+  <!-- SLIDE 10 — FORMULARIO -->
+  <div class="slide slide-photo grain" id="slide-10" style="background-image:url('../assets/img/maderasbarber/fondo-10.jpg');">
+    <div class="photo-overlay"></div>
+    <div class="pad pad-over" style="min-height:100vh;">
       <div class="max-w-sm">
 
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
