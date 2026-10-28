@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PalferIA Studio × Jose Luis Madrigal · Propuesta de Expansión Estratégica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #080C18; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #06B6D4, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-glow {
+            background: radial-gradient(ellipse 90% 55% at 50% -5%, rgba(6,182,212,0.12) 0%, transparent 65%);
+        }
+        .card-base {
+            background: linear-gradient(135deg, rgba(17,24,39,0.9), rgba(20,30,50,0.5));
+            border: 1px solid rgba(255,255,255,0.07);
+            backdrop-filter: blur(8px);
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .card-hover:hover {
+                border-color: rgba(6,182,212,0.25);
+                box-shadow: 0 0 28px rgba(6,182,212,0.08);
+                transform: translateY(-1px);
+            }
+            .cta-btn:hover {
+                transform: scale(1.03);
+                box-shadow: 0 12px 40px rgba(6,182,212,0.2);
+            }
+        }
+        .card-hover { transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), border-color 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s cubic-bezier(0.16,1,0.3,1); }
+        .cta-btn { transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s cubic-bezier(0.16,1,0.3,1); }
+
+        .number-grad {
+            background: linear-gradient(135deg, #06B6D4, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .divider { background: linear-gradient(90deg, transparent, rgba(6,182,212,0.3), transparent); height: 1px; }
+
+        .tab-active {
+            background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(59,130,246,0.15));
+            border-color: #06B6D4 !important;
+            color: #06B6D4;
+        }
+        .tab-inactive {
+            background: transparent;
+            border-color: rgba(255,255,255,0.1) !important;
+            color: rgba(255,255,255,0.45);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active {
+            display: block;
+            animation: fadeUp 0.35s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .s1 { animation: fadeIn 0.55s cubic-bezier(0.16,1,0.3,1) both; }
+        .s2 { animation: fadeIn 0.55s 0.08s cubic-bezier(0.16,1,0.3,1) both; }
+        .s3 { animation: fadeIn 0.55s 0.14s cubic-bezier(0.16,1,0.3,1) both; }
+        .s4 { animation: fadeIn 0.55s 0.20s cubic-bezier(0.16,1,0.3,1) both; }
+        .s5 { animation: fadeIn 0.55s 0.26s cubic-bezier(0.16,1,0.3,1) both; }
+        .s6 { animation: fadeIn 0.55s 0.32s cubic-bezier(0.16,1,0.3,1) both; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .s1,.s2,.s3,.s4,.s5,.s6,.tab-content.active { animation: none; opacity:1; transform:none; }
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(6,182,212,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.06) 1px, transparent 1px);
+            background-size: 56px 56px;
+        }
+        .role-pill { padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+        .check-cyan { width:18px; height:18px; border-radius:50%; background:rgba(6,182,212,0.15); border:1px solid rgba(6,182,212,0.35); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+        .check-blue  { width:18px; height:18px; border-radius:50%; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.35); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+
+<!-- ─── HERO ─────────────────────────────────────────────────────────────── -->
+<section class="relative flex flex-col items-center justify-center min-h-screen px-6 py-24 hero-glow overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-100 pointer-events-none"></div>
+
+    <!-- Badge -->
+    <div class="s1 mb-8 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/08 text-cyan-400 text-xs font-semibold uppercase tracking-wider">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        Propuesta de Alianza · Confidencial · 2026
+    </div>
+
+    <!-- Brand line -->
+    <div class="s2 flex items-center gap-3 mb-6 flex-wrap justify-center">
+        <img src="data:image/png;base64,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"
+             alt="PalferIA" class="h-9 w-auto object-contain">
+        <span class="text-slate-600 text-lg font-light">×</span>
+        <span class="text-lg font-semibold text-slate-300">Jose Luis Madrigal</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="s3 text-center text-4xl md:text-6xl lg:text-[68px] font-black tracking-tight leading-[1.05] mb-6">
+        <span class="gradient-text">Propuesta de</span><br>
+        <span class="text-white">Expansión Estratégica</span>
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="s4 text-center text-base md:text-xl text-slate-400 max-w-2xl leading-relaxed mb-14">
+        Tu <strong class="text-white font-semibold">red de contactos y visión comercial</strong> más nuestra
+        <strong class="text-white font-semibold">infraestructura IA en producción</strong>:
+        dos verticales con mercado probado y delivery técnico al 100% cubierto.
+    </p>
+
+    <!-- Stats -->
+    <div class="s5 grid grid-cols-3 gap-8 md:gap-16 mb-14">
+        <div class="text-center">
+            <div class="text-4xl font-black number-grad">2</div>
+            <div class="text-[11px] text-slate-500 mt-1 uppercase tracking-widest">Verticales activas</div>
+        </div>
+        <div class="text-center border-x border-slate-800 px-8 md:px-16">
+            <div class="text-4xl font-black number-grad">72h</div>
+            <div class="text-[11px] text-slate-500 mt-1 uppercase tracking-widest">Time-to-deploy</div>
+        </div>
+        <div class="text-center">
+            <div class="text-4xl font-black number-grad">90%</div>
+            <div class="text-[11px] text-slate-500 mt-1 uppercase tracking-widest">Reducción manual</div>
+        </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="s6 flex flex-col items-center gap-2 text-slate-600">
+        <span class="text-[10px] uppercase tracking-[0.2em]">Explorar propuesta</span>
+        <svg class="animate-bounce w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </div>
+</section>
+
+<div class="divider mx-auto max-w-5xl"></div>
+
+<!-- ─── THE MATCH ─────────────────────────────────────────────────────────── -->
+<section class="px-6 py-24 max-w-6xl mx-auto">
+    <div class="text-center mb-14">
+        <span class="text-cyan-400 text-xs font-semibold uppercase tracking-[0.18em] mb-3 block">La alianza perfecta</span>
+        <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">
+            Los roles son exactos.<br><span class="gradient-text">Sin solapamiento.</span>
+        </h2>
+        <p class="text-slate-400 max-w-lg mx-auto text-base">Cada uno aporta lo que el otro no tiene. Puro apalancamiento, cero fricción.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <!-- Jose Luis -->
+        <div class="card-base card-hover rounded-2xl p-8">
+            <div class="flex items-start gap-4 mb-7">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25)">
+                    <svg width="22" height="22" fill="none" stroke="#06B6D4" stroke-width="1.5" viewBox="0 0 24 24">
+                        <circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
+                        <line x1="12" y1="7" x2="12" y2="13"/><line x1="12" y1="13" x2="6" y2="17"/>
+                        <line x1="12" y1="13" x2="18" y2="17"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="role-pill mb-1" style="background:rgba(6,182,212,0.12);color:#06B6D4;border:1px solid rgba(6,182,212,0.25)">Desarrollo de Negocio</div>
+                    <div class="text-lg font-bold text-white leading-tight">Jose Luis Madrigal</div>
+                    <div class="text-sm text-slate-500">Director de Operaciones · POLARCUBE / PC Shopping SL</div>
+                </div>
+            </div>
+            <div class="space-y-3 mb-7">
+                <div class="flex items-start gap-3">
+                    <div class="check-cyan mt-0.5">
+                        <svg width="9" height="9" fill="none" stroke="#06B6D4" stroke-width="2.5" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+                    </div>
+                    <span class="text-slate-300 text-sm">Apertura de grandes cuentas y relaciones institucionales de alto nivel</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="check-cyan mt-0.5">
+                        <svg width="9" height="9" fill="none" stroke="#06B6D4" stroke-width="2.5" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+                    </div>
+                    <span class="text-slate-300 text-sm">Activación de red de contactos estratégicos cualificados</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="check-cyan mt-0.5">
+                        <svg width="9" height="9" fill="none" stroke="#06B6D4" stroke-width="2.5" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+                    </div>
+                    <span class="text-slate-300 text-sm">Analítica y coordinación en proyectos de gran envergadura</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="check-cyan mt-0.5">
+                        <svg width="9" height="9" fill="none" stroke="#06B6D4" stroke-width="2.5" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+                    </div>
+                    <span class="text-slate-300 text-sm">Estrategia comercial y optimización de procesos enterprise</span>
+                </div>
+            </div>
+            <div class="pt-5 border-t border-slate-800/80">
+                <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-2">Experiencia probada en</div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300" style="background:#111827">POLARCUBE</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300" style="background:#111827">PC Shopping SL</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300" style="background:#111827">Dir. Operaciones</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ronald -->
+        <div class="card-base card-hover rounded-2xl p-8">
+            <div class="flex items-start gap-4 mb-7">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25)">
+                    <svg width="22" height="22" fill="none" stroke="#3B82F6" stroke-width="1.5" viewBox="0 0 24 24">
+                        <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="role-pill mb-1" style="background:rgba(59,130,246,0.12);color:#3B82F6;border:1px solid rgba(59,130,246,0.25)">Ingeniería &amp; Ops GTM</div>
+                    <div class="text-lg font-bold text-white leading-tight">Ronald · PalferIA</div>
+                    <div class="text-sm text-slate-500">Fundador · Manager de proyecto B2B y GTM Ingeniería</div>
+                </div>
+            </div>
+            <div class="space-y-3 mb-7">
+                <div class="flex items-start gap-3">
+                    <div class="check-blue mt-0.5">
+                        <svg width="9" height="9" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+                    </div>
+                    <span class="text-slate-300 text-sm">Desarrollo y mantenimiento de todos los sistemas IA</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="check-blue mt-0.5">
+                        <svg width="9" height="9" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+                    </div>
+                    <span class="text-slate-300 text-sm">Integraciones técnicas y delivery en producción desde 72 horas</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="check-blue mt-0.5">
+                        <svg width="9" height="9" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+                    </div>
+                    <span class="text-slate-300 text-sm">Operaciones: gestión de proyectos, QA y soporte post-venta</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="check-blue mt-0.5">
+                        <svg width="9" height="9" fill="none" stroke="#3B82F6" stroke-width="2.5" viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg>
+                    </div>
+                    <span class="text-slate-300 text-sm">Estrategia de producto IA y posicionamiento técnico en mercado</span>
+                </div>
+            </div>
+            <div class="pt-5 border-t border-slate-800/80">
+                <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-2">Stack tecnológico</div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300" style="background:#111827">Claude AI</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300" style="background:#111827">n8n</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300" style="background:#111827">Supabase</span>
+                    <span class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300" style="background:#111827">WhatsApp API</span>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-800/60">
+                    <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-2">Equipo técnico</div>
+                    <div class="flex gap-2">
+                        <div class="px-3 py-2 rounded-lg text-xs flex items-center gap-2" style="background:rgba(6,182,212,0.07);border:1px solid rgba(6,182,212,0.15)">
+                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0"></span>
+                            <span class="text-slate-300">Dev IA <span class="text-cyan-400 font-semibold">Low-code</span></span>
+                        </div>
+                        <div class="px-3 py-2 rounded-lg text-xs flex items-center gap-2" style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15)">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0"></span>
+                            <span class="text-slate-300">Dev IA <span class="text-blue-400 font-semibold">Hard-code</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The equation -->
+    <div class="mt-6 rounded-2xl p-6 md:p-8 text-center" style="background:linear-gradient(135deg,rgba(6,182,212,0.05),rgba(59,130,246,0.05));border:1px solid rgba(6,182,212,0.12)">
+        <div class="flex items-center justify-center gap-4 flex-wrap text-base md:text-lg">
+            <span class="text-slate-300 font-medium">Red de contactos de alto nivel</span>
+            <span class="text-2xl text-cyan-400 font-black">+</span>
+            <span class="text-slate-300 font-medium">Infraestructura IA validada en producción</span>
+            <span class="text-2xl text-cyan-400 font-black">=</span>
+            <span class="font-bold gradient-text">Escalado acelerado sin fricción</span>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-6"></div>
+
+<!-- ─── ECOSYSTEM TABS ─────────────────────────────────────────────────────── -->
+<section class="px-6 py-24 max-w-6xl mx-auto">
+    <div class="text-center mb-12">
+        <span class="text-cyan-400 text-xs font-semibold uppercase tracking-[0.18em] mb-3 block">El portafolio</span>
+        <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">
+            Dos verticales.<br><span class="gradient-text">Un ecosistema.</span>
+        </h2>
+        <p class="text-slate-400 max-w-xl mx-auto">Sistemas construidos, documentados y en producción. Tú abres la puerta, nosotros entregamos.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex gap-3 justify-center mb-10">
+        <button onclick="switchTab('sport')" id="tab-sport"
+            class="tab-btn px-6 py-3 rounded-xl border text-sm font-semibold transition-all duration-200 tab-active">
+            <span class="flex items-center gap-2">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                </svg>
+                palferia.me · Sport Business
+            </span>
+        </button>
+        <button onclick="switchTab('enterprise')" id="tab-enterprise"
+            class="tab-btn px-6 py-3 rounded-xl border text-sm font-semibold transition-all duration-200 tab-inactive">
+            <span class="flex items-center gap-2">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                </svg>
+                palferia.com · Enterprise
+            </span>
+        </button>
+    </div>
+
+    <!-- SPORT TAB -->
+    <div id="content-sport" class="tab-content active">
+        <div class="grid md:grid-cols-3 gap-5 mb-5">
+            <!-- Dolores -->
+            <div class="card-base card-hover rounded-2xl p-6">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2)">
+                    <svg width="18" height="18" fill="none" stroke="#06B6D4" stroke-width="1.5" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                </div>
+                <h3 class="text-white font-bold mb-4 text-xs uppercase tracking-wider">Dolores que resuelve</h3>
+                <ul class="space-y-2.5">
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400"><span class="text-red-400/70 font-bold mt-px flex-shrink-0">—</span>Inscripciones gestionadas a mano por WhatsApp</li>
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400"><span class="text-red-400/70 font-bold mt-px flex-shrink-0">—</span>Socios sin respuesta fuera del horario de oficina</li>
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400"><span class="text-red-400/70 font-bold mt-px flex-shrink-0">—</span>Seguimiento de patrocinadores sin sistema</li>
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400"><span class="text-red-400/70 font-bold mt-px flex-shrink-0">—</span>Captación de leads dependiente de RRSS manuales</li>
+                </ul>
+            </div>
+
+            <!-- Integraciones -->
+            <div class="card-base card-hover rounded-2xl p-6">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2)">
+                    <svg width="18" height="18" fill="none" stroke="#3B82F6" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                    </svg>
+                </div>
+                <h3 class="text-white font-bold mb-4 text-xs uppercase tracking-wider">Integraciones nativas</h3>
+                <div class="flex flex-wrap gap-2 mb-5">
+                    <span class="px-2 py-1 rounded-md text-xs text-slate-300 font-medium" style="background:#0f172a">WhatsApp Business</span>
+                    <span class="px-2 py-1 rounded-md text-xs text-slate-300 font-medium" style="background:#0f172a">Mindbody</span>
+                    <span class="px-2 py-1 rounded-md text-xs text-slate-300 font-medium" style="background:#0f172a">Clupik</span>
+                    <span class="px-2 py-1 rounded-md text-xs text-slate-300 font-medium" style="background:#0f172a">SportMadness</span>
+                    <span class="px-2 py-1 rounded-md text-xs text-slate-300 font-medium" style="background:#0f172a">HubSpot</span>
+                    <span class="px-2 py-1 rounded-md text-xs text-slate-300 font-medium" style="background:#0f172a">n8n</span>
+                    <span class="px-2 py-1 rounded-md text-xs text-slate-300 font-medium" style="background:#0f172a">Zapier</span>
+                </div>
+                <div class="pt-4 border-t border-slate-800/60">
+                    <div class="text-[10px] text-slate-600 uppercase tracking-wider">Producto estrella</div>
+                    <div class="text-sm font-bold text-cyan-400 mt-1">Kit IA Deportivo — 1.000€ · listo en 72h</div>
+                </div>
+            </div>
+
+            <!-- ROI -->
+            <div class="card-base card-hover rounded-2xl p-6">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2)">
+                    <svg width="18" height="18" fill="none" stroke="#10B981" stroke-width="1.5" viewBox="0 0 24 24">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                </div>
+                <h3 class="text-white font-bold mb-4 text-xs uppercase tracking-wider">ROI demostrado</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="text-3xl font-black text-green-400">60%</div>
+                        <div class="text-xs text-slate-500">Reducción tiempo gestión operativa</div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800/60">
+                        <div class="text-3xl font-black text-cyan-400">24/7</div>
+                        <div class="text-xs text-slate-500">Atención automática a socios</div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800/60">
+                        <div class="text-3xl font-black text-blue-400">72h</div>
+                        <div class="text-xs text-slate-500">De contrato firmado a sistema en producción</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Target clients sport -->
+        <div class="card-base rounded-2xl p-6">
+            <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-4">Clientes target palferia.me</div>
+            <div class="flex flex-wrap gap-3">
+                <span class="px-4 py-2 rounded-xl text-sm text-cyan-300" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.18)">Academias deportivas</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-cyan-300" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.18)">Clubes (50–500 socios)</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-cyan-300" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.18)">Federaciones locales</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-cyan-300" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.18)">Organizadores de eventos</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-cyan-300" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.18)">Turismo deportivo</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-cyan-300" style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.18)">Gestores de patrocinios</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENTERPRISE TAB -->
+    <div id="content-enterprise" class="tab-content">
+        <div class="grid md:grid-cols-3 gap-5 mb-5">
+            <!-- Dolores -->
+            <div class="card-base card-hover rounded-2xl p-6">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2)">
+                    <svg width="18" height="18" fill="none" stroke="#6366F1" stroke-width="1.5" viewBox="0 0 24 24">
+                        <rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/>
+                        <line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
+                    </svg>
+                </div>
+                <h3 class="text-white font-bold mb-4 text-xs uppercase tracking-wider">Dolores que resuelve</h3>
+                <ul class="space-y-2.5">
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400"><span class="text-red-400/70 font-bold mt-px flex-shrink-0">—</span>Procesos internos en Excel con alto coste de error</li>
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400"><span class="text-red-400/70 font-bold mt-px flex-shrink-0">—</span>Equipos de ventas sin datos ni seguimiento en tiempo real</li>
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400"><span class="text-red-400/70 font-bold mt-px flex-shrink-0">—</span>Marketing sin automatización ni nurturing con IA</li>
+                    <li class="flex items-start gap-2.5 text-sm text-slate-400"><span class="text-red-400/70 font-bold mt-px flex-shrink-0">—</span>Sin visibilidad analítica ejecutiva del negocio</li>
+                </ul>
+            </div>
+
+            <!-- Servicios -->
+            <div class="card-base card-hover rounded-2xl p-6">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2)">
+                    <svg width="18" height="18" fill="none" stroke="#3B82F6" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h3 class="text-white font-bold mb-4 text-xs uppercase tracking-wider">Servicios incluidos</h3>
+                <div class="space-y-2.5">
+                    <div class="flex items-center gap-2.5 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0"></span>Automatización de procesos con IA y n8n</div>
+                    <div class="flex items-center gap-2.5 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0"></span>Agentes IA de ventas internos</div>
+                    <div class="flex items-center gap-2.5 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0"></span>Marketing automation multicanal</div>
+                    <div class="flex items-center gap-2.5 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0"></span>Dashboards analíticos en tiempo real</div>
+                    <div class="flex items-center gap-2.5 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0"></span>Diseño creativo orientado a conversión y ROI</div>
+                </div>
+            </div>
+
+            <!-- Caso real -->
+            <div class="card-base card-hover rounded-2xl p-6" style="border-color:rgba(16,185,129,0.2)">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-5" style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2)">
+                    <svg width="18" height="18" fill="none" stroke="#10B981" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                </div>
+                <h3 class="text-white font-bold mb-1 text-xs uppercase tracking-wider">Caso real verificado</h3>
+                <div class="text-cyan-400 font-semibold text-sm mb-4">Grupo Cueva · Automatización RRHH</div>
+                <div class="space-y-2.5 mb-4">
+                    <div class="flex justify-between text-sm border-b border-slate-800/50 pb-2">
+                        <span class="text-slate-500">Flujos automatizados</span>
+                        <span class="text-white font-bold">12</span>
+                    </div>
+                    <div class="flex justify-between text-sm border-b border-slate-800/50 pb-2">
+                        <span class="text-slate-500">Tiempo de implantación</span>
+                        <span class="text-white font-bold">4 semanas</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-500">Reducción proceso manual</span>
+                        <span class="text-green-400 font-bold">90%</span>
+                    </div>
+                </div>
+                <div class="px-3 py-2.5 rounded-xl" style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15)">
+                    <p class="text-xs text-green-300/80 italic leading-relaxed">"Sistema en producción en 4 semanas. El equipo eliminó el 90% del trabajo manual en RRHH."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Target clients enterprise -->
+        <div class="card-base rounded-2xl p-6">
+            <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-4">Clientes target palferia.com</div>
+            <div class="flex flex-wrap gap-3">
+                <span class="px-4 py-2 rounded-xl text-sm text-blue-300" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18)">Empresas medianas B2B</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-blue-300" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18)">Despachos legales</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-blue-300" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18)">Clínicas privadas</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-blue-300" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18)">Hoteles rurales</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-blue-300" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18)">Centros comerciales</span>
+                <span class="px-4 py-2 rounded-xl text-sm text-blue-300" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.18)">Asesorías y consultoras</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-6"></div>
+
+<!-- ─── SCALABILITY ────────────────────────────────────────────────────────── -->
+<section class="px-6 py-24 max-w-6xl mx-auto">
+    <div class="text-center mb-14">
+        <span class="text-cyan-400 text-xs font-semibold uppercase tracking-[0.18em] mb-3 block">El modelo de negocio</span>
+        <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-4">
+            El sistema ya existe.<br><span class="gradient-text">Solo necesita mercado.</span>
+        </h2>
+        <p class="text-slate-400 max-w-xl mx-auto">El delivery técnico está al 100% cubierto. No hay que construir nada para los primeros clientes: solo ejecutar.</p>
+    </div>
+
+    <!-- Numbers -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
+        <div class="card-base card-hover rounded-2xl p-6 text-center">
+            <div class="text-4xl font-black number-grad mb-2">100%</div>
+            <div class="text-sm text-slate-400">Delivery técnico cubierto</div>
+            <div class="text-xs text-slate-700 mt-1.5">Sistema en producción</div>
+        </div>
+        <div class="card-base card-hover rounded-2xl p-6 text-center">
+            <div class="text-4xl font-black number-grad mb-2">72h</div>
+            <div class="text-sm text-slate-400">Máximo time-to-deploy</div>
+            <div class="text-xs text-slate-700 mt-1.5">De firma a producción</div>
+        </div>
+        <div class="card-base card-hover rounded-2xl p-6 text-center">
+            <div class="text-4xl font-black number-grad mb-2">2</div>
+            <div class="text-sm text-slate-400">Verticales escalables</div>
+            <div class="text-xs text-slate-700 mt-1.5">Sport + Enterprise B2B</div>
+        </div>
+        <div class="card-base card-hover rounded-2xl p-6 text-center">
+            <div class="text-4xl font-black number-grad mb-2">∞</div>
+            <div class="text-sm text-slate-400">Capacidad de escalar</div>
+            <div class="text-xs text-slate-700 mt-1.5">Sin límite de clientes</div>
+        </div>
+    </div>
+
+    <!-- Why it scales -->
+    <div class="grid md:grid-cols-3 gap-5">
+        <div class="card-base card-hover rounded-2xl p-6">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2)">
+                <svg width="16" height="16" fill="none" stroke="#06B6D4" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <h4 class="text-white font-bold mb-2 text-sm">Producto validado</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">Los sistemas están construidos, documentados y en producción. No hay I+D pendiente para los primeros clientes.</p>
+        </div>
+        <div class="card-base card-hover rounded-2xl p-6">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2)">
+                <svg width="16" height="16" fill="none" stroke="#3B82F6" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <h4 class="text-white font-bold mb-2 text-sm">Márgenes de SaaS</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">El modelo setup + retainer mensual permite márgenes del 70-80%. Los costes operativos escalan mucho más lento que los ingresos.</p>
+        </div>
+        <div class="card-base card-hover rounded-2xl p-6">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2)">
+                <svg width="16" height="16" fill="none" stroke="#6366F1" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            </div>
+            <h4 class="text-white font-bold mb-2 text-sm">División sin fricción</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">Sin microgestión. Tú cierras, yo entrego. Comisiones transparentes desde el primer acuerdo. Cero conflicto de intereses.</p>
+        </div>
+    </div>
+</section>
+
+<div class="divider mx-6"></div>
+
+<!-- ─── CTA ───────────────────────────────────────────────────────────────── -->
+<section class="px-6 py-24 max-w-4xl mx-auto text-center">
+    <span class="text-cyan-400 text-xs font-semibold uppercase tracking-[0.18em] mb-4 block">La propuesta</span>
+    <h2 class="text-3xl md:text-5xl font-black tracking-tight mb-6">
+        Sin inversión de capital.<br><span class="gradient-text">Solo tu red y tu criterio.</span>
+    </h2>
+    <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+        No te pido dinero. Te propongo un modelo de colaboración basado en resultados: tú identificas la oportunidad, la generas y la cierras — yo entrego el sistema. Los proyectos van de <strong class="text-white">2.000€ a 10.000€</strong> según complejidad, y tu comisión es del <strong class="text-cyan-400">20% por cada operación cerrada</strong>.
+    </p>
+
+    <!-- Comisión highlight -->
+    <div class="rounded-2xl p-6 md:p-8 mb-10" style="background:linear-gradient(135deg,rgba(6,182,212,0.08),rgba(59,130,246,0.08));border:1px solid rgba(6,182,212,0.2)">
+        <div class="grid grid-cols-3 gap-4 md:gap-8">
+            <div class="text-center">
+                <div class="text-3xl md:text-4xl font-black number-grad mb-1">20%</div>
+                <div class="text-xs text-slate-500 leading-tight">Comisión por<br>operación cerrada</div>
+            </div>
+            <div class="text-center border-x border-slate-800">
+                <div class="text-3xl md:text-4xl font-black number-grad mb-1">2K–10K€</div>
+                <div class="text-xs text-slate-500 leading-tight">Ticket por proyecto<br>según complejidad</div>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl md:text-4xl font-black number-grad mb-1">0€</div>
+                <div class="text-xs text-slate-500 leading-tight">Inversión de capital<br>requerida</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dos ángulos -->
+    <div class="grid md:grid-cols-2 gap-5 mb-10 text-left">
+        <div class="rounded-xl p-6 card-base">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2)">
+                    <svg width="15" height="15" fill="none" stroke="#06B6D4" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <div class="text-cyan-400 font-bold text-xs uppercase tracking-wider">Ángulo 1 · Ver el mercado</div>
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed">Detectar empresas que ya sienten el dolor — operaciones lentas, equipos saturados, procesos manuales — pero que aún no saben que la IA puede resolverlo. Tu visión de operaciones identifica esos perfiles antes de que lleguen solos.</p>
+        </div>
+        <div class="rounded-xl p-6 card-base">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2)">
+                    <svg width="15" height="15" fill="none" stroke="#3B82F6" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <div class="text-blue-400 font-bold text-xs uppercase tracking-wider">Ángulo 2 · Aprovechar la necesidad</div>
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed">Cuando una empresa ya tiene una necesidad concreta — automatizar un proceso, captar más clientes, reducir costes operativos — conectarla con la solución exacta que ya tenemos construida y lista para desplegarse en 72 horas.</p>
+        </div>
+    </div>
+
+    <!-- Cómo funciona la comisión -->
+    <div class="rounded-xl p-5 mb-10 text-left" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06)">
+        <div class="text-[10px] text-slate-600 uppercase tracking-wider mb-3">Cómo funciona la comisión</div>
+        <div class="grid md:grid-cols-3 gap-4">
+            <div class="flex items-start gap-2.5">
+                <span class="text-cyan-400 font-black text-sm flex-shrink-0 mt-px">01</span>
+                <div>
+                    <div class="text-white text-xs font-semibold mb-1">Apertura</div>
+                    <div class="text-slate-500 text-xs leading-relaxed">Identificas y cualificas el lead. Presentas PalferIA a tu contacto.</div>
+                </div>
+            </div>
+            <div class="flex items-start gap-2.5">
+                <span class="text-cyan-400 font-black text-sm flex-shrink-0 mt-px">02</span>
+                <div>
+                    <div class="text-white text-xs font-semibold mb-1">Generación</div>
+                    <div class="text-slate-500 text-xs leading-relaxed">Coordinas la reunión o demo. Yo preparo la propuesta técnica y el precio.</div>
+                </div>
+            </div>
+            <div class="flex items-start gap-2.5">
+                <span class="text-cyan-400 font-black text-sm flex-shrink-0 mt-px">03</span>
+                <div>
+                    <div class="text-white text-xs font-semibold mb-1">Cierre · 20%</div>
+                    <div class="text-slate-500 text-xs leading-relaxed">Firma el cliente. Yo entrego el sistema. Tú cobras el 20% del proyecto.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+        <a href="https://wa.me/34643469239?text=Hola%20Ronald%2C%20he%20visto%20la%20propuesta%20de%20PalferIA%20y%20me%20interesa%20hablar."
+           target="_blank"
+           class="cta-btn inline-flex items-center gap-2 px-8 py-4 rounded-xl text-sm font-bold text-white"
+           style="background:linear-gradient(135deg,#06B6D4,#3B82F6)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.12 1.523 5.854L.057 23.882a.5.5 0 0 0 .611.611l6.042-1.456A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.944 9.944 0 0 1-5.073-1.387l-.36-.214-3.733.9.924-3.634-.235-.374A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+            </svg>
+            Hablamos por WhatsApp
+        </a>
+        <a href="mailto:ri@palferia.com?subject=Propuesta PalferIA — Jose Luis Madrigal"
+           class="cta-btn inline-flex items-center gap-2 px-6 py-4 rounded-xl text-sm font-semibold text-slate-300"
+           style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1)">
+            Escribir por email
+        </a>
+    </div>
+    <div class="text-slate-600 text-sm">+34 672 037 621 · ri@palferia.com · Ronald · PalferIA Studio</div>
+
+    <!-- Footer -->
+    <div class="mt-16 pt-8 border-t border-slate-900">
+        <div class="flex items-center justify-center gap-6 text-slate-700 text-xs flex-wrap">
+            <span>PalferIA Studio © 2026</span>
+            <span class="text-slate-800">·</span>
+            <span>Documento confidencial</span>
+            <span class="text-slate-800">·</span>
+            <span>Preparado para Jose Luis Madrigal</span>
+            <span class="text-slate-800">·</span>
+            <span>palferia.com · palferia.me</span>
+        </div>
+    </div>
+</section>
+
+<script>
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => {
+            el.classList.remove('tab-active');
+            el.classList.add('tab-inactive');
+        });
+        document.getElementById('content-' + tab).classList.add('active');
+        document.getElementById('tab-' + tab).classList.remove('tab-inactive');
+        document.getElementById('tab-' + tab).classList.add('tab-active');
+    }
+</script>
+</body>
+</html>
