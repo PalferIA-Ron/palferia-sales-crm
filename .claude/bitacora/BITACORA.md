@@ -110,6 +110,71 @@ proponen todas las piezas ni en ese orden, y **no hay ni una cifra de precio**.
 
 ---
 
+### 🔴 SEGURIDAD: token de GitHub en texto plano en .git/config
+
+Al mirar `git remote -v` salió un **token personal de GitHub incrustado en la URL del
+remoto**, en claro. Está en `.git/config` y aparece cada vez que alguien mira el remoto.
+
+**Hay que rotarlo:** revocarlo en GitHub, Settings, Developer settings, Personal access
+tokens, y volver a poner el remoto sin credencial:
+
+```bash
+git remote set-url origin https://github.com/PalferIA-Ron/palferia-sales-crm.git
+```
+
+Y autenticar con `gh auth login` o con el llavero, no metiendo el token en la URL.
+Incumple el no negociable de «cero keys en el código» del CLAUDE.md.
+
+---
+
+### Publicado en sales.palferia.me, y tres cosas que estaban mal
+
+Ron: «Neil no la puede responder, no le puedo compartir el link como la de Rocafort, y la
+web está en blanco y negro.» Las tres tenían causa real.
+
+#### 1 · La web se veía en blanco y negro porque no cargaba ninguna foto
+`web-muestra/web-nolimits.html` apunta a `assets/nolimits/`, y en esa carpeta solo estaba
+el HTML: las imágenes se habían quedado en `assets/` del cliente, un nivel más arriba.
+**Las diez fotos rotas** dejaban la página en fondo oscuro sin nada. Copiadas al lado.
+
+🔑 **Una web de muestra se prueba desde su propia carpeta**, no solo desde donde se
+publica. Las rutas relativas se rompen justo ahí.
+
+#### 2 · No estaba desplegada
+Ahora sí: `git push` el 13 nov. Comprobado en vivo, HTTP 200 los dos documentos y las
+imágenes. **Tecniluispa y Rocafort siguen en pie**, así que los filtros `protect` del
+`deploy.yml` hicieron su trabajo.
+
+- `https://sales.palferia.me/propuestas/eb44c2ef-nolimits-diagnostico.html`
+- `https://sales.palferia.me/propuestas/eb44c2ef-nolimits-web.html`
+
+#### 3 · «PalferIA ME-sport» no va en cara al cliente
+**ME-sport es el código interno del proyecto.** La marca pública es **PalferIA Sport**,
+como dice el CLAUDE.md del holding. Corregido en el diagnóstico y en la propuesta.
+
+Y fuera la tarjeta **«CUESTA / Nada»**: anclaba el valor en cero antes de que el prospecto
+hubiera visto nada. Ahora dice lo que la pieza es, un diagnóstico sin precios, y que la
+propuesta viene después.
+
+#### 🔴 Y un fallo que habría roto todo en silencio
+El Apps Script esperaba **`p1` a `p16`**, de cuando era el formulario de la propuesta
+comercial. El diagnóstico manda **`q1` a `q13`**, con `q1b`, `q2b` y `q3b`.
+**Ni un solo campo coincidía:** habrían llegado correos con todas las respuestas en blanco,
+sin ningún error visible.
+
+Reescrito para que coincida, y ahora el correo **separa las tres que deciden la propuesta**
+del resto. Comprobado campo a campo: 19 manda el HTML, 19 espera el script, cero se pierden.
+
+🔑 **Si se cambia el formulario, se comprueba el `.gs` contra él.** Es un fallo mudo: todo
+parece funcionar y lo que llega está vacío.
+
+#### Lo que falta para que Neil pueda contestar de verdad
+**Instalar el Apps Script y pegar la URL en dos sitios**, el archivo del cliente y el de
+`public/propuestas/`, y volver a hacer push. Mientras tanto el formulario le dice que
+escriba por WhatsApp, así que no se pierde nadie.
+
+---
+
 ### 🔴🔴 DOS SESIONES A LA VEZ SOBRE LA MISMA CARPETA
 
 **Mientras yo trabajaba, otra sesión de Claude estaba haciendo lo mismo.** Escribió
