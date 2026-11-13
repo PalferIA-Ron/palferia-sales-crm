@@ -4,13 +4,303 @@
 
 ---
 
+## 2026-11-13 · Skills instaladas de verdad y base de la app de propuestas
+
+### El hallazgo
+**Ninguna skill de PalferIA estaba instalada.** `~/.claude/skills/` solo tenía
+`ui-ux-pro-max-skill`, que además trae `skill.json` en vez de `SKILL.md`, así que **tampoco
+cargaba**. Los CLAUDE.md llevaban meses dándolas por activas.
+
+Y había tres copias de las mismas skills: `Palferia-Holding/skills/` (17),
+`clientes/skill proyecto/` (14, siete byte a byte iguales a la anterior) y `skills-web/`
+(zips y duplicados). Origen único desde hoy: **`Palferia-Holding/skills/`**.
+
+### Hecho
+- **23 skills instaladas** y **15 agentes** (de `kit-agency-agents`, MIT) en
+  `~/.claude/agents/palferia/`. Con script re-ejecutable:
+  `bash Palferia-Holding/skills/instalar-skills.sh` (`--listar` para ensayar en seco).
+- **Dos skills nuevas, que son la base de la app de propuestas en HTML:**
+  - **`propuestas-html`** — destila Tecniluispa y No Limits: cuándo diapositivas y cuándo
+    scroll (se decide por el canal, no por el gusto), el arco de ocho secciones, la paleta
+    verificada, dónde se publica con prefijo hex, y una lista de comprobación de 20 puntos
+    con el comando que caza los caracteres de IA.
+  - **`formularios-sheets`** — el patrón Apps Script más Sheets más aviso a
+    `ri@palferia.com`, con plantilla `.gs` genérica. Iba por su tercera vez escrito a mano.
+- **Propuesta de No Limits rematada** con la skill: revelado al entrar con
+  `IntersectionObserver`, cascada en las tarjetas, y la red de seguridad que faltaba.
+
+### Lo que faltaba y ahora está
+🔴 **La propuesta no tenía ninguna animación de scroll**, solo un `prefers-reduced-motion`
+en vacío. Añadidas 33 zonas de revelado **arrancando visibles**: la clase `js` la pone el
+propio script, así que si el JS falla la propuesta se lee igual. Lo contrario, salir de
+`opacity:0`, deja una propuesta en blanco ante el cliente.
+
+### Dos errores propios, corregidos
+- Al añadir las clases en bloque **me comí `mod` y `mod star`** de los cinco módulos, que
+  son las que les dan la tarjeta y el borde índigo. Restauradas y verificadas.
+- Mi primer comprobador de caracteres **marcaba `«»` como rastro de IA**. Son las comillas
+  españolas correctas, justo lo contrario. Corregido en la skill.
+
+### 🔴 Cuatro skills que este repositorio promete y no existen
+`kit-objeciones-ventas`, `kit-seguimiento-propuesta`, `kit-pricing-planes` y
+`kit-contrato-cliente`, citadas en el rol COMERCIAL de `CLAUDE.md`. Buscadas en todo el
+workspace: no están en ninguna parte. Objeciones, seguimiento, precios y contratos **van a
+mano**. Anotado en los dos CLAUDE.md. También falta `revisar-texto-academico`.
+
+### Fuera por licencia, igual que Divisual
+`kit-estudio-video-ia` (sin licencia), `whatsapp-ai-agent-kit` (trae la guía de Divisual
+dentro) y `divisual-video-editor-kit`. Y fuera por no ser skills: `kit-webs-3d-magnific`
+(es un kit de proyecto, se usa abriendo su carpeta) y `web-analyzer-extension` (es una
+extensión de Chrome).
+
+### 🔴 Cuarta corrección: no era una propuesta, era un diagnóstico
+
+Ron: «esta es una sesión de diagnóstico inicial donde debemos ver si tiene Meta Ads, página
+web, manejo de redes. Dependiendo lo que responda creamos la propuesta.»
+
+**El error de fondo:** se escribía la comercial antes de saber qué tiene el prospecto. Con
+Neil se rehizo dos veces por eso mismo.
+
+#### Queda escrito: `clientes/ESTRUCTURA-PROPUESTAS.md`
+
+Manda sobre cualquier skill. **Tres piezas, mismo prefijo hexadecimal, las tres en
+`sales.palferia.me`:**
+
+| | Qué es | Dónde | Precio |
+|---|---|---|---|
+| 1 · Diagnóstico | Se manda primero, pregunta qué tiene | `/propuestas/<hex>-<slug>-diagnostico.html` | **No** |
+| 2 · Comercial | Solo cuando ha contestado | `/propuestas/<hex>-<slug>.html` | Sí |
+| 3 · Ayuda de ventas | Para Ron, en la llamada | `/setter/<hex>-<slug>.html` | Sí |
+
+**Las tres preguntas que deciden la propuesta**, de `<select>` y al principio del
+formulario: ¿tiene web?, ¿hace anuncios de pago?, ¿quién le lleva las redes?
+
+#### El sistema de diseño sí existía, y yo había escrito lo contrario
+`ai/tools/kit-diseno-web` lo tiene desde agosto: **una paleta por línea de negocio**, no
+por cliente. COM-studio teal con Playfair, **ME-sport lima con Inter**, DraftDayES índigo
+con Space Grotesk, **Setter ámbar**. Mi skill decía «no hay paleta de la casa». Corregido.
+El diagnóstico de Neil va en lima sobre oscuro, que es lo correcto para ME-sport.
+
+#### Dos skills más que no había instalado, y eran justo de esto
+`kit-diseno-web` y **`kit-orquestador-propuestas`**, que ya tenía las ocho fases del flujo
+completo hechas desde agosto: intake, auditorías, precios, vista previa, HTML, setter,
+deploy y Supabase. Instaladas. Total: **26 skills**.
+
+Le faltaba la etapa de Ron, así que añadí **FASE 0.5, el diagnóstico**, antes de las
+auditorías.
+
+#### Neil, reorganizado
+```
+auditoria/     dos informes, hechos antes de escribir
+diagnostico/   el HTML y su formulario de 16 preguntas
+propuestas/    vacío hasta que conteste
+setter/        vacío hasta que haya comercial
+```
+Publicado en `public/propuestas/eb44c2ef-nolimits-diagnostico.html`. **El prefijo
+`eb44c2ef` queda reservado** para sus tres piezas, anotado en `.hex`.
+
+Quitado todo lo que era comercial: la diapositiva 7 ahora dice expresamente que no se le
+proponen todas las piezas ni en ese orden, y **no hay ni una cifra de precio**.
+
+#### Pendiente de Ron
+1. **Instalar el Apps Script** del diagnóstico y pegar la URL. Sigue siendo lo único que
+   bloquea el envío.
+2. `git push main` para que suba a `sales.palferia.me`.
+3. Decidir precios de Neil, pero **eso es de la pieza 2**, cuando conteste.
+
+---
+
+### 🔴🔴 DOS SESIONES A LA VEZ SOBRE LA MISMA CARPETA
+
+**Mientras yo trabajaba, otra sesión de Claude estaba haciendo lo mismo.** Escribió
+`clientes/ESTRUCTURA-PROPUESTAS.md`, reescribió `skills/kit-propuestas-html/SKILL.md`,
+creó su propio `diagnostico/diagnostico-nolimits.html`, publicó
+`eb44c2ef-nolimits-diagnostico.html` y **se llevó la propuesta comercial de su carpeta**.
+Yo publiqué en paralelo con otro hexadecimal, `65f92e3d`.
+
+Durante un rato hubo **dos diagnósticos distintos del mismo prospecto, con dos
+hexadecimales**, que es justo lo que la convención del hex existe para evitar.
+
+🔑 **No abrir dos sesiones de Claude sobre esta carpeta.** Ya estaba escrito en el
+CLAUDE.md del KitAvatarProyect. Aquí hacía falta igual.
+
+#### Cómo quedó, sin perder nada de nadie
+- Lo de la otra sesión está **respaldado entero** en
+  `clientes/ME-sport/NoLimits-NeilViloria/_otra-sesion/`.
+- Se adoptó **su hexadecimal, `eb44c2ef`**, por ser el primero.
+- Con **mi contenido**, por un motivo objetivo y no de gusto: **su diagnóstico tenía cero
+  campos de formulario.** Era el arco comercial con etiqueta de diagnóstico (caso real,
+  transformación, siguiente paso), así que no podía averiguar ni web, ni Meta Ads, ni quién
+  lleva las redes, que es exactamente lo que Ron pidió que averiguara.
+- **La propuesta comercial se ha quedado sin archivo fuente.** Solo queda
+  `propuesta-nolimits-scroll-v1.html`. Según `ESTRUCTURA-PROPUESTAS.md` eso es correcto:
+  **la comercial no se escribe hasta que Neil conteste el diagnóstico.**
+
+---
+
+### Tercera petición de Ron: diagnóstico primero, y la web de muestra
+
+#### Pieza 1, el diagnóstico · `eb44c2ef-nolimits-diagnostico.html`
+Once diapositivas siguiendo `ESTRUCTURA-PROPUESTAS.md`, **sin precio**. Las tres de en
+medio son las que importan:
+
+- **Diapositiva 7, «el motivo de esta sesión»**: las tres cosas que desde fuera no se
+  pueden saber, explicando por qué cada una cambia la propuesta entera.
+- **Diapositiva 11, el cuestionario**: 16 campos. Las tres primeras son **`<select>`**, no
+  texto libre, porque son las que deciden: ¿haces Meta Ads? ¿tienes web? ¿quién lleva tus
+  redes? De texto libre se contestan mal.
+- Pregunta también **cuánto cuesta el Lab y el entrenamiento**, que no está público y sin
+  eso no hay proyección posible.
+
+#### Pieza 3, la web de muestra · `eb44c2ef-nolimits-web.html`
+Hecha con `instagram-a-web`: **10 fotos suyas descargadas de verdad** a
+`assets/nolimits/`, su bio literal, su lema, su semana deducida de los pies de foto
+(lunes técnica, martes series, domingos bici) y **los dos testimonios reales de Lucho y
+Raúl**. Botón al Calendly que ya tiene. Lleva aviso al pie de que es una muestra de
+PalferIA y no su web oficial.
+
+Va enlazada desde la diapositiva 9 del diagnóstico. **Es la ayuda de ventas para la
+llamada**: en vez de contarle que le falta una web, se la enseña.
+
+#### Lo que falta
+- **La ayuda de ventas de `/setter/`** no está hecha: según la estructura se construye con
+  las respuestas del diagnóstico, que todavía no existen.
+- **El Apps Script sigue sin instalar**, y ahora el formulario es el del diagnóstico.
+- Los filtros `protect` de `deploy.yml` **comprobados y en su sitio**.
+
+---
+
+### 🔴 Tercera corrección de Ron, y la más cara
+
+Tres cosas: que las 11 preguntas se contesten en la propia propuesta, que faltaban los
+análisis de SEO, Meta Ads y negocio digital, y que **la propuesta no tenía la estructura
+de las de ME-sport que se alojan en `sales.palferia.me`**.
+
+#### El error de fondo: cogí la referencia equivocada
+
+Monté la propuesta de Neil en formato scroll y escribí una skill entera documentando «el
+formato de la casa» a partir de **una copia suelta en la carpeta de un cliente**. Las de
+producción están en `public/propuestas/` y **las cinco son de diapositivas**, con el mismo
+motor: `#presentation-container`, `.slide.active`, `data-slide`, barra de progreso,
+contador, teclado y gesto de deslizar.
+
+Y documenté una paleta fija que no existe: Tecniluispa va índigo con Playfair, Rocafort
+oscuro con lima, Madrigal oscuro con cian, 4iCV con Bebas Neue. **Lo fijo es el armazón,
+no el color.**
+
+🔑 **Regla: la referencia es lo que está publicado, no lo que hay en una carpeta de
+trabajo.**
+
+#### Auditoría de Neil, que era la pieza que faltaba
+
+La diapositiva 9 de Rocafort lleva «Hoy, score 50/100». Por eso Ron pedía los análisis.
+Hecha y guardada en `auditoria/auditoria-digital-nolimits.md`. **Score 45 sobre 100.**
+
+| Hallazgo | Detalle |
+|---|---|
+| **No tiene web** | El único enlace de su perfil es un Calendly |
+| **No aparece en buscadores** | Buscando entrenador de resistencia en Barranquilla salen directorios y webs de otros países, no él |
+| **Un solo evento en el Calendly** | «Evalúa tu perfil», 45 min. El resto del negocio se agenda a mano |
+| **Sede improvisada** | El propio Calendly dice «por acordar con espacio para saltos» |
+| **Sin precio público** | Ni del Lab ni del entrenamiento |
+| **Motor de contenido fuerte** | 729 publicaciones, todas cierran con una pregunta |
+
+**Meta Ads: no verificado.** La biblioteca pública no permite confirmarlo sin iniciar
+sesión, así que va como pregunta en el formulario, no como afirmación. Eso está escrito en
+la propia diapositiva del diagnóstico.
+
+#### Propuesta rehecha: 11 diapositivas
+
+Portada, quiénes somos, sus palabras, el problema, el momento, **diagnóstico con score**,
+seis módulos, cuatro fases, caso real Tecniluispa, antes y después, formulario.
+Oscuro con el lima de PalferIA. La versión de scroll se guarda como
+`propuesta-nolimits-scroll-v1.html`.
+
+**Dos arreglos que las de producción no traen** y que hacían falta al meter formulario en
+una diapositiva: las flechas no deben cambiar de hoja cuando el foco está en un campo, y
+deslizar sobre el formulario tampoco. Sin eso, en el móvil se pierde lo escrito.
+
+#### Formulario: 14 preguntas, todas al correo
+Las 11 del guion de llamada más las 3 cortas, agrupadas en cinco bloques. Solo nombre y
+correo obligatorios. El Apps Script reescrito con una lista `CAMPOS` reutilizable, y el
+correo **lista aparte lo que dejó sin contestar**, que también es información.
+
+#### Skill `propuestas-html` v2
+Reescrita con el arco real de 10 u 11 diapositivas, el armazón exacto, los dos arreglos del
+formulario, cómo se monta la diapositiva del score y la advertencia de que las propuestas
+antiguas llevan emojis porque son anteriores a la regla de Ron.
+
+---
+
+### 🔴 Segunda parte de la sesión: Ron me corrigió, con razón
+
+«Te dije que instalaras y usaras las que tengamos que usar.» Había instalado 23 skills y
+usado una. **Y la que no usé era la que más falta hacía.**
+
+#### `instagram-a-web` funciona, y yo había dado el perfil por imposible
+
+Dos veces dije que el Instagram de Neil «no devuelve nada». Lo que había probado era
+**descargar la página**, que efectivamente devuelve una cáscara. La skill trae scrapers con
+**Chrome real por Puppeteer** y entra sin problema. Lo mismo pasó con Mireya y también lo di
+por perdido.
+
+🔑 **Regla: antes de declarar algo imposible, comprobar si hay una skill que ya lo resuelve.**
+Es la hermana de la del micrófono: antes de corregir, comprobar.
+
+Datos en `clientes/ME-sport/NoLimits-NeilViloria/auditoria/instagram-nolimits.md`.
+2.459 seguidores, 729 publicaciones, Barranquilla.
+
+#### Cinco cosas que cambiaron la propuesta
+
+1. **Su lema lleva puntos medios, no flechas.** Él escribe `MIDE · IDENTIFICA · POTENCIA`.
+   Yo había puesto flechas y encima las defendí como «literales suyas». No lo eran.
+2. **El Lab ya está midiendo desde el 29 oct**, no se está lanzando. Titular reescrito.
+3. **Ya tiene Calendly** para la evaluación. El módulo 03 pasó de montarle la captación a
+   alimentar el Calendly que ya usa.
+4. **El volumen de comentarios es de 0 a 28**, varios posts del Lab con 0. Yo había escrito
+   que «genera comentarios y mensajes privados» y que eran «gente levantando la mano». Era
+   una suposición y los números no la sostienen. Fuera.
+5. **Sus atletas ya le escriben los testimonios.** Lucho, 108 días desde un accidente,
+   dando las gracias a «Neil y el equipo de NO LIMITS». Módulo 06 nuevo, y es el mejor
+   argumento de la propuesta. **Material real, no fabricado**, que es justo lo que no
+   podemos hacer con un cliente.
+
+#### `verificador-datos` cazó dos cosas mías
+
+- ❌ **«Están en TrainingPeaks».** Lo afirmaba como hecho y **no aparece en ningún sitio**.
+  Encima se lo preguntaba en el guion de llamada: no puede ser las dos cosas. Reescrito sin
+  nombrar plataforma.
+- 🔶 **«Nadie lo está guardando ni reutilizando»**, una frase después de citar que tiene una
+  historia destacada llamada Testimonios. **Se contradecía sola.** Reescrito.
+
+#### `humanizador`, tres pasadas
+Fuera «abriste la puerta del todo con una frase que no tiene vuelta atrás», fuera «eso
+significa que» y fuera «biblioteca de pruebas».
+
+#### Estado de la propuesta
+Seis módulos, 34 zonas de revelado, 15 en cascada. Caracteres prohibidos: ninguno. Emojis:
+ninguno. Etiquetas cuadradas, JS válido. Sirviendo en el 8099.
+
+---
+
+### Pendiente de Ron
+1. **Instalar el Apps Script de No Limits** y pegar la URL en el HTML. Cinco minutos,
+   paso a paso en `clientes/ME-sport/NoLimits-NeilViloria/formulario/INSTRUCCIONES.md`.
+2. ~~Capturas de publicaciones de Neil~~ **ya no hacen falta**: la skill `instagram-a-web`
+   saca sus pies de foto literales. Hecho.
+3. **Cómo cobra Neil**, para ajustar el módulo 05: en Colombia no sirven Bizum ni Stripe.
+4. Publicar la propuesta en `public/propuestas/` con prefijo hex cuando se apruebe.
+
+---
+
 ## ESTADO ACTUAL
 **Fase:** 1 — MVP en producción / Generación activa de propuestas
-**Última sesión:** 2026-10-04
+**Última sesión:** 2026-11-13
 **Próxima acción prioritaria:**
-1. Generar ayudaventas/setter tool para UD Rocafort CF (interno — solo Ronald)
-2. Seguimiento Tecniluispa y Cortinajes Valls & París
-3. Completar integración OpenWA ↔ Chatwoot (3 pasos — ver Infraestructura/Técnico)
+1. Compartir propuesta Jose Luis Madrigal y hacer seguimiento
+2. Generar ayudaventas/setter tool para UD Rocafort CF (interno — solo Ronald)
+3. Seguimiento Tecniluispa y Cortinajes Valls & París
+4. Completar integración OpenWA ↔ Chatwoot (3 pasos — ver Infraestructura/Técnico)
 
 ---
 
@@ -60,11 +350,41 @@
 
 ---
 
+## SESIÓN 28/10/2026 — Propuesta alianza estratégica Jose Luis Madrigal
+
+### Ejecutado
+- **Propuesta alianza estratégica Jose Luis Madrigal** — HTML completo, desplegada en producción
+  - URL: `https://sales.palferia.me/propuestas/f4a9d2c1-jose-luis-madrigal.html` ✅ online
+  - Perfil: Director de Operaciones POLARCUBE / PC Shopping SL — contacto cercano de Ronald
+  - Objetivo: asociarle como Director de Desarrollo de Negocio (red de contactos) mientras Ronald es Manager de proyecto B2B y GTM Ingeniería
+  - Diseño: dark navy `#080C18`, acento cyan/blue, tipografía Inter, grid de fondo sutil
+  - Secciones: Hero con stats → The Match (roles) → Tabs interactivas (Sport/Enterprise) → Escalabilidad → CTA
+  - Tabs: palferia.me Sport Business + palferia.com Enterprise Automation con dolores, integraciones y ROI
+  - Caso real Grupo Cueva embebido: 12 flujos, 4 semanas, 90% reducción manual
+  - Logo corporativo `logo-fondooscuro1.png` de PalferiaMe-Proyect embebido en base64
+  - Equipo técnico: 2 devs IA (low-code + hard-code) añadidos en la card de Ronald
+  - **Modelo de alianza explícito:**
+    - 0€ inversión de capital requerida
+    - 20% comisión por apertura + generación + cierre
+    - Proyectos de 2.000€ a 10.000€ según complejidad
+    - 2 ángulos de mercado: "Ver el mercado" (detectar dolor) + "Aprovechar la necesidad" (conectar con solución lista)
+    - Flujo 3 pasos: Apertura → Generación → Cierre (20%)
+  - CTA: WhatsApp personal +34643469239 (solo esta propuesta) + email ri@palferia.com
+  - Commits: `e56e64e` (propuesta inicial) · `902e5f4` (fix tamaño logo)
+  - Desplegada vía GitHub Actions → rsync VPS ✅
+
+### Pendientes de esta sesión
+- [ ] Verificar logo en producción (se ajustó de h-9 a 48px — pendiente confirmar visualmente)
+- [ ] Compartir URL con Jose Luis Madrigal y abrir seguimiento
+- [ ] Proyecto Claude.ai "Arquitectura IA PalferIA" — Ronald quiere revisarlo en próxima sesión
+
+---
+
 ## SESIÓN 04/10/2026 — Propuestas COM-studio + Stack IA visual
 
 ### Ejecutado
 - **Propuesta Maderas Barber** — 10 slides HTML completos, desplegada en producción
-  - URL: `https://sales.palferia.me/propuestas/c2e8f4a3-maderasbarber.html`
+  - URL: `https://sales.palferia.me/propuestas/c2e8f4a3-maderasbarber.html` ✅ online
   - Contenido: 3 flujos (pedidos internacionales, selección por foto, alertas stock B2B)
   - Diseño: light mode `#EAE6CA`, tipografía Playfair+Inter, estilo Studiova
   - Imágenes: SVG violín, SVG sección madera, 4 fotos reales comprimidas

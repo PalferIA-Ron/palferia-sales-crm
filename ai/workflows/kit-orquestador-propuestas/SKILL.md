@@ -85,6 +85,60 @@ Preguntar: **"¿Empezamos las auditorías con estos datos?"**
 
 ---
 
+## FASE 0.5 — El diagnóstico, antes de la comercial
+
+🔴 **Añadida el 13 nov 2026 por decisión de Ron.** Manda sobre el resto del flujo.
+Detalle completo en `clientes/ESTRUCTURA-PROPUESTAS.md`.
+
+**La propuesta comercial no se escribe hasta que el prospecto haya contestado.** Antes va
+una pieza distinta, el **diagnóstico**, que se le manda y que pregunta lo que no se ve
+desde fuera. Sin eso, se acaba escribiendo una propuesta sobre suposiciones. Pasó con Neil
+Viloria y hubo que rehacerla dos veces.
+
+### Las tres que deciden la propuesta
+
+Ninguna es opcional. Van al principio del formulario, antes que nada:
+
+| Pregunta | Qué cambia según la respuesta |
+|---|---|
+| **¿Tiene web?** | Sin web hay que presupuestarla y la captación se monta de otra forma |
+| **¿Hace Meta Ads?** | Si invierte, hay coste por contacto que medir. Si no, el discurso es orgánico |
+| **¿Quién le lleva las redes?** | Con agencia de por medio, nos conectamos a ella, no la sustituimos |
+
+Las tres van de `<select>` con opciones cerradas, no de texto libre: se contestan en
+tres toques desde el móvil. Las de web y anuncios llevan un campo de texto detrás para el
+enlace y la inversión mensual.
+
+### Qué lleva el diagnóstico
+
+Ocho diapositivas, con el mismo armazón que la comercial, y **sin una sola cifra de
+precio**. El diagnóstico vende la llamada, no el servicio.
+
+1. Portada · 2. Quiénes somos · 3. Sus palabras · 4. El problema · 5. El momento
+· 6. **Diagnóstico con score** · 7. Lo que se podría montar, sin precio · 8. **Formulario**
+
+En la 7 hay que decir expresamente que **no se le proponen todas las piezas ni en ese
+orden**: están ahí para que vea de qué se habla y diga cuál le quita más peso.
+
+### El score de la 6
+
+Sale de las auditorías de la FASE 1, que se corren **antes** y solo sobre información
+pública. En la misma diapositiva se escribe **lo que no se ha podido comprobar**: decirlo
+sube la credibilidad del resto y convierte el hueco en una pregunta del formulario.
+
+### Dónde se publica
+
+`public/propuestas/<hex>-<slug>-diagnostico.html`, con **el mismo hexadecimal** que tendrán
+después la comercial y el setter. El formulario, con `formularios-sheets`, a
+`ri@palferia.com`.
+
+### Cuando conteste
+
+Sus respuestas entran en la FASE 0 de este orquestador como datos confirmados, no como
+suposiciones, y de ahí sigue el flujo normal: precios, vista previa, HTML, setter y deploy.
+
+---
+
 ## FASE 1 — Auditorías
 
 Correr en orden según lo disponible. Mostrar resultado resumido tras cada una y preguntar si hay algo que corregir o añadir.

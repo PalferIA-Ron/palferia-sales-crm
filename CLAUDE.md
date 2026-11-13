@@ -54,13 +54,20 @@ Cada rol tiene un norte claro y skills asignadas. Claude activa el rol (o combo)
 
 **Activa cuando:** hay un follow-up pendiente, una propuesta que escribir, una objeción que responder, un precio que negociar, o una reunión de cierre que preparar.
 
-**Skills:**
-- `ai/prompts/hormozi-skill-main` — oferta irresistible
-- `ai/prompts/humanizador` — mensajes que suenan a persona
-- `~/.claude/skills/kit-objeciones-ventas` — 8 objeciones con respuestas por perfil
-- `~/.claude/skills/kit-seguimiento-propuesta` — secuencia 7 días post-propuesta
-- `~/.claude/skills/kit-pricing-planes` — precios, planes, módulos
-- `~/.claude/skills/kit-contrato-cliente` — contratos Setup y Mantenimiento
+**Skills** (instaladas y comprobadas el 13 nov 2026):
+- **`propuestas-html`** — **la base de toda propuesta.** Formato, arco de secciones, paleta
+  y lista de comprobación. Sale de Tecniluispa y No Limits. No improvises otra arquitectura
+- **`formularios-sheets`** — el formulario de respuesta a `ri@palferia.com`, sin backend
+- `hormozi-marketing` — oferta irresistible
+- `humanizador` — **obligatorio antes de enviar nada**
+- `mantenimiento-ia` — precio y contrato del mantenimiento mensual
+- Agente `sales-proposal-strategist`, y `sales-discovery-coach` para preparar la llamada
+
+🔴 **Cuatro skills que este archivo prometía y nunca existieron:**
+`kit-objeciones-ventas`, `kit-seguimiento-propuesta`, `kit-pricing-planes`,
+`kit-contrato-cliente`. Buscadas en todo el workspace el 13 nov 2026. **Van a mano**, y los
+precios se sacan de la sección «Precios referencia» de este mismo archivo, que es el único
+sitio donde están escritos. Si alguna se construye, `crear-skill` la monta.
 
 **Referencia:** Alex Hormozi (oferta) · Russell Brunson (funnel) · Dan Kennedy (seguimiento)
 

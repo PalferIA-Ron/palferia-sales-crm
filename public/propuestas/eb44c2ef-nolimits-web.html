@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>No Limits, entrenamiento de resistencia en Barranquilla</title>
+<meta name="description" content="Entrenamiento personalizado de running, ciclismo, natación y triatlón en Barranquilla. Performance Lab: evaluación de fuerza, potencia, movilidad y composición corporal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080e14; --bg2:#0d1620; --card:#111d28; --line:rgba(255,255,255,.09);
+  --txt:#e8f0f5; --txt2:#aebecb; --dim:#7b8b99;
+  --lime:#B1F727; --lime2:#84cc16;
+}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,sans-serif;background:var(--bg);
+  color:var(--txt);line-height:1.65;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--lime);text-decoration:none}
+
+.w{max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
+section{padding:clamp(58px,9vw,100px) 0}
+.alt{background:var(--bg2)}
+
+h1{font-size:clamp(36px,7vw,74px);font-weight:900;line-height:1.02;letter-spacing:-.03em}
+h2{font-size:clamp(26px,4.4vw,46px);font-weight:800;line-height:1.1;
+  letter-spacing:-.022em;margin-bottom:16px}
+h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--lime);margin-bottom:16px;padding:6px 13px;
+  border:1px solid rgba(177,247,39,.3);border-radius:999px}
+.sub{font-size:clamp(15px,1.9vw,19px);color:var(--txt2);max-width:68ch}
+.hl{color:var(--lime);font-weight:700}
+
+/* barra superior */
+header{position:sticky;top:0;z-index:50;background:rgba(8,14,20,.88);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header .w{display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding-top:13px;padding-bottom:13px}
+.marca{display:flex;align-items:center;gap:11px;font-weight:900;letter-spacing:-.02em;
+  font-size:17px}
+.marca img{width:36px;height:36px;border-radius:50%;object-fit:cover;
+  border:2px solid var(--lime)}
+nav{display:flex;gap:22px;font-size:14.5px}
+nav a{color:var(--txt2)}
+nav a:hover{color:var(--lime)}
+@media(max-width:760px){nav{display:none}}
+.btn{display:inline-block;background:var(--lime);color:#17280a;font-weight:800;
+  font-size:14.5px;padding:11px 20px;border-radius:9px;white-space:nowrap}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+
+/* portada */
+.hero{padding:clamp(60px,10vw,110px) 0 clamp(40px,6vw,70px);position:relative;
+  overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-30% -10% auto auto;width:62vw;
+  height:62vw;max-width:720px;max-height:720px;border-radius:50%;
+  background:radial-gradient(circle,rgba(177,247,39,.13),transparent 68%);
+  pointer-events:none}
+.hero .w{position:relative}
+.hero .deportes{display:flex;flex-wrap:wrap;gap:9px;margin:26px 0 30px}
+.chip{font-size:13px;padding:7px 15px;border:1px solid var(--line);border-radius:999px;
+  color:var(--txt2);background:var(--card)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.firma{margin-top:34px;font-size:15px;color:var(--dim)}
+.firma b{color:var(--lime);font-weight:700}
+
+/* datos */
+.datos{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  margin-top:44px}
+.datos div{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:20px;text-align:center}
+.datos b{display:block;font-size:clamp(28px,4.4vw,40px);font-weight:900;color:var(--lime);
+  line-height:1;letter-spacing:-.03em}
+.datos span{display:block;font-size:13px;color:var(--dim);margin-top:7px}
+
+/* rejilla */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+.card.key{border-color:rgba(177,247,39,.45)}
+.card p{font-size:15px;color:var(--txt2)}
+.card .n{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--lime);
+  margin-bottom:10px}
+
+/* lema */
+.lema{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:30px 0}
+.lema span{padding:11px 22px;background:var(--lime);color:#17280a;border-radius:999px;
+  font-weight:900;font-size:15px;letter-spacing:.05em}
+.lema b{color:var(--dim);font-weight:400;font-size:20px}
+
+/* semana */
+.semana{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  margin-top:26px}
+.semana div{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:19px 21px;border-top:3px solid var(--lime)}
+.semana h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);
+  margin-bottom:8px}
+.semana p{font-size:14.5px;color:var(--txt2)}
+
+/* galeria */
+.galeria{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  margin-top:28px}
+.galeria a{display:block;border-radius:12px;overflow:hidden;border:1px solid var(--line);
+  aspect-ratio:9/16;background:var(--card)}
+.galeria img{width:100%;height:100%;object-fit:cover;
+  transition:transform .5s cubic-bezier(.2,.6,.2,1)}
+.galeria a:hover img{transform:scale(1.05)}
+
+/* testimonios */
+.testi{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  margin-top:28px}
+.testi blockquote{background:var(--card);border:1px solid var(--line);
+  border-left:3px solid var(--lime);border-radius:0 16px 16px 0;padding:24px}
+.testi p{font-size:16px;color:var(--txt);margin-bottom:14px}
+.testi cite{font-style:normal;font-size:13.5px;color:var(--dim)}
+
+/* revelado: arranca visible, el JS quita la opacidad */
+.rv{opacity:1}
+.js .rv{opacity:0;transform:translateY(22px);
+  transition:opacity .7s cubic-bezier(.2,.6,.2,1),transform .7s cubic-bezier(.2,.6,.2,1)}
+.js .rv.on{opacity:1;transform:none}
+.js .rv[data-d="1"]{transition-delay:.07s}
+.js .rv[data-d="2"]{transition-delay:.14s}
+.js .rv[data-d="3"]{transition-delay:.21s}
+.js .rv[data-d="4"]{transition-delay:.28s}
+
+footer{border-top:1px solid var(--line);padding:46px 0 60px;color:var(--dim);font-size:14px}
+footer .w{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between}
+.aviso{margin-top:28px;background:rgba(177,247,39,.07);
+  border:1px solid rgba(177,247,39,.3);border-radius:13px;padding:17px 21px;
+  font-size:13.5px;color:var(--txt2)}
+.aviso b{color:var(--lime)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .js .rv{opacity:1!important;transform:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="w">
+    <a class="marca" href="#inicio">
+      <img src="assets/nolimits/avatar.jpg" alt="No Limits">
+      <span>NO LIMITS</span>
+    </a>
+    <nav>
+      <a href="#lab">Performance Lab</a>
+      <a href="#entreno">Entrenamiento</a>
+      <a href="#semana">La semana</a>
+      <a href="#atletas">Atletas</a>
+    </nav>
+    <a class="btn" href="https://calendly.com/neilviloria1/nolimits_performance_lab" target="_blank" rel="noopener">Agenda tu evaluación</a>
+  </div>
+</header>
+
+<section class="hero" id="inicio">
+  <div class="w">
+    <span class="label rv">Barranquilla, presencial y online</span>
+    <h1 class="rv">Tu potencial es único.<br>Tu entrenamiento también.</h1>
+    <div class="deportes rv" data-d="1">
+      <span class="chip">Running</span>
+      <span class="chip">Ciclismo</span>
+      <span class="chip">Natación</span>
+      <span class="chip">Triatlón</span>
+      <span class="chip">Fuerza</span>
+    </div>
+    <p class="sub rv" data-d="2">Entrenamiento de resistencia planificado para cada
+    deportista, no copiado de una plantilla. Porque no todos tenemos las mismas
+    necesidades, ni partimos del mismo punto.</p>
+    <div class="cta rv" data-d="3">
+      <a class="btn" href="https://calendly.com/neilviloria1/nolimits_performance_lab" target="_blank" rel="noopener">Agenda tu evaluación</a>
+      <a class="btn ghost" href="https://www.instagram.com/nolimits_nl_/" target="_blank" rel="noopener">Míranos en Instagram</a>
+    </div>
+    <p class="firma rv" data-d="4"><b>Neil Viloria</b>, Head Coach, No Limits Club</p>
+
+    <div class="datos rv" data-d="4">
+      <div><b>729</b><span>publicaciones</span></div>
+      <div><b>2.459</b><span>nos siguen</span></div>
+      <div><b>4</b><span>deportes</span></div>
+      <div><b>45 min</b><span>dura la evaluación</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="lab">
+  <div class="w">
+    <span class="label rv">Performance Lab</span>
+    <h2 class="rv">¿Sabes qué necesitas mejorar?</h2>
+    <p class="sub rv">Cuando entrenamos solemos fijarnos en los kilómetros, los tiempos y
+    los resultados. Pero hay otros aspectos de la condición física que también vale la pena
+    conocer. <span class="hl">Puedes hacer tu evaluación seas o no parte del club.</span></p>
+    <div class="lema rv" data-d="1"><span>MIDE</span><b>·</b><span>IDENTIFICA</span><b>·</b><span>POTENCIA</span></div>
+    <div class="grid g2">
+      <div class="card key rv" data-d="1"><div class="n">SE EVALÚA</div>
+        <h3>Composición corporal</h3>
+        <p>De dónde partes, en datos y no en sensaciones.</p></div>
+      <div class="card key rv" data-d="2"><div class="n">SE EVALÚA</div>
+        <h3>Movilidad</h3>
+        <p>El rango con el que trabaja tu cuerpo, que condiciona todo lo demás.</p></div>
+      <div class="card key rv" data-d="3"><div class="n">SE EVALÚA</div>
+        <h3>Potencia</h3>
+        <p>Con pruebas de salto. Por eso hace falta un espacio donde poder hacerlas.</p></div>
+      <div class="card key rv" data-d="4"><div class="n">SE EVALÚA</div>
+        <h3>Fuerza</h3>
+        <p>La base que sostiene el volumen de entrenamiento sin romperte.</p></div>
+    </div>
+    <div class="aviso rv"><b>Cómo es la sesión:</b> 45 minutos, con ropa de entrenamiento y
+    un espacio donde poder hacer desplazamientos y saltos. No hace falta que sea un
+    gimnasio. Se agenda en el enlace de arriba.</div>
+  </div>
+</section>
+
+<section id="entreno">
+  <div class="w">
+    <span class="label rv">Entrenamiento</span>
+    <h2 class="rv">No se trata de terminar más agotado, sino de entrenar con un propósito.</h2>
+    <div class="grid g3">
+      <div class="card rv" data-d="1"><div class="n">01</div><h3>Cada sesión es parte de un proceso</h3>
+        <p>La distancia, la intensidad y la recuperación dependen del nivel, el objetivo y
+        el momento de preparación de cada deportista.</p></div>
+      <div class="card rv" data-d="2"><div class="n">02</div><h3>La técnica también se entrena</h3>
+        <p>No todo es sumar kilómetros. Coordinación, control del movimiento y los detalles
+        que hacen correr mejor, sin importar cuánto lleves corriendo.</p></div>
+      <div class="card rv" data-d="3"><div class="n">03</div><h3>Presencial y online</h3>
+        <p>En Barranquilla o a distancia, con el mismo seguimiento y la misma
+        planificación individual.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="semana">
+  <div class="w">
+    <span class="label rv">La semana en No Limits</span>
+    <h2 class="rv">Hay un sitio donde estar cada semana.</h2>
+    <p class="sub rv">Entrenar acompañado es la mitad del trabajo. Estos son los espacios
+    fijos del club.</p>
+    <div class="semana">
+      <div class="rv" data-d="1"><h4>Lunes</h4><p>Técnica de carrera. Coordinación, control
+        del movimiento y los detalles que marcan la diferencia.</p></div>
+      <div class="rv" data-d="2"><h4>Martes</h4><p>Series. Cada atleta con su ritmo, su plan
+        y sus metas, pero todos con las mismas ganas de mejorar.</p></div>
+      <div class="rv" data-d="3"><h4>Domingos</h4><p>Salida en bici y trotes sociales.
+        Kilómetros, conversación y la parte que recuerda por qué nos gusta esto.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="atletas">
+  <div class="w">
+    <span class="label rv">Atletas</span>
+    <h2 class="rv">Lo que dicen los que entrenan aquí</h2>
+    <div class="testi">
+      <blockquote class="rv" data-d="1">
+        <p>«Hoy, día 108, vuelvo a entrenar con normalidad. Y no llegué solo: gracias a Neil
+        y el equipo de NO LIMITS por ayudarme a retomar el nivel deportivo.»</p>
+        <cite>Lucho Camargo, tras un accidente en bici y su cirugía</cite>
+      </blockquote>
+      <blockquote class="rv" data-d="2">
+        <p>«Sí me divierto mientras intento tener una mejor técnica para correr. Todo sea
+        por mejorar.»</p>
+        <cite>Raúl Martínez, sobre las clases de técnica</cite>
+      </blockquote>
+    </div>
+
+    <h2 class="rv" style="margin-top:56px;font-size:clamp(22px,3vw,30px)">El día a día</h2>
+    <div class="galeria">
+      <a class="rv" data-d="1" href="https://www.instagram.com/nolimits_nl_/" target="_blank" rel="noopener"><img src="assets/nolimits/post_2.jpg" alt="Entrenamiento de series en No Limits" loading="lazy"></a>
+      <a class="rv" data-d="2" href="https://www.instagram.com/nolimits_nl_/" target="_blank" rel="noopener"><img src="assets/nolimits/post_4.jpg" alt="Trabajo de técnica de carrera" loading="lazy"></a>
+      <a class="rv" data-d="3" href="https://www.instagram.com/nolimits_nl_/" target="_blank" rel="noopener"><img src="assets/nolimits/post_5.jpg" alt="Salida en bici de domingo" loading="lazy"></a>
+      <a class="rv" data-d="4" href="https://www.instagram.com/nolimits_nl_/" target="_blank" rel="noopener"><img src="assets/nolimits/post_6.jpg" alt="Martes de series" loading="lazy"></a>
+      <a class="rv" data-d="1" href="https://www.instagram.com/nolimits_nl_/" target="_blank" rel="noopener"><img src="assets/nolimits/post_8.jpg" alt="Trote social de Halloween" loading="lazy"></a>
+      <a class="rv" data-d="2" href="https://www.instagram.com/nolimits_nl_/" target="_blank" rel="noopener"><img src="assets/nolimits/post_9.jpg" alt="Grupo de corredores de No Limits" loading="lazy"></a>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="w" style="text-align:center">
+    <h2 class="rv">Empieza por saber dónde estás.</h2>
+    <p class="sub rv" style="margin:0 auto 28px">Una evaluación de 45 minutos y sales
+    sabiendo qué trabajar primero. Seas o no parte del club.</p>
+    <a class="btn rv" data-d="1" href="https://calendly.com/neilviloria1/nolimits_performance_lab" target="_blank" rel="noopener" style="font-size:16px;padding:15px 30px">Agenda tu evaluación</a>
+  </div>
+</section>
+
+<footer>
+  <div class="w">
+    <div>
+      <strong style="color:var(--txt)">NO LIMITS</strong>, entrenamiento deportivo<br>
+      Barranquilla, Colombia. Presencial y online.
+    </div>
+    <div>
+      <a href="https://www.instagram.com/nolimits_nl_/" target="_blank" rel="noopener">Instagram</a>
+      <span style="color:var(--line)">|</span>
+      <a href="https://calendly.com/neilviloria1/nolimits_performance_lab" target="_blank" rel="noopener">Agendar</a>
+    </div>
+  </div>
+  <div class="w">
+    <div class="aviso" style="margin-top:30px">
+      <b>Esto es una muestra, no la web oficial de No Limits.</b> La ha montado PalferIA
+      para Neil Viloria usando sus textos, sus fotos y sus datos públicos de Instagram,
+      recogidos el 13 de noviembre de 2026. Los textos son suyos. No se recogen datos de
+      nadie en esta página.
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var rv = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window) || !rv.length) return;
+
+  // La clase js activa el revelado. Sin JS no se añade y todo queda visible.
+  document.documentElement.className += ' js';
+
+  var obs = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('on');
+      obs.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+
+  for (var i = 0; i < rv.length; i++) obs.observe(rv[i]);
+
+  // Lo que ya está en pantalla al cargar se revela sin esperar al scroll
+  requestAnimationFrame(function () {
+    for (var j = 0; j < rv.length; j++) {
+      if (rv[j].getBoundingClientRect().top < window.innerHeight) rv[j].classList.add('on');
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>No Limits, sesión de diagnóstico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root{
+      --bg:#080e14; --bg2:#0d1620; --card:#111d28; --line:rgba(255,255,255,.09);
+      --txt:#e8f0f5; --txt2:#aebecb; --dim:#7b8b99;
+      --lime:#B1F727; --lime2:#84cc16; --lime3:#65a30d;
+      --cyan:#38bdf8; --warn:#fb923c; --bad:#f87171;
+    }
+    body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);
+      color:var(--txt);overflow:hidden;-webkit-font-smoothing:antialiased}
+
+    #progress-bar-track{position:fixed;top:0;left:0;width:100%;height:4px;
+      background:rgba(255,255,255,.07);z-index:100}
+    #progress-bar{height:100%;width:9%;
+      background:linear-gradient(90deg,var(--lime3),var(--lime2),var(--lime));
+      transition:width .4s cubic-bezier(.4,0,.2,1);box-shadow:0 0 12px rgba(177,247,39,.55)}
+
+    #presentation-container{position:relative;width:100%;height:100vh;overflow:hidden}
+    .slide{position:absolute;top:0;left:0;width:100%;height:100vh;overflow-y:auto;
+      overflow-x:hidden;opacity:0;visibility:hidden;transform:translateY(20px);
+      transition:opacity .5s ease,transform .5s ease;z-index:0;padding-bottom:110px;
+      background:var(--bg)}
+    .slide.active{opacity:1;visibility:visible;transform:translateY(0);z-index:10}
+    .slide.alt{background:var(--bg2)}
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:rgba(8,14,20,.5)}
+    ::-webkit-scrollbar-thumb{background:var(--lime2);border-radius:4px}
+
+    .wrap{max-width:1020px;margin:0 auto;padding:clamp(46px,7vh,88px) clamp(20px,5vw,44px) 0}
+    .label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.18em;
+      text-transform:uppercase;color:var(--lime);margin-bottom:16px;padding:6px 13px;
+      border:1px solid rgba(177,247,39,.3);border-radius:999px}
+    h1{font-size:clamp(32px,6vw,58px);font-weight:900;line-height:1.04;
+      letter-spacing:-.025em;margin-bottom:18px}
+    h2{font-size:clamp(25px,4.2vw,42px);font-weight:800;line-height:1.1;
+      letter-spacing:-.02em;margin-bottom:14px}
+    h3{font-size:17px;font-weight:700;margin-bottom:7px}
+    .sub{font-size:clamp(15px,2vw,19px);color:var(--txt2);max-width:72ch;line-height:1.6;
+      margin-bottom:12px}
+    .sub.big{font-size:clamp(17px,2.4vw,23px);color:var(--txt)}
+    p{line-height:1.65}
+    .hl{color:var(--lime);font-weight:700}
+
+    .grid{display:grid;gap:14px;margin-top:26px}
+    .g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+    .g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+      padding:20px 22px}
+    .card.key{border-color:rgba(177,247,39,.45)}
+    .card.q{border-color:rgba(56,189,248,.35)}
+    .card p{font-size:14.5px;color:var(--txt2)}
+    .card .n{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--lime);
+      margin-bottom:9px}
+    .card.q .n{color:var(--cyan)}
+
+    blockquote{border-left:3px solid var(--lime);padding:4px 0 4px 20px;margin:22px 0}
+    blockquote p{font-size:clamp(16px,2.2vw,21px);color:var(--txt);margin-bottom:12px;font-weight:500}
+    blockquote p:last-of-type{margin-bottom:0}
+    cite{display:block;margin-top:14px;font-style:normal;font-size:13px;color:var(--dim)}
+    .lema{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:24px 0}
+    .lema span{padding:9px 18px;background:var(--lime);color:#17280a;border-radius:999px;
+      font-weight:800;font-size:14px;letter-spacing:.04em}
+    .lema b{color:var(--dim);font-weight:400;font-size:18px}
+    mark{background:rgba(177,247,39,.17);color:var(--lime);padding:1px 5px;border-radius:4px}
+    .sint{display:grid;gap:10px;margin-top:24px}
+    .sint > div{display:flex;gap:16px;align-items:flex-start;background:var(--card);
+      border:1px solid var(--line);border-radius:12px;padding:15px 18px}
+    .sint .num{flex:0 0 auto;font-size:12px;font-weight:800;color:var(--lime);
+      background:rgba(177,247,39,.1);width:30px;height:30px;border-radius:8px;
+      display:grid;place-items:center}
+    .sint p{font-size:14.5px;color:var(--txt2);margin:0}
+    .score{display:flex;align-items:baseline;gap:14px;margin:6px 0 22px;flex-wrap:wrap}
+    .score b{font-size:clamp(54px,11vw,92px);font-weight:900;color:var(--lime);
+      line-height:1;letter-spacing:-.04em}
+    .score i{font-style:normal;font-size:17px;color:var(--dim)}
+    .bars{display:grid;gap:11px;margin-top:4px}
+    .bar{display:grid;grid-template-columns:minmax(120px,1.4fr) 3fr auto;gap:13px;
+      align-items:center;font-size:13.5px}
+    .bar .t{color:var(--txt2)}
+    .bar .track{height:8px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+    .bar .fill{height:100%;border-radius:99px;background:var(--lime2)}
+    .bar .fill.lo{background:var(--bad)} .bar .fill.mid{background:var(--warn)}
+    .bar .v{font-weight:700;color:var(--txt);min-width:34px;text-align:right}
+    .tag{display:inline-block;margin-top:12px;font-size:11px;font-weight:700;
+      letter-spacing:.07em;text-transform:uppercase;padding:5px 10px;border-radius:6px;
+      background:rgba(255,255,255,.06);color:var(--dim)}
+    .card.key .tag{background:var(--lime);color:#17280a}
+    .nota{margin-top:26px;background:rgba(56,189,248,.07);
+      border:1px solid rgba(56,189,248,.3);border-radius:13px;padding:18px 22px;
+      font-size:14.5px;color:var(--txt2);line-height:1.65}
+    .nota b{color:var(--cyan)}
+
+    /* las tres incógnitas */
+    .inc{display:grid;gap:12px;margin-top:24px}
+    .inc > div{display:flex;gap:16px;align-items:flex-start;background:var(--card);
+      border:1px solid var(--line);border-left:3px solid var(--warn);
+      border-radius:0 12px 12px 0;padding:16px 20px}
+    .inc .q{flex:0 0 auto;font-size:15px;font-weight:900;color:var(--warn);
+      background:rgba(251,146,60,.12);width:32px;height:32px;border-radius:8px;
+      display:grid;place-items:center}
+    .inc p{font-size:14.5px;color:var(--txt2);margin:0}
+    .inc strong{color:var(--txt)}
+
+    form{margin-top:24px;display:grid;gap:22px;max-width:780px}
+    fieldset{border:1px solid var(--line);border-radius:14px;padding:20px 22px;
+      background:var(--card)}
+    legend{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+      color:var(--lime);padding:0 9px}
+    .campo{margin-bottom:17px}
+    .campo:last-child{margin-bottom:0}
+    label{display:block;font-size:14.5px;font-weight:600;margin-bottom:7px;color:var(--txt)}
+    label .ay{display:block;font-weight:400;font-size:13px;color:var(--dim);margin-top:3px}
+    input,textarea,select{width:100%;background:var(--bg);color:var(--txt);
+      border:1px solid var(--line);border-radius:9px;padding:11px 13px;
+      font:400 15px Inter,system-ui,sans-serif;resize:vertical}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:var(--lime);
+      box-shadow:0 0 0 3px rgba(177,247,39,.13)}
+    textarea{min-height:62px}
+    .hp{position:absolute;left:-9999px}
+    button{font:800 15px Inter,system-ui,sans-serif;padding:15px 30px;border:0;
+      border-radius:10px;cursor:pointer;background:var(--lime);color:#17280a;
+      justify-self:start}
+    button:hover{filter:brightness(1.08)}
+    button:disabled{opacity:.5;cursor:default}
+    #estado{font-size:14.5px;min-height:22px;margin:0}
+    #estado.ok{color:var(--lime);font-weight:700}
+    #estado.err{color:var(--bad);font-weight:700}
+
+    .pie{margin-top:34px;padding-top:22px;border-top:1px solid var(--line);
+      font-size:13px;color:var(--dim);line-height:1.7}
+    .pie b{color:var(--txt2)}
+    a{color:var(--lime)}
+
+    #nav-controls{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+      display:flex;align-items:center;gap:13px;z-index:90;
+      background:rgba(13,22,32,.93);border:1px solid var(--line);border-radius:999px;
+      padding:8px 13px;backdrop-filter:blur(10px)}
+    .nav-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
+      background:transparent;color:var(--txt);display:grid;place-items:center;cursor:pointer}
+    .nav-btn:hover:not(:disabled){background:var(--lime);color:#17280a;border-color:var(--lime)}
+    .nav-btn:disabled{opacity:.3;cursor:default}
+    #slide-counter{font-size:13px;font-weight:700;color:var(--txt2);min-width:48px;
+      text-align:center;font-variant-numeric:tabular-nums}
+    :focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+    @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+    @media(max-width:620px){#nav-controls{bottom:14px}}
+  </style>
+</head>
+<body>
+
+<div id="progress-bar-track"><div id="progress-bar"></div></div>
+<div id="presentation-container">
+
+  <!-- 1 -->
+  <div class="slide active" data-slide="1">
+    <div class="wrap">
+      <span class="label">Sesión de diagnóstico, no propuesta</span>
+      <h1>Antes de proponerte nada, quiero saber qué tienes montado.</h1>
+      <p class="sub big">He mirado todo lo que de No Limits es público. Hay tres cosas que
+      desde fuera <span class="hl">no se pueden saber</span>, y las tres cambian por
+      completo lo que tendría sentido proponerte.</p>
+      <p class="sub">Esto son seis pantallas. La última es un cuestionario. Con lo que
+      contestes preparo la propuesta de verdad, con tus números y no con los míos.</p>
+      <div class="grid g3" style="margin-top:32px">
+        <div class="card"><div class="n">PARA</div><h3>Neil Viloria</h3>
+          <p>Head Coach, No Limits Performance Lab, Barranquilla</p></div>
+        <div class="card"><div class="n">DE</div><h3>PalferIA ME-sport</h3>
+          <p>Automatización IA aplicada al deporte</p></div>
+        <div class="card"><div class="n">CUESTA</div><h3>Nada</h3>
+          <p>Ni esta sesión ni la llamada de media hora</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="slide alt" data-slide="2">
+    <div class="wrap">
+      <span class="label">Quiénes somos</span>
+      <h2>Automatización IA hecha para el deporte, no adaptada a él.</h2>
+      <p class="sub">PalferIA ME-sport monta sistemas a medida para clubes, academias,
+      entrenadores y organizadores. Lo que hacemos es quitar de encima las tareas que no
+      necesitan a un entrenador para salir adelante.</p>
+      <div class="grid g3">
+        <div class="card"><div class="n">01</div><h3>Complementamos, no sustituimos</h3>
+          <p>No competimos con la plataforma donde programas los entrenos ni con tu
+          Calendly. Nos conectamos a lo que ya usas.</p></div>
+        <div class="card"><div class="n">02</div><h3>Tu metodología no se toca</h3>
+          <p>Nada de esto decide cargas, ritmos ni progresiones. Eso es tuyo y sigue
+          siéndolo.</p></div>
+        <div class="card"><div class="n">03</div><h3>Se entrega funcionando</h3>
+          <p>Montado, probado con atletas reales y documentado para que puedas cambiarlo
+          sin depender de nadie.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="slide" data-slide="3">
+    <div class="wrap">
+      <span class="label">De dónde parte esto</span>
+      <h2>Tus propias palabras</h2>
+      <blockquote>
+        <p>«Cada entrenamiento deja información: ritmos, tiempos, potencia, cargas,
+        volumen, sensaciones y evolución.»</p>
+        <p>«No se trata de medir por medir. Se trata de sumar información que nos ayude a
+        identificar oportunidades.»</p>
+        <p>«Tu potencial es único. Tu entrenamiento también.»</p>
+        <cite>Neil Viloria. Las dos primeras, presentando el Performance Lab. La tercera la
+        llevas en la bio y cierras posts con ella.</cite>
+      </blockquote>
+      <div class="lema"><span>MIDE</span><b>·</b><span>IDENTIFICA</span><b>·</b><span>POTENCIA</span></div>
+      <p class="sub big">Es un buen método y por eso funciona con los atletas.
+      <mark>La pregunta de esta sesión es otra: ese mismo método, aplicado a tu operación,
+      ¿qué encontraría?</mark></p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="slide alt" data-slide="4">
+    <div class="wrap">
+      <span class="label">El problema real</span>
+      <h2>Tu negocio también deja información cada semana. Y nadie la está leyendo.</h2>
+      <p class="sub">Cada vez que un atleta abre o no abre su entreno, cada mensaje que
+      llega a medianoche, cada cobro que se retrasa: eso son datos. Están repartidos entre
+      la plataforma donde programas, WhatsApp y tu cabeza, y hoy solo se leen cuando tú te
+      sientas a mirarlos.</p>
+      <p class="sub"><span class="hl">No es un problema de desorden. Es que no hay
+      sistema.</span> Y sin sistema, cada atleta nuevo cuesta lo mismo que el anterior: el
+      mismo rato de ti.</p>
+      <div class="sint">
+        <div><div class="num">01</div><p><strong>Alguien pregunta por el Lab a las once de
+          la noche.</strong> Tú lo ves por la mañana, si lo ves.</p></div>
+        <div><div class="num">02</div><p><strong>Un atleta lleva cinco días sin completar
+          un entreno.</strong> Te enteras cuando abres su calendario, no cuando pasa.</p></div>
+        <div><div class="num">03</div><p><strong>Entrenos pasados a mano</strong>, uno por
+          uno, semana tras semana.</p></div>
+        <div><div class="num">04</div><p><strong>Cobrar y facturar.</strong> Perseguir el
+          pago de quien se despista, emitir la factura, apuntarlo.</p></div>
+        <div><div class="num">05</div><p><strong>El resumen de cómo va cada uno.</strong>
+          Lo que te gustaría mandar a todos y acabas mandando a unos pocos.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="slide" data-slide="5">
+    <div class="wrap">
+      <span class="label">Y además, el momento</span>
+      <h2>El Lab ya está midiendo. Ahí es donde entra esto.</h2>
+      <p class="sub">El 29 de octubre escribiste que <span class="hl">ya comenzaron las
+      evaluaciones</span>: fuerza, potencia, movilidad y composición corporal. Y lo abriste
+      a cualquiera: <em>«puedes realizar tu evaluación, seas o no parte del club»</em>.</p>
+      <p class="sub">Cada evaluación deja datos que hay que recoger, guardar y devolver en
+      un informe que el atleta entienda. Esa parte no se ve en el post y es la que más
+      trabajo da. Sin ella montada, la medición acaba en una hoja de cálculo y el atleta se
+      queda sin el informe, que es lo que ha venido a buscar.</p>
+      <h3 style="margin-top:30px;font-size:21px">Y hay algo que no estás recogiendo</h3>
+      <p class="sub">Tus atletas ya escriben tus testimonios por ti. Lucho contó en su
+      cuenta sus ciento ocho días desde el accidente y terminó dando las gracias a
+      <em>«Neil y el equipo de NO LIMITS por ayudarme a retomar el nivel deportivo»</em>.
+      Raúl habla de tus clases de técnica. Tienes hasta una historia destacada llamada
+      Testimonios.</p>
+      <p class="sub">Esa historia ya dice que te importa. El problema es que
+      <span class="hl">el material es de ellos</span> y recogerlo a mano depende de que lo
+      veas pasar, te acuerdes de pedir permiso y lo guardes en algún sitio. Tres cosas que
+      se caen solas en una semana cargada.</p>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="slide alt" data-slide="6">
+    <div class="wrap">
+      <span class="label">Lo que sí se ve desde fuera</span>
+      <h2>Lo que he podido averiguar sin preguntarte</h2>
+      <p class="sub">Todo esto sale de tu Instagram, tu Calendly y de lo que devuelven los
+      buscadores. Consultado el 13 de noviembre de 2026.</p>
+      <div class="score"><b>45</b><i>sobre 100 en madurez digital</i></div>
+      <div class="bars">
+        <div class="bar"><span class="t">Contenido y marca</span>
+          <span class="track"><span class="fill" style="width:80%"></span></span><span class="v">80</span></div>
+        <div class="bar"><span class="t">Comunidad</span>
+          <span class="track"><span class="fill" style="width:70%"></span></span><span class="v">70</span></div>
+        <div class="bar"><span class="t">Producto definido</span>
+          <span class="track"><span class="fill" style="width:65%"></span></span><span class="v">65</span></div>
+        <div class="bar"><span class="t">Captación</span>
+          <span class="track"><span class="fill mid" style="width:25%"></span></span><span class="v">25</span></div>
+        <div class="bar"><span class="t">Operación</span>
+          <span class="track"><span class="fill mid" style="width:20%"></span></span><span class="v">20</span></div>
+        <div class="bar"><span class="t">Conversión y medición</span>
+          <span class="track"><span class="fill lo" style="width:10%"></span></span><span class="v">10</span></div>
+        <div class="bar"><span class="t">Visibilidad en buscadores</span>
+          <span class="track"><span class="fill lo" style="width:5%"></span></span><span class="v">5</span></div>
+      </div>
+      <div class="grid g2">
+        <div class="card key">
+          <div class="n">LO QUE HACES BIEN, Y ES LO DIFÍCIL</div>
+          <p><strong>729 publicaciones</strong> y publicas cada uno a tres días. Todas
+          cierran con una pregunta. Eso no es casualidad, es un sistema, y es la parte que
+          no se puede comprar.</p>
+          <p style="margin-top:11px"><strong>Tus atletas escriben sobre ti por su cuenta.</strong>
+          Lucho contó sus ciento ocho días desde el accidente dando las gracias a No Limits.
+          Raúl habla de tus clases de técnica. Tienes una historia destacada que se llama
+          Testimonios.</p>
+          <p style="margin-top:11px"><strong>El Performance Lab ya está midiendo</strong>
+          desde el 29 de octubre, con sus cuatro variables, y abierto a quien no es del club.</p>
+        </div>
+        <div class="card">
+          <div class="n">LO QUE NO ENCUENTRO</div>
+          <p><strong>Web, ninguna.</strong> El único enlace de tu perfil es el Calendly.</p>
+          <p style="margin-top:11px"><strong>No apareces en buscadores.</strong> Quien busca
+          entrenador de resistencia en Barranquilla encuentra directorios y webs de
+          entrenamiento online de otros países. Tú no sales.</p>
+          <p style="margin-top:11px"><strong>Un solo evento en todo el Calendly</strong>, el
+          del Lab. Y ningún precio público, ni del Lab ni del entrenamiento.</p>
+        </div>
+      </div>
+      <div class="nota"><b>Esto no es una crítica, es un punto de partida.</b> Lo que te
+      falta es infraestructura, que se monta. Lo que ya tienes, que es la constancia y la
+      confianza de tus atletas, es lo que no se monta.</div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="slide" data-slide="7">
+    <div class="wrap">
+      <span class="label">El motivo de esta sesión</span>
+      <h2>Tres cosas que desde fuera no puedo saber</h2>
+      <p class="sub">Y según cómo estén, la propuesta sería <span class="hl">completamente
+      distinta</span>. Por eso no te he mandado una todavía.</p>
+      <div class="inc">
+        <div><div class="q">1</div><p><strong>¿Haces campañas de pago en Instagram o
+          Facebook?</strong> La biblioteca pública de anuncios de Meta no me deja
+          comprobarlo sin entrar con una cuenta. Si ya inviertes, el primer trabajo es que
+          ese dinero caiga en algún sitio que lo recoja. Si no inviertes, ni lo tocamos.</p></div>
+        <div><div class="q">2</div><p><strong>¿Tienes web, o la has tenido?</strong> No
+          encuentro ninguna. Si no hay, hace falta algo donde aterrizar. Si hay una a medias
+          o un dominio parado, eso cambia el plazo y el precio.</p></div>
+        <div><div class="q">3</div><p><strong>¿Quién lleva tus redes?</strong> ¿Lo haces tú,
+          lo lleva alguien del equipo o lo tienes contratado? Automatizar lo que ya hace una
+          persona es distinto de automatizar lo que no hace nadie, y el reparto de trabajo
+          cambia entero.</p></div>
+      </div>
+      <div class="nota"><b>Por qué te lo pregunto en vez de suponerlo.</b> Una propuesta
+      construida sobre suposiciones se nota a los dos minutos y te hace perder el rato.
+      Prefiero enseñarte lo que no sé.</div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="slide alt" data-slide="8">
+    <div class="wrap">
+      <span class="label">Lo que podría montarse</span>
+      <h2>Seis piezas posibles. Cuál y en qué orden, lo decides tú.</h2>
+      <p class="sub">Esto <span class="hl">no es la propuesta</span>, es el menú. Cuál
+      tendría sentido para ti depende de lo que contestes, y por eso aquí no hay precios ni
+      plazos: ponerlos ahora sería inventármelos.</p>
+      <div class="grid g2">
+        <div class="card"><div class="n">A</div><h3>Vigía de adherencia</h3>
+          <p>Aviso el mismo día cuando un atleta deja de completar entrenos, no cinco días
+          después. Tú decides el umbral.</p></div>
+        <div class="card"><div class="n">B</div><h3>Informes del Lab</h3>
+          <p>De la medición al informe. Las cuatro variables entran una vez y salen en un
+          documento con su evolución, listo para el atleta.</p></div>
+        <div class="card"><div class="n">C</div><h3>Del comentario al Calendly</h3>
+          <p>Quien pregunta recibe tu enlace al momento, y queda anotado quién preguntó,
+          por qué área y si llegó a agendar.</p></div>
+        <div class="card"><div class="n">D</div><h3>Alta de atleta</h3>
+          <p>Del «quiero entrenar contigo» a atleta dado de alta, con sus datos y su
+          bienvenida, sin que escribas nada.</p></div>
+        <div class="card"><div class="n">E</div><h3>Cobros y facturas</h3>
+          <p>Cobro recurrente, recordatorio a quien se retrasa y factura emitida sola.
+          <strong>Depende de cómo cobres en Colombia</strong>, y eso te lo pregunto.</p></div>
+        <div class="card"><div class="n">F</div><h3>Recoger lo que ya dicen de ti</h3>
+          <p>Cuando un atleta te menciona, se guarda con su enlace y se le pide permiso.
+          Lo de Lucho y lo de Raúl ya está escrito.</p></div>
+      </div>
+      <div class="nota"><b>Ninguna te cambia la forma de entrenar.</b> No deciden cargas ni
+      ritmos. Solo quitan de en medio lo que no necesita a un entrenador para salir
+      adelante.</div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="slide" data-slide="9">
+    <div class="wrap">
+      <span class="label">Mientras tanto</span>
+      <h2>Te he montado la web que no tienes, para que la veas</h2>
+      <p class="sub">No es una maqueta de relleno. Está hecha con <span class="hl">tus
+      fotos, tus textos y tus datos reales</span>, sacados de tu propio Instagram. Para que
+      no tengas que imaginártelo.</p>
+      <div class="card key" style="margin-top:22px">
+        <div class="n">MUESTRA</div>
+        <h3 style="font-size:20px">No Limits, Barranquilla</h3>
+        <p style="font-size:15px">Tu bio, tu lema, tus últimas publicaciones y el enlace a
+        tu Calendly, en una página que sí puede encontrar quien te busque.</p>
+        <p style="margin-top:16px"><a class="btn" href="https://sales.palferia.me/propuestas/eb44c2ef-nolimits-web.html" target="_blank" rel="noopener" style="display:inline-block;background:var(--lime);color:#17280a;font-weight:800;padding:13px 24px;border-radius:9px;text-decoration:none">Ver la web de muestra</a></p>
+      </div>
+      <div class="nota"><b>No te la estoy vendiendo.</b> Es para que la conversación sea
+      sobre algo concreto. Si te gusta, hablamos. Si no, me lo dices y ya está, que para eso
+      la he hecho antes de cobrarte nada.</div>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="slide alt" data-slide="10">
+    <div class="wrap">
+      <span class="label">Cómo funciona esto</span>
+      <h2>Dos pasos, y el primero no cuesta nada</h2>
+      <div class="grid g2">
+        <div class="card key">
+          <div class="n">AHORA, PASO 1</div>
+          <h3>Diagnóstico</h3>
+          <p>Contestas el cuestionario de la pantalla siguiente. Con eso y con lo que ya he
+          mirado, te preparo una propuesta con tus números: qué automatizar primero, en qué
+          orden y qué cuesta.</p>
+          <p style="margin-top:11px"><strong>Lo que tardo:</strong> te la mando en pocos
+          días desde que contestes.</p>
+        </div>
+        <div class="card">
+          <div class="n">DESPUÉS, PASO 2</div>
+          <h3>Propuesta y media hora de llamada</h3>
+          <p>La lees con calma y hablamos media hora. De ahí sale el primer módulo, el que
+          más tiempo te devuelva. Se monta ese y solo ese.</p>
+          <p style="margin-top:11px"><strong>Si no te sirve, paramos ahí.</strong> No hay
+          permanencia ni paquete cerrado.</p>
+        </div>
+      </div>
+      <div class="nota"><b>Por qué no te he mandado la propuesta directamente.</b> Porque
+      sería adivinando, y adivinar contigo es tonto: nos conocemos y puedes contestarme en
+      cinco minutos.</div>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="slide" data-slide="11">
+    <div class="wrap">
+      <span class="label">Cuestionario de diagnóstico</span>
+      <h2>Las preguntas. Contesta lo que sepas.</h2>
+      <p class="sub">Las tres primeras son las importantes, las que no puedo averiguar yo.
+      <span class="hl">Solo el nombre y el correo son obligatorios.</span> Lo que dejes en
+      blanco lo hablamos en la llamada.</p>
+
+      <form id="f" novalidate>
+        <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <fieldset>
+          <legend>Para poder contestarte</legend>
+          <div class="campo"><label for="nombre">Tu nombre</label>
+            <input id="nombre" name="nombre" type="text" autocomplete="name" required></div>
+          <div class="campo"><label for="email">Tu correo</label>
+            <input id="email" name="email" type="email" autocomplete="email" required></div>
+          <div class="campo"><label for="whatsapp">WhatsApp
+            <span class="ay">Con indicativo de país. Opcional, pero es más rápido.</span></label>
+            <input id="whatsapp" name="whatsapp" type="text" autocomplete="tel"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Las tres que no puedo saber</legend>
+          <div class="campo"><label for="q1">1. ¿Haces campañas de pago en Instagram o Facebook?</label>
+            <select id="q1" name="q1">
+              <option value="">Elige</option>
+              <option>No, nunca he invertido</option>
+              <option>Lo he probado y lo dejé</option>
+              <option>Sí, de vez en cuando promociono publicaciones</option>
+              <option>Sí, tengo campañas en marcha</option>
+            </select></div>
+          <div class="campo"><label for="q1b">Si inviertes, ¿cuánto al mes, más o menos, y a dónde mandas a la gente?</label>
+            <textarea id="q1b" name="q1b"></textarea></div>
+
+          <div class="campo"><label for="q2">2. ¿Tienes web?</label>
+            <select id="q2" name="q2">
+              <option value="">Elige</option>
+              <option>No, nunca he tenido</option>
+              <option>Tuve una y está caída o abandonada</option>
+              <option>Tengo dominio comprado pero sin web</option>
+              <option>Sí, tengo web funcionando</option>
+            </select></div>
+          <div class="campo"><label for="q2b">Si tienes web o dominio, pásame la dirección</label>
+            <input id="q2b" name="q2b" type="text" placeholder="ejemplo.com"></div>
+
+          <div class="campo"><label for="q3">3. ¿Quién lleva tus redes?</label>
+            <select id="q3" name="q3">
+              <option value="">Elige</option>
+              <option>Las llevo yo entero</option>
+              <option>Las llevo yo y alguien me ayuda a ratos</option>
+              <option>Las lleva alguien del equipo</option>
+              <option>Las tengo contratadas fuera</option>
+            </select></div>
+          <div class="campo"><label for="q3b">¿Y quién contesta los mensajes privados y los comentarios?</label>
+            <textarea id="q3b" name="q3b"></textarea></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Tu operación</legend>
+          <div class="campo"><label for="q4">4. ¿Cuántos atletas llevas ahora y cuántos querrías llevar?</label>
+            <textarea id="q4" name="q4"></textarea></div>
+          <div class="campo"><label for="q5">5. ¿Qué te quita más tiempo cada semana?
+            <span class="ay">Pasar entrenos, revisar quién ha entrenado, contestar mensajes, facturas.</span></label>
+            <textarea id="q5" name="q5"></textarea></div>
+          <div class="campo"><label for="q6">6. ¿Con qué plataforma programas los entrenos, y pones alguno a mano?</label>
+            <textarea id="q6" name="q6"></textarea></div>
+          <div class="campo"><label for="q7">7. ¿Cómo cobras y cómo mandas las facturas?
+            <span class="ay">Esta me hace falta de verdad: en Colombia no sirve lo que uso aquí.</span></label>
+            <textarea id="q7" name="q7"></textarea></div>
+          <div class="campo"><label for="q8">8. ¿Cuánto cuesta el Lab y cuánto el entrenamiento?
+            <span class="ay">No lo tienes público. Sin esto no puedo calcularte ningún número.</span></label>
+            <textarea id="q8" name="q8"></textarea></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Qué te gustaría quitarte de encima</legend>
+          <div class="campo"><label for="q9">9. Si pudieras apretar un botón y que desapareciera una tarea, ¿cuál sería?</label>
+            <textarea id="q9" name="q9"></textarea></div>
+          <div class="campo"><label for="q10">10. ¿Te ha pasado que un atleta deje de entrenar y no te enteres hasta días después?</label>
+            <textarea id="q10" name="q10"></textarea></div>
+          <div class="campo"><label for="q11">11. Dame un ejemplo: «cuando pasa X, quiero que pase Y automáticamente»</label>
+            <textarea id="q11" name="q11"></textarea></div>
+          <div class="campo"><label for="q12">12. ¿Ya usas Zapier, Make o algo parecido, o partimos de cero?</label>
+            <textarea id="q12" name="q12"></textarea></div>
+          <div class="campo"><label for="q13">13. ¿Qué te pareció la web de muestra?
+            <span class="ay">Sin filtros. Si no te gusta, es mejor saberlo ahora.</span></label>
+            <textarea id="q13" name="q13"></textarea></div>
+        </fieldset>
+
+        <button type="submit" id="btn">Enviar el diagnóstico</button>
+        <p id="estado"></p>
+      </form>
+
+      <div class="pie">
+        <b>PalferIA Studio</b>, línea ME-sport. Sesión de diagnóstico para Neil Viloria,
+        No Limits Performance Lab, Barranquilla.<br>
+        Todo lo de las pantallas 2 y 3 sale de información pública consultada el 13 de
+        noviembre de 2026. Nada de aquí es una estimación de resultados: esas salen
+        después, con tus datos.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="nav-controls">
+  <button class="nav-btn prev" id="btn-prev" aria-label="Anterior" disabled>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <div id="slide-counter"><span id="counterCurrent">1</span> / <span id="counterTotal"></span></div>
+  <button class="nav-btn next" id="btn-next" aria-label="Siguiente">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<script>
+/* ── Navegación. Mismo motor que las propuestas ME-sport. */
+(function () {
+  var slides = document.querySelectorAll('.slide');
+  var total = slides.length, current = 0;
+  document.getElementById('counterTotal').textContent = total;
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    slides[current].scrollTop = 0;
+    document.getElementById('counterCurrent').textContent = current + 1;
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+    document.getElementById('progress-bar').style.width = ((current + 1) / total * 100) + '%';
+  }
+  document.getElementById('btn-prev').addEventListener('click', function(){ if(current>0) goTo(current-1); });
+  document.getElementById('btn-next').addEventListener('click', function(){ if(current<total-1) goTo(current+1); });
+
+  document.addEventListener('keydown', function (e) {
+    // Dentro de un campo las flechas mueven el cursor, no pasan de hoja
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (current < total-1) goTo(current+1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { if (current > 0) goTo(current-1); }
+  });
+
+  var tsX = 0, tsY = 0;
+  document.addEventListener('touchstart', function(e){
+    tsX = e.changedTouches[0].screenX; tsY = e.changedTouches[0].screenY;
+  }, { passive:true });
+  document.addEventListener('touchend', function(e){
+    // Deslizar sobre el formulario no debe cambiar de hoja
+    if (e.target.closest && e.target.closest('form')) return;
+    var dx = tsX - e.changedTouches[0].screenX, dy = tsY - e.changedTouches[0].screenY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx > 0 && current < total-1) goTo(current+1);
+      if (dx < 0 && current > 0) goTo(current-1);
+    }
+  }, { passive:true });
+
+  goTo(0);
+})();
+
+/* ── Formulario. Ver formulario/INSTRUCCIONES.md */
+(function () {
+  var ENDPOINT = 'PEGAR_URL_DEL_APPS_SCRIPT';
+  var f = document.getElementById('f'),
+      btn = document.getElementById('btn'),
+      est = document.getElementById('estado');
+
+
+  // Respaldo del respaldo: si el correo no se puede abrir, que no se pierda nada escrito.
+  function copiarAlPortapapeles(texto) {
+    var ok = function () {
+      est.className = 'ok';
+      est.textContent = 'Tus respuestas están copiadas. Pégalas en un WhatsApp o un correo a ri@palferia.com y listo.';
+    };
+    var fallo = function () {
+      est.className = 'err';
+      est.textContent = 'Son muchas respuestas para abrir el correo solo. Escríbeme por WhatsApp y te lo paso de otra forma.';
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(ok).catch(fallo);
+    } else { fallo(); }
+  }
+
+  f.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    est.className = ''; est.textContent = '';
+
+    var nombre = f.nombre.value.trim(), email = f.email.value.trim();
+    if (!nombre || !email || email.indexOf('@') < 1) {
+      est.className = 'err';
+      est.textContent = 'Necesito al menos tu nombre y un correo válido.';
+      return;
+    }
+    var CLAVES = ['q1','q1b','q2','q2b','q3','q3b','q4','q5','q6','q7','q8','q9','q10','q11','q12','q13'];
+
+    var datos = {
+      nombre: nombre, email: email, whatsapp: f.whatsapp.value.trim(),
+      website: f.website.value,
+      origen: 'diagnostico-nolimits', linea: 'ME-sport', etapa: 'diagnostico'
+    };
+    CLAVES.forEach(function (k) { datos[k] = f[k] ? f[k].value.trim() : ''; });
+
+    // Mientras el Apps Script no esté conectado, se manda por correo.
+    // Abre el programa de correo con todo ya escrito: solo hay que darle a enviar.
+    if (ENDPOINT.indexOf('http') !== 0) {
+      var cuerpo = 'Diagnostico No Limits\n\n' +
+                   'Nombre: ' + datos.nombre + '\n' +
+                   'Email: ' + datos.email + '\n' +
+                   'WhatsApp: ' + (datos.whatsapp || '-') + '\n\n';
+      CLAVES.forEach(function (k) {
+        var lab = document.querySelector('label[for="' + k + '"]');
+        var txt = lab ? lab.childNodes[0].textContent.trim() : k;
+        if (datos[k]) cuerpo += txt + '\n   ' + datos[k] + '\n\n';
+      });
+
+      var url = 'mailto:ri@palferia.com' +
+                '?subject=' + encodeURIComponent('Diagnostico No Limits, ' + datos.nombre) +
+                '&body=' + encodeURIComponent(cuerpo);
+
+      // Los navegadores cortan los mailto muy largos. Si se pasa, se avisa y se
+      // ofrece copiar al portapapeles en vez de perder las respuestas.
+      if (url.length > 1900) {
+        copiarAlPortapapeles(cuerpo);
+        return;
+      }
+      window.location.href = url;
+      est.className = 'ok';
+      est.textContent = 'Se te ha abierto el correo con todo escrito. Dale a enviar y listo.';
+      return;
+    }
+
+    btn.disabled = true; btn.textContent = 'Enviando';
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      // text/plain evita el preflight CORS que Apps Script no responde
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(datos)
+    })
+      .then(function (r) { return r.text(); })
+      .then(function () {
+        f.style.display = 'none';
+        est.className = 'ok';
+        est.textContent = 'Recibido, Neil. Con esto preparo la propuesta y te la mando.';
+      })
+      .catch(function () {
+        btn.disabled = false; btn.textContent = 'Enviar el diagnóstico';
+        est.className = 'err';
+        est.textContent = 'No ha salido. Escríbeme por WhatsApp y lo vemos igual.';
+      });
+  });
+})();
+</script>
+</body>
+</html>
